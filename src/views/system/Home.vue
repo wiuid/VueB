@@ -55,9 +55,14 @@
       </el-col>
       <!--管理公告！-->
       <el-col :span="9" :xs="24"><el-card style="height: 220px;margin: 10px;flex-grow:1;" shadow="hover" >
-        <el-row><span>网站公示板</span></el-row>
+        <el-row><span>网站公示板</span>
+          <el-link :underline="false" type="primary" title="更多公告" @click="drawer = true">
+            <i class="el-icon-more-outline" style="padding: 0 10px"></i>
+          </el-link>
+        </el-row>
         <hr/>
         <el-row>
+          <!--最多6条公告-->
           <el-row>
             <!--white-space: nowrap;  强制不换行
             display: inline-block;    将span当做块级元素对待
@@ -65,34 +70,13 @@
             overflow: hidden;       超出隐藏
             text-overflow: ellipsis; 超出部分用。。。 代替
             -->
-            <el-col :span="17"><span style="white-space: nowrap;display: inline-block; width: 100%; overflow: hidden;text-overflow: ellipsis;">我是公告标题我是公告标题我是公告标题</span></el-col>
+            <el-col :span="17">
+              <el-link type="primary" :underline="false" @click="dialogInformInfo = true" style="white-space: nowrap;display: inline-block; width: 100%; overflow: hidden;text-overflow: ellipsis;">
+                <span>我是公告标题我是公告标题我是公告标题</span>
+              </el-link>
+            </el-col>
             <el-col :span="5">time</el-col>
-            <el-col :span="1"><el-tag size="mini"><i class="el-icon-warning"></i></el-tag></el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="17"><span style="white-space: nowrap;display: inline-block; width: 100%; overflow: hidden;text-overflow: ellipsis;">我是公告标题我是公告标题我是公告标题</span></el-col>
-            <el-col :span="5">time</el-col>
-            <el-col :span="1"><el-tag type="danger" size="mini"><i class="el-icon-warning"></i></el-tag></el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="17"><span style="white-space: nowrap;display: inline-block; width: 100%; overflow: hidden;text-overflow: ellipsis;">我是公告标题我是公告标题我是公告标题</span></el-col>
-            <el-col :span="5">time</el-col>
-            <el-col :span="1"><el-tag type="danger" size="mini"><i class="el-icon-warning"></i></el-tag></el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="17"><span style="white-space: nowrap;display: inline-block; width: 100%; overflow: hidden;text-overflow: ellipsis;">我是公告标题我是公告标题我是公告标题</span></el-col>
-            <el-col :span="5">time</el-col>
-            <el-col :span="1"><el-tag type="danger" size="mini"><i class="el-icon-warning"></i></el-tag></el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="17"><span style="white-space: nowrap;display: inline-block; width: 100%; overflow: hidden;text-overflow: ellipsis;">我是公告标题我是公告标题我是公告标题</span></el-col>
-            <el-col :span="5">time</el-col>
-            <el-col :span="1"><el-tag type="danger" size="mini"><i class="el-icon-warning"></i></el-tag></el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="17"><span style="white-space: nowrap;display: inline-block; width: 100%; overflow: hidden;text-overflow: ellipsis;">我是公告标题我是公告标题我是公告标题</span></el-col>
-            <el-col :span="5">time</el-col>
-            <el-col :span="1"><el-tag type="danger" size="mini"><i class="el-icon-warning"></i></el-tag></el-col>
+            <el-col :span="1" title="普通"><el-tag size="mini"><i class="el-icon-warning"></i></el-tag></el-col>
           </el-row>
         </el-row>
       </el-card></el-col>
@@ -110,22 +94,101 @@
         <el-card class="card-home" shadow="hover">其他板</el-card>
       </el-col>
     </el-row>
+
+    <el-dialog center title="我是公告标题我是公告标题我是公告标题" :visible.sync="dialogInformInfo">
+      <el-row style="text-align: center;margin-bottom: 20px">
+        <i class="el-icon-date">xxxxxxxxxxxx</i>
+        <span style="padding: 0 10px">占位：重要等级</span>
+      </el-row>
+      <el-row>
+        <span>
+          正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文
+        </span>
+      </el-row>
+    </el-dialog>
+
+    <el-drawer title="所有公告" :visible.sync="drawer" :with-header="true">
+      <el-row style="padding: 0 20px 40px 20px">
+        <el-row>
+          <el-input v-model="searchInformOption.title" size="small" style="margin-left: 10px;width: 200px;" placeholder="标题" @change="searchInform"></el-input>
+        </el-row>
+        <el-row>
+          <el-date-picker v-model="searchInformOption.data" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期" size="small" :default-time="['00:00:00', '23:59:59']" style="margin-left: 10px" @change="searchInform"></el-date-picker>
+        </el-row>
+        <el-row>
+          <el-select size="small" v-model="searchInformOption.mark" placeholder="请选择" style="margin-left: 10px;" clearable @change="searchInform">
+            <el-option v-for="item in markSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </el-row>
+      </el-row>
+      <el-row style="padding: 0 20px">
+        <!--white-space: nowrap;  强制不换行
+        display: inline-block;    将span当做块级元素对待
+        width: 100%;            宽度限制
+        overflow: hidden;       超出隐藏
+        text-overflow: ellipsis; 超出部分用。。。 代替
+        -->
+        <el-col :span="17">
+          <el-link type="primary" :underline="false" @click="dialogInformInfo = true" style="white-space: nowrap;display: inline-block; width: 100%; overflow: hidden;text-overflow: ellipsis;">
+            <span>我是公告标题我是公告标题我是公告标题</span>
+          </el-link>
+        </el-col>
+        <el-col :span="5">time</el-col>
+        <el-col :span="1"><el-tag size="mini"><i class="el-icon-warning"></i></el-tag></el-col>
+      </el-row>
+
+      <el-row style="text-align: center">
+        <Pagination :total="20"></Pagination>
+      </el-row>
+
+    </el-drawer>
+
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue'
+import Pagination from '@/components/Pagination'
 
 export default {
   name: 'Home',
+  components: { Pagination },
   // components: {
   //   HelloWorld
   // }
+  data () {
+    return {
+      dialogInformInfo: false,
+      drawer: false,
+      searchInformOption: {
+        title: '',
+        data: '',
+        mark: ''
+      },
+      markSelect: [
+        {
+          value: 'success',
+          label: '普通'
+        },
+        {
+          value: 'warning',
+          label: '警告'
+        },
+        {
+          value: 'danger',
+          label: '紧急'
+        }
+      ]
+    }
+  },
   mounted () {
     this.drawLine()
   },
   methods: {
+    searchInform () {
+      this.$message.success('yes my love')
+    },
     drawLine () {
       // 基于准备好的dom，初始化echarts实例
       const myChart = this.$echarts.init(document.getElementById('myChart'))

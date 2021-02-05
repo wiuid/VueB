@@ -7,7 +7,7 @@
       @open="handleOpen"
       @close="handleClose">
       <router-link to="/system">
-        <div style="height: 50px;border-bottom: solid 1px #e6e6e6;padding: 5px 0">
+        <div style="height: 50px;padding: 5px 0">
           <img src="../assets/logo.png" style="height: 50px;width: 50px;"/>
           <span style="font-size: 20px;max-width: 150px;line-height: 1.7" >Webra</span>
         </div>

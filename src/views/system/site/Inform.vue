@@ -3,15 +3,16 @@
     <el-row>
       <el-button type="primary" plain icon="el-icon-plus" size="small" @click="openDialogAddInform">新 增</el-button>
       <el-button type="danger" plain icon="el-icon-delete" size="small" @click="deleteInforms">删 除</el-button>
-      <el-date-picker v-model="searchInform.data" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期" size="small" :default-time="['00:00:00', '23:59:59']" style="margin-left: 10px"></el-date-picker>
-      <el-select size="small" v-model="searchInform.mark" placeholder="请选择" style="margin-left: 10px;" clearable>
+      <el-input v-model="searchInformOption.title" size="small" style="margin-left: 10px;width: 200px;" placeholder="输入公告标题部分字段" @change="searchInform"></el-input>
+      <el-date-picker v-model="searchInformOption.data" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期" size="small" :default-time="['00:00:00', '23:59:59']" style="margin-left: 10px" @change="searchInform"></el-date-picker>
+      <el-select size="small" v-model="searchInformOption.mark" placeholder="公告重要程度" style="margin-left: 10px;" clearable @change="searchInform">
         <el-option v-for="item in markSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
       <br>
-      <p>组件值：{{ searchInform.data }}</p>
+<!--      <p>组件值：{{ searchInformOption.data }}</p>-->
     </el-row>
     <el-row>
-      <el-table :data="tableData" stripe style="width: 100%" ref="informTable"  @selection-change="handleSelectionChange">
+      <el-table v-loading="loading" :data="tableData" stripe style="width: 100%" ref="informTable"  @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="id" label="序号" width="55"></el-table-column>
         <el-table-column prop="title" label="公告标题"></el-table-column>
@@ -85,7 +86,8 @@ export default {
   components: { Pagination },
   data () {
     return {
-      searchInform: {
+      searchInformOption: {
+        title: '',
         data: '',
         mark: ''
       },
@@ -135,10 +137,14 @@ export default {
           label: '紧急'
         }
       ],
-      multipleSelection: []
+      multipleSelection: [],
+      loading: false
     }
   },
   methods: {
+    searchInform () {
+      this.$message.success('yes my love')
+    },
     /**
      * 打开对话框  同时清空表单数据、标题改为新增公告
      */
@@ -192,6 +198,9 @@ export default {
         this.dialogAddInform = false
       })
     },
+    /**
+     * 批量删除通知公告
+     */
     deleteInforms () {
       const informList = this.multipleSelection
       const idList = []
@@ -207,9 +216,13 @@ export default {
           this.$message.success('删除成功!')
         })
       } else {
-        this.$message.success('你应该至少选中一个！')
+        this.$message.warning('你应该至少选中一个！')
       }
     },
+    /**
+     * 获取表格多选选中了哪些
+     * @param val
+     */
     handleSelectionChange (val) {
       this.multipleSelection = val
     }
