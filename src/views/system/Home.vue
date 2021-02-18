@@ -138,7 +138,7 @@
       </el-row>
 
       <el-row style="text-align: center">
-        <Pagination :total="20"></Pagination>
+        <pagination :total="20"></pagination>
       </el-row>
 
     </el-drawer>
@@ -149,11 +149,11 @@
 <script>
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue'
-import Pagination from '@/components/Pagination'
+import pagination from '@/components/Pagination'
 
 export default {
   name: 'Home',
-  components: { Pagination },
+  components: { pagination },
   // components: {
   //   HelloWorld
   // }

@@ -20,19 +20,17 @@
         <el-table-column prop="mark" label="重要标识"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button-group>
-              <el-button size="small" plain icon="el-icon-edit  " type="primary" @click="editInform(scope.row.id)">修改</el-button>
-              <el-button size="small" plain icon="el-icon-delete" type="danger" @click="deleteInform(scope.row)">删除</el-button>
-            </el-button-group>
+            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="editInform(scope.row.id)"><i class="el-icon-edit"></i>修改</el-link>
+            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="deleteInform(scope.row)"><i class="el-icon-delete"></i>删除</el-link>
           </template>
         </el-table-column>
       </el-table>
     </el-row>
     <el-row style="text-align: center">
-      <Pagination :total="20"></Pagination>
+      <pagination :total="20"></pagination>
     </el-row>
 
-    <el-dialog :title="dialogAddInformTitle+'公告'" :visible.sync="dialogAddInform">
+    <el-dialog :title="dialogAddInformTitle+'公告'" :visible.sync="dialogAddInform" :before-close="closeDialog">
       <el-form :model="inform" :rules="rules" ref="inform">
         <el-row>
           <el-form-item label="公告标题" :label-width="formLabelWidth" prop="title">
@@ -69,10 +67,10 @@
 </template>
 
 <script>
-import Pagination from '@/components/Pagination'
+import pagination from '@/components/Pagination'
 export default {
   name: 'Inform',
-  components: { Pagination },
+  components: { pagination },
   data () {
     return {
       searchInformOption: {
@@ -144,6 +142,8 @@ export default {
       loading: false
     }
   },
+  mounted () {
+  },
   methods: {
     searchInform () {
       this.$message.success('yes my love')
@@ -152,7 +152,6 @@ export default {
      * 打开对话框  同时清空表单数据、标题改为新增公告
      */
     openDialogAddInform () {
-      this.clearInform()
       this.dialogAddInformTitle = '新增'
       this.dialogAddInform = true
     },
@@ -174,6 +173,13 @@ export default {
       this.dialogAddInformTitle = '修改'
       this.inform.title = id
       this.dialogAddInform = true
+    },
+    /**
+     * 想要离开对话框时清空表单，并关闭对话框
+     */
+    closeDialog () {
+      this.clearInform()
+      this.dialogAddInform = false
     },
     /**
      * 保存对话框中的数据到后台数据库（更新和新增同一接口）

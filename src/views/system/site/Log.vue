@@ -15,21 +15,21 @@
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="id" label="序号" width="55"></el-table-column>
         <el-table-column prop="title" label="日志标题"></el-table-column>
-        <el-table-column prop="data" label="时间"></el-table-column>
+        <el-table-column prop="date" label="时间"></el-table-column>
         <el-table-column prop="text" label="详情"></el-table-column>
       </el-table>
     </el-row>
     <el-row style="text-align: center">
-      <Pagination :total="20"></Pagination>
+      <pagination :total="20"></pagination>
     </el-row>
   </div>
 </template>
 
 <script>
-import Pagination from '@/components/Pagination'
+import pagination from '@/components/Pagination'
 export default {
   name: 'Log',
-  components: { Pagination },
+  components: { pagination },
   data () {
     return {
       multipleSelection: [],
