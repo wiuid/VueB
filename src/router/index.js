@@ -22,12 +22,18 @@ const routes = [
   {
     path: '/',
     name: 'Index',
-    component: Index
+    component: Index,
+    meta: {
+      title: 'webraAdmin'
+    }
   },
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: Login,
+    meta: {
+      title: '登录'
+    }
   },
   {
     path: '/system',
@@ -37,62 +43,98 @@ const routes = [
       {
         path: '/system',
         name: 'Home',
-        component: Home
+        component: Home,
+        meta: {
+          title: '首页'
+        }
       },
       {
         path: '/system/site/inform',
         name: 'Inform',
-        component: Inform
+        component: Inform,
+        meta: {
+          title: '通知公告'
+        }
       },
       {
         path: '/system/site/log',
         name: 'Log',
-        component: Log
+        component: Log,
+        meta: {
+          title: '日志详情'
+        }
       },
       {
         path: '/system/department',
         name: 'department',
-        component: Department
+        component: Department,
+        meta: {
+          title: '部门管理'
+        }
       },
       {
         path: '/system/department/post',
         name: 'Post',
-        component: Post
+        component: Post,
+        meta: {
+          title: '岗位管理'
+        }
       },
       {
         path: '/system/user',
         name: 'User',
-        component: User
+        component: User,
+        meta: {
+          title: '用户管理'
+        }
       },
       {
         path: '/system/user/auth',
         name: 'Auth',
-        component: Auth
+        component: Auth,
+        meta: {
+          title: '权限管理'
+        }
       },
       {
         path: '/system/info',
         name: 'Info',
-        component: Info
+        component: Info,
+        meta: {
+          title: '个人信息'
+        }
       },
       {
         path: '/system/monitoring',
         name: 'Monitoring',
-        component: Monitoring
+        component: Monitoring,
+        meta: {
+          title: '系统监控'
+        }
       },
       {
         path: '/system/monitoring/user',
         name: 'ActiveUser',
-        component: ActiveUser
+        component: ActiveUser,
+        meta: {
+          title: '在线用户'
+        }
       },
       {
         path: '/system/about',
         name: 'About',
-        component: About
+        component: About,
+        meta: {
+          title: '本站相关'
+        }
       },
       {
         path: '/system/*',
         name: 'NotFount',
-        component: NotFount
+        component: NotFount,
+        meta: {
+          title: '404-您输入的网页有误'
+        }
       }
     ]
   },

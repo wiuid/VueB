@@ -38,12 +38,12 @@
           </el-form-item>
         </el-row>
         <el-row>
-          <el-col :sm="12" :xs="24">
+          <el-col :span="12">
             <el-form-item label="发布日期" :label-width="formLabelWidth" prop="date">
               <el-date-picker type="date" placeholder="选择日期" v-model="inform.date" style="width: 100%;"></el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :sm="12" :xs="24">
+          <el-col :span="12">
             <el-form-item label="重要程度" :label-width="formLabelWidth" prop="mark">
               <el-select v-model="inform.mark" placeholder="请选择">
                 <el-option v-for="item in markSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
