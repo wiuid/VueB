@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-button type="primary" plain icon="el-icon-plus" size="small" @click="openDialogAddDepartment">新 增 部 门</el-button>
+      <el-button type="primary" plain icon="el-icon-plus" size="small" @click="openDialogAddDepartment">新 增</el-button>
     </el-row>
     <el-row>
       <el-table lazy v-loading="loading" row-key="id" :data="tableData" size="mini" style="width: 100%" ref="departmentTable">
@@ -66,7 +66,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="clearDepartment;dialogAddDepartment = false">取 消</el-button>
+        <el-button @click="closeDialog;dialogAddDepartment = false">取 消</el-button>
         <el-button @click="clearDepartment" type="warning" plain style="float:left;">清 空 重 置</el-button>
         <el-button type="primary" @click="saveDepartment('department')">确 定</el-button>
       </div>

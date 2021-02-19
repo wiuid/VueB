@@ -1,14 +1,16 @@
 <template>
   <div>
-    <el-row>
-      <el-button type="danger" plain icon="el-icon-delete" size="small" @click="deleteLogs">删 除 选 中</el-button>
-      <el-button type="success" plain icon="el-icon-folder-opened" size="small" @click="deleteLogs">导 出</el-button>
-      <el-button type="danger" icon="el-icon-brush" size="small" @click="deleteLogs">清 空</el-button>
-      <el-input v-model="searchLogOption.title" size="small" style="margin-left: 10px;width: 200px;" placeholder="输入日志标题部分字段" @change="searchLog"></el-input>
-      <el-date-picker v-model="searchLogOption.data" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期" size="small" :default-time="['00:00:00', '23:59:59']" style="margin-left: 10px" @change="searchLog"></el-date-picker>
-      <el-select size="small" v-model="searchLogOption.mark" placeholder="日志分类" style="margin-left: 10px;" clearable @change="searchLog">
+    <el-row style="margin-bottom: 10px">
+      <el-input v-model="searchLogOption.title" size="small" style="margin-right: 10px;width: 200px;" placeholder="输入日志标题部分字段" @change="searchLog"></el-input>
+      <el-date-picker v-model="searchLogOption.data" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期" size="small" :default-time="['00:00:00', '23:59:59']" style="margin-right: 10px" @change="searchLog"></el-date-picker>
+      <el-select size="small" v-model="searchLogOption.mark" placeholder="日志分类" style="margin-right: 10px;" clearable @change="searchLog">
         <el-option v-for="item in markSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
+    </el-row>
+    <el-row>
+      <el-button type="danger" plain icon="el-icon-delete" size="small" @click="deleteLogs">删 除 选 中</el-button>
+      <el-button type="success" plain icon="el-icon-download" size="small" @click="deleteLogs">导 出</el-button>
+      <el-button type="danger" icon="el-icon-brush" size="small" @click="deleteLogs">清 空</el-button>
     </el-row>
     <el-row>
       <el-table v-loading="loading" :data="tableData" stripe style="width: 100%" ref="logTable" size="mini"  @selection-change="handleSelectionChange">

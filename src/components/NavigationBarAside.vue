@@ -40,10 +40,6 @@
         <el-menu-item index="/system/user">用户管理</el-menu-item>
         <el-menu-item index="/system/user/auth">权限管理</el-menu-item>
       </el-submenu>
-      <el-menu-item index="/system/info">
-        <i class="el-icon-s-order"></i>
-        <span slot="title">个人信息</span>
-      </el-menu-item>
       <el-submenu index="/system/monitoring">
         <template slot="title">
           <i class="el-icon-s-platform"></i>

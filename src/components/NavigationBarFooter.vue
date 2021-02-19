@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 50px;background-color: #e6e6e6">
+  <div style="height: 50px;background-color: #e6e6e6;margin-top: 50px">
     <span>
       FOOTER
     </span>
