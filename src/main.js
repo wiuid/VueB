@@ -8,7 +8,10 @@ import axios from 'axios'
 import * as echarts from 'echarts'
 Vue.prototype.$echarts = echarts
 
-Vue.use(ElementUI)
+Vue.use(ElementUI, {
+  size: 'small'
+})
+
 Vue.use(axios)
 
 Vue.config.productionTip = false

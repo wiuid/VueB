@@ -7,7 +7,7 @@ npm install
 
 ### Compiles and hot-reloads for development/运行vue服务
 ```
-npm run serve
+npm run dev
 ```
 
 ### Compiles and minifies for production/构建vue项目
