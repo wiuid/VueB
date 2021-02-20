@@ -126,7 +126,7 @@ export default {
       dialogAddDepartmentTitle: '新增',
       dialogAddDepartment: false,
       formLabelWidth: '120px',
-      options: [
+      options: [ // 选择框下拉 树形组件 的数据
         {
           id: 'a',
           label: 'a',
@@ -153,15 +153,26 @@ export default {
     }
   },
   methods: {
+    /**
+     * 打开新增部门对话框（默认顶级部门）
+     */
     openDialogAddDepartment () {
       this.dialogAddDepartmentTitle = '新增'
       this.dialogAddDepartment = true
     },
+    /**
+     * 打开新增部门对话框（自动定位上级部门）
+     * @param title
+     */
     openDialogAddDepartment2 (title) {
       this.dialogAddDepartmentTitle = '新增'
       this.dialogAddDepartment = true
       this.department.superior = title
     },
+    /**
+     * 打开修改部门对话框
+     * @param id
+     */
     editDepartment (id) {
       this.dialogAddDepartmentTitle = '修改'
       this.dialogAddDepartment = true
@@ -169,13 +180,23 @@ export default {
        * 这里通过传入的id参数从后台获取数据传入到department表单
        */
     },
+    /**
+     * 清除检验规则
+     */
     clearDepartment () {
       this.$refs.department.resetFields()
     },
+    /**
+     * 离开对话框并清除校验规则
+     */
     closeDialog () {
       this.clearDepartment()
       this.dialogAddDepartment = false
     },
+    /**
+     * 保存  新增/修改 的部门信息
+     * @param department
+     */
     saveDepartment (department) {
       this.$refs[department].validate((valid) => {
         if (valid) {
@@ -192,6 +213,10 @@ export default {
         }
       })
     },
+    /**
+     * 删除部门（仅支持删除单个部门，不支持批量删除）
+     * @param row
+     */
     deleteDepartment (row) {
       this.$confirm('是否确认删除名称为"' + row.title + '"及下级的部门?', '提示', {
         confirmButtonText: '确定',

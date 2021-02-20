@@ -6,14 +6,16 @@
           <div slot="header" class="clearfix">
             <span>个人信息</span>
           </div>
-          <el-link @click="dialogChangePortrait = true">
-            <div class="demo-basic--circle">
-              <div class="block"><el-avatar :size="100" :src="circleUrl"></el-avatar></div>
-              <div class="block" v-for="size in sizeList" :key="size">
-                <el-avatar :size="size" :src="'../assets/touxiang.gif'"></el-avatar>
+          <div style="text-align: center">
+            <el-link @click="dialogChangePortrait = true">
+              <div class="demo-basic--circle">
+                <div class="block"><el-avatar :size="100" :src="circleUrl"></el-avatar></div>
+                <div class="block" v-for="size in sizeList" :key="size">
+                  <el-avatar :size="size" :src="'../assets/touxiang.gif'"></el-avatar>
+                </div>
               </div>
-            </div>
-          </el-link>
+            </el-link>
+          </div>
           <div style="font-size: 15px">
             <el-divider class="costHr"></el-divider>
             <el-row>
@@ -60,10 +62,10 @@
                 <el-form-item label="用户昵称" prop="name" required>
                   <el-input v-model="info.name" autocomplete="off" style="width: 300px;"></el-input>
                 </el-form-item>
-                <el-form-item label="手机号码" prop="phone" required>
+                <el-form-item label="手机号码" prop="phone">
                   <el-input type="number" v-model="info.phone" autocomplete="off" style="width: 300px;"></el-input>
                 </el-form-item>
-                <el-form-item label="用户邮箱" prop="email" required>
+                <el-form-item label="用户邮箱" prop="email">
                   <el-input type="email" v-model="info.email" autocomplete="off" style="width: 300px;"></el-input>
                 </el-form-item>
                 <el-form-item>
@@ -129,7 +131,7 @@ export default {
     }
     const validatePhone = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入手机号码'))
+        callback()
       } else if (value.length !== 11) {
         callback(new Error('请输入正确的手机号码'))
       } else {
@@ -184,7 +186,6 @@ export default {
           { validator: validatePhone, trigger: 'blur' }
         ],
         email: [
-          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
           { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
         ]
       },
@@ -203,6 +204,10 @@ export default {
     }
   },
   methods: {
+    /**
+     * 保存基本资料
+     * @param rules
+     */
     saveInfo (rules) {
       this.$refs[rules].validate((valid) => {
         if (valid) {
@@ -213,6 +218,10 @@ export default {
         }
       })
     },
+    /**
+     * 保存修改的密码
+     * @param rules
+     */
     savePassword (rules) {
       this.$refs[rules].validate((valid) => {
         if (valid) {
@@ -223,10 +232,16 @@ export default {
         }
       })
     },
+    /**
+     * 清空表单校验规则
+     */
     handleClick () {
       this.$refs.rulesInfo.resetFields()
       this.$refs.rulesPassword.resetFields()
     },
+    /**
+     * 保存头像
+     */
     savePortrait () {
       this.$message.info('正在保存头像')
     },

@@ -131,10 +131,16 @@ export default {
     }
   },
   methods: {
+    /**
+     * 打开新增对话框
+     */
     openDialogAddPost () {
       this.dialogAddPostTitle = '新增'
       this.dialogAddPost = true
     },
+    /**
+     * 打开编辑对话框
+     */
     editPost (id) {
       this.dialogAddPostTitle = '修改'
       this.dialogAddPost = true
@@ -142,13 +148,22 @@ export default {
        * 这里通过传入的id参数从后台获取数据传入到post表单
        */
     },
+    /**
+     * 离开对话框并清除表单规则
+     */
     closeDialog () {
       this.clearPost()
       this.dialogAddPost = false
     },
+    /**
+     * 清除对话框表单规则
+     */
     clearPost () {
       this.$refs.post.resetFields()
     },
+    /**
+     * 保存 新增/修改 的岗位信息
+     */
     savePost (post) {
       this.$refs[post].validate((valid) => {
         if (valid) {
@@ -165,11 +180,17 @@ export default {
         }
       })
     },
+    /**
+     * 搜索岗位
+     */
     searchPost () {
       this.loading = true
       this.$message.success('触发搜索API')
       this.loading = false
     },
+    /**
+     * 删除单个岗位
+     */
     deletePost (row) {
       this.$confirm('是否确认删除名称为"' + row.title + '"的岗位?', '提示', {
         confirmButtonText: '确定',
@@ -180,6 +201,9 @@ export default {
         this.dialogAddInform = false
       })
     },
+    /**
+     * 批量删除岗位
+     */
     deletePosts () {
       const postList = this.multipleSelection
       const idList = []

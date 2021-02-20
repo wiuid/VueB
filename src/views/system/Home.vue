@@ -88,7 +88,7 @@
     </el-row>
     <el-row>
       <el-col :span="12" :xs="24">
-        <el-card class="card-home" shadow="hover">人员情况变动板</el-card>
+        <el-card class="card-home" shadow="hover">财务数据板</el-card>
       </el-col>
       <el-col :span="12" :xs="24">
         <el-card class="card-home" shadow="hover">其他板</el-card>
