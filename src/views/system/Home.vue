@@ -11,7 +11,7 @@
         <el-col :span="12" :xs="24"><el-card class="card-home" shadow="hover">
           <el-row :gutter="20">
             <el-col :span="12">
-              <img src="../../assets/user.png" style="max-height: 60px"/>
+              <img src="../../assets/images/user.png" style="max-height: 60px"/>
             </el-col>
             <el-col :span="12" style="float:right;">
               <el-row>人员情况1</el-row>
@@ -22,7 +22,7 @@
         <el-col :span="12" :xs="24"><el-card class="card-home" shadow="hover">
           <el-row :gutter="20">
             <el-col :span="12">
-              <img src="../../assets/user.png" style="max-height: 60px"/>
+              <img src="../../assets/images/user.png" style="max-height: 60px"/>
             </el-col>
             <el-col :span="12" style="float:right;">
               <el-row>人员情况2</el-row>
@@ -33,7 +33,7 @@
         <el-col :span="12" :xs="24"><el-card class="card-home" shadow="hover">
           <el-row :gutter="20">
             <el-col :span="12">
-              <img src="../../assets/user.png" style="max-height: 60px"/>
+              <img src="../../assets/images/user.png" style="max-height: 60px"/>
             </el-col>
             <el-col :span="12" style="float:right;">
               <el-row>人员情况3</el-row>
@@ -44,7 +44,7 @@
         <el-col :span="12" :xs="24"><el-card class="card-home" shadow="hover">
           <el-row :gutter="20">
             <el-col :span="12">
-              <img src="../../assets/user.png" style="max-height: 60px"/>
+              <img src="../../assets/images/user.png" style="max-height: 60px"/>
             </el-col>
             <el-col :span="12" style="float:right;">
               <el-row>人员情况4</el-row>
