@@ -9,10 +9,10 @@
         </treeselect>
       </el-col>
       <el-col :span="8" style="margin-bottom: 10px">
-        <el-input v-model="searchUserOption.name" size="medium" style="width: 300px;" placeholder="输入用户名称" clearable></el-input>
+        <el-input v-model="searchUserOption.name" style="width: 300px;" placeholder="输入用户名称" clearable></el-input>
       </el-col>
       <el-col :span="8" style="margin-bottom: 10px">
-        <el-input v-model="searchUserOption.phone" size="medium" style="width: 300px;" placeholder="输入手机号码" clearable></el-input>
+        <el-input v-model="searchUserOption.phone" style="width: 300px;" placeholder="输入手机号码" clearable></el-input>
       </el-col>
       <el-col :span="8" style="margin-bottom: 10px">
         <el-select v-model="searchUserOption.state" placeholder="请选择用户状态" style="width: 300px" clearable>
@@ -31,18 +31,18 @@
           type="daterange"
           clearable
           range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期">
+          start-placeholder="开始创建日期"
+          end-placeholder="结束创建日期">
         </el-date-picker>
       </el-col>
       <el-col :span="8" style="margin-bottom: 10px">
-        <el-button type="primary" plain icon="el-icon-search" size="small" @click="searchUser">搜索</el-button>
-        <el-button type="primary" plain icon="el-icon-refresh" size="small" @click="reSearchUserOption">重置</el-button>
+        <el-button type="primary" plain icon="el-icon-search"  @click="searchUser">搜索</el-button>
+        <el-button type="primary" plain icon="el-icon-refresh"  @click="reSearchUserOption">重置</el-button>
       </el-col>
     </el-row>
     <el-row>
-      <el-button type="primary" plain icon="el-icon-plus" size="small" @click="openDialogAddUser">新 增</el-button>
-      <el-button type="danger" plain icon="el-icon-delete" size="small" @click="deleteUsers">删 除 所 选</el-button>
+      <el-button type="primary" plain icon="el-icon-plus"  @click="openDialogAddUser">新 增</el-button>
+      <el-button type="danger" plain icon="el-icon-delete"  @click="deleteUsers">删 除 所 选</el-button>
     </el-row>
     <el-row>
       <el-table v-loading="loading" :data="tableData" stripe style="width: 100%" ref="informTable"  @selection-change="handleSelectionChange">
@@ -141,6 +141,7 @@
 </template>
 
 <script>
+import '../../../assets/styles/defaultTreeselect.css'
 import treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import pagination from '@/components/Pagination'
@@ -155,7 +156,7 @@ export default {
           username: 'zhangsan',
           nickname: '张三',
           department: '开发部',
-          phone: '18231202665',
+          phone: '18231200000',
           state: '正常',
           date: '2021年2月20日'
         },
@@ -164,7 +165,7 @@ export default {
           username: 'lisi',
           nickname: '李四',
           department: '市场部',
-          phone: '18231202665',
+          phone: '18231200000',
           state: '正常',
           date: '2021年2月20日'
         }
@@ -226,7 +227,7 @@ export default {
       multipleSelection: [],
       dialogAddUser: false,
       dialogAddUserTitle: '新增',
-      formLabelWidth: '120px',
+      formLabelWidth: '80px',
       authSelect: [
         {
           label: '超级管理员',
@@ -267,8 +268,21 @@ export default {
       this.user.username = id
       this.dialogAddUser = true
     },
-    saveUser () {
-      this.$message.success('保存 新增/修改 的用户数据')
+    saveUser (user) {
+      this.$refs[user].validate((valid) => {
+        if (valid) {
+          this.$confirm('是否确认' + this.dialogAddUserTitle + '名称为"' + this.user.username + '"的用户?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$message.success(this.dialogAddUserTitle + '成功!')
+            this.dialogAddInform = false
+          })
+        } else {
+          return false
+        }
+      })
     },
     deleteUser (row) {
       this.$confirm('是否确认删除账户为"' + row.username + '"的用户?', '提示', {

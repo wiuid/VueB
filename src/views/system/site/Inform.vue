@@ -1,15 +1,15 @@
 <template>
   <div>
     <el-row style="margin-bottom: 10px">
-      <el-input v-model="searchInformOption.title" size="small" style="margin-right: 10px;width: 200px;" placeholder="输入公告标题部分字段" @change="searchInform"></el-input>
-      <el-date-picker v-model="searchInformOption.date" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期" size="small" :default-time="['00:00:00', '23:59:59']" style="margin-right: 10px" @change="searchInform"></el-date-picker>
-      <el-select size="small" v-model="searchInformOption.mark" placeholder="公告重要程度" style="margin-right: 10px;" clearable @change="searchInform">
+      <el-input v-model="searchInformOption.title"  style="margin-right: 10px;width: 200px;" placeholder="输入公告标题部分字段" @change="searchInform"></el-input>
+      <el-date-picker v-model="searchInformOption.date" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"  :default-time="['00:00:00', '23:59:59']" style="margin-right: 10px" @change="searchInform"></el-date-picker>
+      <el-select  v-model="searchInformOption.mark" placeholder="公告重要程度" style="margin-right: 10px;" clearable @change="searchInform">
         <el-option v-for="item in markSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
     </el-row>
     <el-row>
-      <el-button type="primary" plain icon="el-icon-plus" size="small" @click="openDialogAddInform">新 增</el-button>
-      <el-button type="danger" plain icon="el-icon-delete" size="small" @click="deleteInforms">删 除</el-button>
+      <el-button type="primary" plain icon="el-icon-plus"  @click="openDialogAddInform">新 增</el-button>
+      <el-button type="danger" plain icon="el-icon-delete"  @click="deleteInforms">删 除</el-button>
 
 <!--      <p>组件值：{{ searchInformOption.data }}</p>-->
     </el-row>
@@ -125,7 +125,7 @@ export default {
       },
       dialogAddInform: false,
       dialogAddInformTitle: '',
-      formLabelWidth: '120px',
+      formLabelWidth: '80px',
       markSelect: [
         {
           value: 'success',

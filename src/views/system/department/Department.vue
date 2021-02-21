@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-button type="primary" plain icon="el-icon-plus" size="small" @click="openDialogAddDepartment">新 增</el-button>
+      <el-button type="primary" plain icon="el-icon-plus"  @click="openDialogAddDepartment">新 增</el-button>
     </el-row>
     <el-row>
       <el-table lazy v-loading="loading" row-key="id" :data="tableData" size="mini" style="width: 100%" ref="departmentTable">
@@ -125,7 +125,7 @@ export default {
       },
       dialogAddDepartmentTitle: '新增',
       dialogAddDepartment: false,
-      formLabelWidth: '120px',
+      formLabelWidth: '80px',
       options: [ // 选择框下拉 树形组件 的数据
         {
           id: 'a',

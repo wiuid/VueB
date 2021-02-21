@@ -25,7 +25,7 @@
             <el-divider class="costHr"></el-divider>
             <el-row>
               <el-col span="12"><i class="el-icon-mobile-phone"></i>手机号码</el-col>
-              <el-col span="12"><span>18231202665</span></el-col>
+              <el-col span="12"><span>18231200000</span></el-col>
             </el-row>
             <el-divider class="costHr"></el-divider>
             <el-row>
@@ -69,9 +69,9 @@
                   <el-input type="email" v-model="info.email" autocomplete="off" style="width: 300px;"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" size="small" @click="saveInfo('rulesInfo')" style="margin-right: 10px;">保存</el-button>
+                  <el-button type="primary"  @click="saveInfo('rulesInfo')" style="margin-right: 10px;">保存</el-button>
                   <router-link to="/system">
-                    <el-button type="danger" size="small">关闭</el-button>
+                    <el-button type="danger" >关闭</el-button>
                   </router-link>
                 </el-form-item>
               </el-form>
@@ -88,9 +88,9 @@
                   <el-input type="password" v-model="passwordForm.confirmPassword" autocomplete="off" style="width: 300px;"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" size="small" @click="savePassword('rulesPassword')" style="margin-right: 10px;">保存</el-button>
+                  <el-button type="primary"  @click="savePassword('rulesPassword')" style="margin-right: 10px;">保存</el-button>
                   <router-link to="/system">
-                    <el-button type="danger" size="small">关闭</el-button>
+                    <el-button type="danger" >关闭</el-button>
                   </router-link>
                 </el-form-item>
               </el-form>

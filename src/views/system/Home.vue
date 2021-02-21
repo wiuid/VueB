@@ -110,13 +110,13 @@
     <el-drawer title="所有公告" :visible.sync="drawer" :with-header="true">
       <el-row style="padding: 0 20px 40px 20px">
         <el-row>
-          <el-input v-model="searchInformOption.title" size="small" style="margin-left: 10px;width: 200px;" placeholder="标题" @change="searchInform"></el-input>
+          <el-input v-model="searchInformOption.title"  style="margin-left: 10px;width: 200px;" placeholder="标题" @change="searchInform"></el-input>
         </el-row>
         <el-row>
-          <el-date-picker v-model="searchInformOption.data" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期" size="small" :default-time="['00:00:00', '23:59:59']" style="margin-left: 10px" @change="searchInform"></el-date-picker>
+          <el-date-picker v-model="searchInformOption.data" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"  :default-time="['00:00:00', '23:59:59']" style="margin-left: 10px" @change="searchInform"></el-date-picker>
         </el-row>
         <el-row>
-          <el-select size="small" v-model="searchInformOption.mark" placeholder="请选择" style="margin-left: 10px;" clearable @change="searchInform">
+          <el-select  v-model="searchInformOption.mark" placeholder="请选择" style="margin-left: 10px;" clearable @change="searchInform">
             <el-option v-for="item in markSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-row>
