@@ -1,20 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Index from '@/views/Index'
-import Login from '@/views/Login'
-import System from '@/views/System'
-import Home from '@/views/system/Home'
-import About from '@/views/system/About'
-import NotFount from '@/views/system/NotFount'
-import Inform from '@/views/system/site/Inform'
-import Log from '@/views/system/site/Log'
-import Department from '@/views/system/department/Department'
-import Post from '@/views/system/department/Post'
-import User from '@/views/system/user/User'
-import Auth from '@/views/system/user/Auth'
-import Info from '@/views/system/Info'
-import Monitoring from '@/views/system/monitoring/Monitoring'
-import ActiveUser from '@/views/system/monitoring/ActiveUser'
 
 Vue.use(VueRouter)
 
@@ -22,7 +7,7 @@ const routes = [
   {
     path: '/',
     name: 'Index',
-    component: Index,
+    component: () => import('@/views/Index'),
     meta: {
       title: 'webraAdmin'
     }
@@ -30,7 +15,7 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: Login,
+    component: () => import('@/views/Login'),
     meta: {
       title: '登录'
     }
@@ -38,12 +23,12 @@ const routes = [
   {
     path: '/system',
     name: 'System',
-    component: System,
+    component: () => import('@/views/System'),
     children: [
       {
         path: '/system',
         name: 'Home',
-        component: Home,
+        component: () => import('@/views/system/Home'),
         meta: {
           title: '首页'
         }
@@ -51,7 +36,7 @@ const routes = [
       {
         path: '/system/site/inform',
         name: 'Inform',
-        component: Inform,
+        component: () => import('@/views/system/site/Inform'),
         meta: {
           title: '通知公告'
         }
@@ -59,7 +44,7 @@ const routes = [
       {
         path: '/system/site/log',
         name: 'Log',
-        component: Log,
+        component: () => import('@/views/system/site/Log'),
         meta: {
           title: '日志详情'
         }
@@ -67,7 +52,7 @@ const routes = [
       {
         path: '/system/department',
         name: 'department',
-        component: Department,
+        component: () => import('@/views/system/department/Department'),
         meta: {
           title: '部门管理'
         }
@@ -75,7 +60,7 @@ const routes = [
       {
         path: '/system/department/post',
         name: 'Post',
-        component: Post,
+        component: () => import('@/views/system/department/Post'),
         meta: {
           title: '岗位管理'
         }
@@ -83,7 +68,7 @@ const routes = [
       {
         path: '/system/user',
         name: 'User',
-        component: User,
+        component: () => import('@/views/system/user/User'),
         meta: {
           title: '用户管理'
         }
@@ -91,7 +76,7 @@ const routes = [
       {
         path: '/system/user/auth',
         name: 'Auth',
-        component: Auth,
+        component: () => import('@/views/system/user/Auth'),
         meta: {
           title: '权限管理'
         }
@@ -99,7 +84,7 @@ const routes = [
       {
         path: '/system/info',
         name: 'Info',
-        component: Info,
+        component: () => import('@/views/system/Info'),
         meta: {
           title: '个人信息'
         }
@@ -107,7 +92,7 @@ const routes = [
       {
         path: '/system/monitoring',
         name: 'Monitoring',
-        component: Monitoring,
+        component: () => import('@/views/system/monitoring/Monitoring'),
         meta: {
           title: '系统监控'
         }
@@ -115,7 +100,7 @@ const routes = [
       {
         path: '/system/monitoring/user',
         name: 'ActiveUser',
-        component: ActiveUser,
+        component: () => import('@/views/system/monitoring/ActiveUser'),
         meta: {
           title: '在线用户'
         }
@@ -123,7 +108,7 @@ const routes = [
       {
         path: '/system/about',
         name: 'About',
-        component: About,
+        component: () => import('@/views/system/About'),
         meta: {
           title: '本站相关'
         }
@@ -131,7 +116,7 @@ const routes = [
       {
         path: '/system/*',
         name: 'NotFount',
-        component: NotFount,
+        component: () => import('@/views/system/NotFount'),
         meta: {
           title: '404-您输入的网页有误'
         }
@@ -157,6 +142,12 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+router.beforeEach((to, from, next) => {
+  if (to.meta.title) {
+    document.title = to.meta.title
+  }
+  next()
 })
 
 export default router
