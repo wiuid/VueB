@@ -14,7 +14,7 @@
               <h6>当前版本：0.1.0</h6>
             </span>
             <span style="font-size: 16px; color: #676a6c">传送门：</span>
-            <a href="#">
+            <a href="https://github.com/wiuid/VueA" target="_blank">
               <img src="~icon/ic-github.svg" height="30px"/>
             </a>
           </el-card>

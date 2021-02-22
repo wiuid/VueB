@@ -9,11 +9,11 @@ module.exports = {
   chainWebpack: (config) => {
     config.resolve.alias
       .set('@', resolve('src'))
-      // 需要重启 IDE
+      // 路径别名
       .set('styles', resolve('src/assets/styles'))
       .set('img', resolve('src/assets/images'))
       .set('icon', resolve('src/assets/icon'))
-      // 可以自己再加，按这种格式.set('', resolve(''))
+
   },
   devServer: {
     overlay: { // 让浏览器 overlay 同时显示警告和错误
