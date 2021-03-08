@@ -15,7 +15,7 @@
               <el-form-item prop="password" required>
                 <el-input type="password" clearable v-model="form.password" show-password prefix-icon="el-icon-s-help" placeholder="密码" style="width: 100%;"></el-input>
               </el-form-item>
-              <el-button type="primary" style="width: 100%">登 录</el-button>
+              <el-button type="primary" style="width: 100%" @click="login">登 录</el-button>
               <br style="margin: 5px"/>
               <br style="margin: 5px"/>
               <el-button type="primary" style="width: 100%" @click="toSystem()">免 登 录 按 钮</el-button>
@@ -28,6 +28,9 @@
 </template>
 
 <script>
+
+import { login } from '@/api/login'
+
 export default {
   name: 'Login',
   data () {
@@ -50,17 +53,18 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
-    onSubmit () {
-      console.log('submit!')
-    },
-    handleResize (event) {
-      this.fullWidth = document.documentElement.clientWidth - 16
-      this.fullHeight = document.documentElement.clientHeight - 16
-      this.curWidth = this.fullWidth + 'px'
-      this.curHeight = this.fullHeight + 'px'
-    },
-    toSystem () {
-      this.$router.push({ path: '/system' })
+    login () {
+      login(this.form)
+        .then((result) => {
+          if (result.data.code === 200) {
+            location.href = '/system'
+          } else {
+            this.$message.error('账号不存在或密码错误，请重新填写')
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
   }
 }
