@@ -57,6 +57,8 @@ export default {
       login(this.form)
         .then((result) => {
           if (result.data.code === 200) {
+            // 登录成功，token存储到sessionStorage，该存储位置，随着浏览器关闭而自动清除
+            sessionStorage.setItem('token', result.data.data.token)
             location.href = '/system'
           } else {
             this.$message.error('账号不存在或密码错误，请重新填写')
