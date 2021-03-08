@@ -42,7 +42,7 @@
     </el-row>
     <el-row>
       <el-button type="primary" plain icon="el-icon-plus"  @click="openDialogAddUser">新 增</el-button>
-      <el-button type="danger" plain icon="el-icon-delete"  @click="deleteUsers">删 除 所 选</el-button>
+      <el-button type="danger" plain icon="el-icon-delete"  @click="deleteUsers">删 除</el-button>
     </el-row>
     <el-row>
       <el-table v-loading="loading" :data="tableData" stripe style="width: 100%" ref="informTable"  @selection-change="handleSelectionChange">
@@ -133,7 +133,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">取 消</el-button>
-        <el-button @click="clearUser" type="warning" plain style="float:left;">清 空 重 置</el-button>
+        <el-button @click="clearUser" type="warning" plain style="float:left;">清 空</el-button>
         <el-button type="primary" @click="saveUser('user')">确 定</el-button>
       </div>
     </el-dialog>

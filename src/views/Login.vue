@@ -3,7 +3,7 @@
     <div class="img_box">
       <!-- 背景图片：动态绑定宽高 -->
       <!-- <img src="../../assets/img/bg01.png" :width="fullWidth" /> -->
-      <img src="../assets/images/backimg.png" :width="fullWidth" />
+      <img src="@/assets/images/backimg.png" :width="fullWidth" />
       <el-container>
         <el-row style="display: flex;margin: auto;text-align: center">
           <div style="margin-top: 150px;">

@@ -8,7 +8,7 @@
         <el-input v-model="searchAuthOption.code" style="width: 300px;" placeholder="请输入权限字符" clearable></el-input>
       </el-col>
       <el-col :span="8" style="margin-bottom: 10px">
-        <el-select v-model="searchAuthOption.state" placeholder="请选择用户状态" style="width: 300px" clearable>
+        <el-select v-model="searchAuthOption.state" placeholder="请选择权限状态" style="width: 300px" clearable>
           <el-option
             v-for="item in stateSelect"
             :key="item.value"
@@ -37,8 +37,8 @@
     </el-row>
     <el-row>
       <el-button type="primary" plain icon="el-icon-plus"  @click="openDialogAddPost">新 增</el-button>
-      <el-button type="danger" plain icon="el-icon-delete"  @click="deletePosts">删 除 所 选</el-button>
-      <el-button type="danger" plain icon="el-icon-circle-close"  @click="deletePosts">停 用 所 选</el-button>
+      <el-button type="danger" plain icon="el-icon-delete"  @click="deletePosts">删 除</el-button>
+      <el-button type="danger" plain icon="el-icon-circle-close"  @click="deletePosts">停 用</el-button>
       <el-button type="success" plain icon="el-icon-download"  @click="deletePosts">导 出</el-button>
     </el-row>
     <el-row>

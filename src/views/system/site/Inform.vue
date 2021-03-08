@@ -61,7 +61,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="clearInform;dialogAddInform = false">取 消</el-button>
-        <el-button @click="clearInform" type="warning" plain style="float:left;">清 空 重 置</el-button>
+        <el-button @click="clearInform" type="warning" plain style="float:left;">清 空</el-button>
         <el-button type="primary" @click="saveInform('inform')">确 定</el-button>
       </div>
     </el-dialog>

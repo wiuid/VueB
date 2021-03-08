@@ -67,7 +67,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeDialog;dialogAddDepartment = false">取 消</el-button>
-        <el-button @click="clearDepartment" type="warning" plain style="float:left;">清 空 重 置</el-button>
+        <el-button @click="clearDepartment" type="warning" plain style="float:left;">清 空</el-button>
         <el-button type="primary" @click="saveDepartment('department')">确 定</el-button>
       </div>
     </el-dialog>

@@ -2,7 +2,7 @@ import request from '@/utils/request/index'
 
 export function getListAPI (params) {
   return request({
-    url: '/getList.json',
+    url: '/hello',
     method: 'get',
     params
   })

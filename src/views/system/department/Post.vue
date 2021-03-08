@@ -1,14 +1,14 @@
 <template>
   <div>
     <el-row style="margin-bottom: 10px">
-      <el-input v-model="searchPostOption.title"  style="margin-right: 10px;width: 200px;" placeholder="输入部门名称部分字段" @change="searchPost" clearable></el-input>
+      <el-input v-model="searchPostOption.title"  style="margin-right: 10px;width: 200px;" placeholder="输入岗位名称部分字段" @change="searchPost" clearable></el-input>
       <el-select  v-model="searchPostOption.state" placeholder="状态分类" style="margin-right: 10px;" clearable @change="searchPost">
         <el-option v-for="item in stateSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
     </el-row>
     <el-row>
       <el-button type="primary" plain icon="el-icon-plus"  @click="openDialogAddPost">新 增</el-button>
-      <el-button type="danger" plain icon="el-icon-delete"  @click="deletePosts">删 除 所 选</el-button>
+      <el-button type="danger" plain icon="el-icon-delete"  @click="deletePosts">删 除</el-button>
       <el-button type="success" plain icon="el-icon-download"  @click="deletePosts">导 出</el-button>
     </el-row>
     <el-row>
@@ -68,7 +68,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">取 消</el-button>
-        <el-button @click="clearPost" type="warning" plain style="float:left;">清 空 重 置</el-button>
+        <el-button @click="clearPost" type="warning" plain style="float:left;">清 空</el-button>
         <el-button type="primary" @click="savePost('post')">确 定</el-button>
       </div>
     </el-dialog>

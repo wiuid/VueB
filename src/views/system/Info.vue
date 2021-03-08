@@ -101,6 +101,7 @@
     </el-row>
 
     <el-dialog title="修改头像" :visible.sync="dialogChangePortrait">
+      <!-- 这里采用先剪裁在上传的模式，剪裁需要使用组件：vue-cropper -->
       <el-upload
         class="avatar-uploader"
         action="https://jsonplaceholder.typicode.com/posts/"

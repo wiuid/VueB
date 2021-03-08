@@ -17,10 +17,11 @@ export default {
   },
   methods: {
     getApi () {
-      getListAPI()
-        .then((result) => {
-          this.$message.success(result)
-        })
+      getListAPI().then((result) => {
+        console.log(result.data)
+      }).catch((err) => {
+        console.log(err.data)
+      })
     }
   }
 }

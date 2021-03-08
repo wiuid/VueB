@@ -8,7 +8,7 @@
       </el-select>
     </el-row>
     <el-row>
-      <el-button type="danger" plain icon="el-icon-delete"  @click="deleteLogs">删 除 选 中</el-button>
+      <el-button type="danger" plain icon="el-icon-delete"  @click="deleteLogs">删 除</el-button>
       <el-button type="success" plain icon="el-icon-download"  @click="deleteLogs">导 出</el-button>
       <el-button type="danger" icon="el-icon-brush"  @click="deleteLogs">清 空</el-button>
     </el-row>
