@@ -4,7 +4,7 @@ import { Message } from 'element-ui'
 import router from '../../router'
 
 const instance = axios.create({
-  baseURL: process.env.VUE_APP_API_BASE_URL,
+  baseURL: '/api',
   timeout: 10000
 })
 // const responseTypeList = new Set(['blob', 'arraybuffer', 'stream'])
@@ -40,7 +40,7 @@ instance.interceptors.response.use(
   },
   err => {
     if (err.response.status) {
-      switch (err.response.status){
+      switch (err.response.status) {
         case 0:
           router.replace({
             path: '/login',
