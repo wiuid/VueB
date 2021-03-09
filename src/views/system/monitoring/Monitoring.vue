@@ -59,8 +59,16 @@
 </template>
 
 <script>
+import { getMonitoring } from '@/api/system/monitoring'
 export default {
-  name: 'Monitoring'
+  name: 'Monitoring',
+  mounted () {
+    getMonitoring().then((result) => {
+      console.log(result)
+    }).catch((err) => {
+      this.$message.error(err)
+    })
+  }
 }
 </script>
 
