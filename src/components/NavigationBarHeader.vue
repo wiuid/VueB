@@ -24,15 +24,21 @@ export default {
       console.log(key, keyPath)
     },
     logout () {
-      logout().then((result) => {
-        if (result.data.status === 200) {
-          sessionStorage.removeItem('token')
-        } else {
-          this.$message.error(result.data.msg)
-        }
-      }).catch((err) => {
-        this.$message.error(err)
-      })
+      const token = sessionStorage.getItem('token')
+
+      if (token !== null && token !== '') {
+        logout().then((result) => {
+          if (result.data.status === 200) {
+            sessionStorage.removeItem('token')
+          } else {
+            this.$message.error(result.data.msg)
+          }
+        }).catch((err) => {
+          this.$message.error(err)
+        })
+      } else {
+        this.$message.error('您当前未登录')
+      }
     }
   }
 }
