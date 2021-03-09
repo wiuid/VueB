@@ -6,12 +6,13 @@
         <img src="../assets/images/touxiang.gif" style="width: 40px;height: 40px">
       </template>
       <el-menu-item index="/system/info">个人中心</el-menu-item>
-      <el-menu-item index="/">退出登录</el-menu-item>
+      <el-menu-item @click="logout">退出登录</el-menu-item>
     </el-submenu>
   </el-menu>
 </template>
 
 <script>
+import { logout } from '@/api/login'
 export default {
   name: 'NavigationBarHeader',
   data () {
@@ -21,6 +22,17 @@ export default {
   methods: {
     handleSelect (key, keyPath) {
       console.log(key, keyPath)
+    },
+    logout () {
+      logout().then((result) => {
+        if (result.data.status === 200) {
+          sessionStorage.removeItem('token')
+        } else {
+          this.$message.error(result.data.msg)
+        }
+      }).catch((err) => {
+        this.$message.error(err)
+      })
     }
   }
 }
