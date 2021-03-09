@@ -41,6 +41,9 @@ instance.interceptors.response.use(
   err => {
     if (err.response.status) {
       switch (err.response.status) {
+        /**
+         * 还未登录，跳转至登录页
+         */
         case 0:
           router.replace({
             path: '/login',
@@ -49,6 +52,9 @@ instance.interceptors.response.use(
             }
           })
           break
+          /**
+           * token过期，清除本地token后跳转至登录页
+           */
         case 403:
           sessionStorage.removeItem('token')
           Message.info('登录过期，请重新登录')
@@ -59,6 +65,9 @@ instance.interceptors.response.use(
             }
           })
           break
+          /**
+           * 权限不足，进行提示即可
+           */
         case 300:
           Message.error('您权限不足，请联系管理员')
           break
