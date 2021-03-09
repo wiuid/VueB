@@ -15,7 +15,7 @@
               <el-form-item prop="password" required>
                 <el-input type="password" clearable v-model="form.password" show-password prefix-icon="el-icon-s-help" placeholder="密码" style="width: 100%;" autocomplete="off"></el-input>
               </el-form-item>
-              <el-button type="primary" style="width: 100%" @click="login(form)">登 录</el-button>
+              <el-button type="primary" style="width: 100%" @click="login()">登 录</el-button>
               <br style="margin: 5px"/>
               <br style="margin: 5px"/>
               <el-button type="primary" style="width: 100%" @click="toSystem()">免 登 录 按 钮</el-button>
@@ -64,9 +64,9 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
-    login (form) {
-      this.$refs[form].validate((valid) => {
-        if (valid) {
+    login () {
+      if (this.form.username.length > 4) {
+        if (this.form.password.length > 5) {
           login(this.form).then((result) => {
             if (result.data.status === 200) {
               // 登录成功，token存储到sessionStorage，该存储位置，随着浏览器关闭而自动清除
@@ -79,9 +79,11 @@ export default {
             console.log(err)
           })
         } else {
-          return false
+          this.$message.info('密码最短六位')
         }
-      })
+      } else {
+        this.$message.info('账号最短五位')
+      }
     },
     toSystem () {
       router.replace({
