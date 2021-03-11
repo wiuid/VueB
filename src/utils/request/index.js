@@ -15,7 +15,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 instance.interceptors.request.use(
   config => {
     const token = sessionStorage.getItem('token')
-    token && (config.headers.Authorization = token)
+    token && (config.headers.token = token)
     return config
   },
   err => {

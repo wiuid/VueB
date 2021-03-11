@@ -64,9 +64,13 @@ export default {
   name: 'Monitoring',
   mounted () {
     getMonitoring().then((result) => {
-      console.log(result)
+      if (result.data.status !== 200) {
+        this.$message.error('您当前未登录')
+      }
     }).catch((err) => {
-      this.$message.error(err)
+      console.log('----------------------')
+      console.log(err)
+      // this.$message.error(err)
     })
   }
 }
