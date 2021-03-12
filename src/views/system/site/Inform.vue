@@ -2,10 +2,8 @@
   <div>
     <el-row style="margin-bottom: 10px">
       <el-input v-model="params.title"  style="margin-right: 10px;width: 200px;" placeholder="输入公告标题部分字段" @change="searchInform"></el-input>
-      <el-date-picker v-model="params.date" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"  :default-time="['00:00:00', '23:59:59']" style="margin-right: 10px" @change="searchInform"></el-date-picker>
-      <el-select  v-model="params.mark" placeholder="公告重要程度" style="margin-right: 10px;" clearable @change="searchInform">
-        <el-option v-for="item in markSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
-      </el-select>
+      <el-date-picker v-model="params.createDate" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"  :default-time="['00:00:00', '23:59:59']" style="margin-right: 10px" @change="searchInform"></el-date-picker>
+      <el-switch  v-model="params.state" @change="searchInform" :active-value="0" :inactive-value="1"></el-switch>
     </el-row>
     <el-row>
       <el-button type="primary" plain icon="el-icon-plus"  @click="openDialogAddInform">新 增</el-button>
@@ -26,10 +24,10 @@
         <el-table-column prop="createDate" :formatter="dateFormat" label="时间" align="center"></el-table-column>
         <el-table-column prop="state" label="状态" align="center">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.state"></el-switch>
+            <el-switch v-model="scope.row.state" :active-value="0" :inactive-value="1"></el-switch>
           </template>
         </el-table-column>
-        <el-table-column prop="mark" label="重要标识" align="center"></el-table-column>
+        <el-table-column prop="userNickname" label="发布人" align="center"></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="editInform(scope.row.id)"><i class="el-icon-edit"></i>修改</el-link>
@@ -51,15 +49,13 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="发布日期" :label-width="formLabelWidth" prop="date">
-              <el-date-picker type="date" placeholder="选择日期" v-model="inform.date" style="width: 100%;"></el-date-picker>
+            <el-form-item label="状态" :label-width="formLabelWidth" prop="status">
+              <el-switch v-model="inform.state" :active-value="0" :inactive-value="1"></el-switch>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="重要程度" :label-width="formLabelWidth" prop="mark">
-              <el-select v-model="inform.mark" placeholder="请选择">
-                <el-option v-for="item in markSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
-              </el-select>
+            <el-form-item label="发布时间" :label-width="formLabelWidth" prop="clearable">
+              <span>{{inform.createDate}}</span>
             </el-form-item>
           </el-col>
         </el-row>
@@ -71,7 +67,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="clearInform;dialogAddInform = false">取 消</el-button>
-        <el-button @click="clearInform" type="warning" plain style="float:left;">清 空</el-button>
+        <!-- <el-button @click="clearInform" type="warning" plain style="float:left;">清 空</el-button> -->
         <el-button type="primary" @click="saveInform('inform')">确 定</el-button>
       </div>
     </el-dialog>
@@ -79,7 +75,7 @@
 </template>
 
 <script>
-import { getInform } from '@/api/system/site/inform'
+import { getInformList, getInform, saveInform } from '@/api/system/site/inform'
 import pagination from '@/components/Pagination'
 import moment from 'moment'
 export default {
@@ -91,21 +87,16 @@ export default {
         title: [
           { required: true, message: '请输入公告标题', trigger: 'blur' }
         ],
-        date: [
-          { required: true, message: '请选择日期', trigger: 'blur' }
-        ],
-        mark: [
-          { required: true, message: '请选择公告类型', trigger: 'change' }
-        ],
         text: [
           { required: true, message: '请输入公告正文内容', trigger: 'blur' }
         ]
       },
       tableData: [],
       inform: {
+        id: '',
         title: '',
-        date: '',
-        mark: 'success',
+        createDate: '',
+        state: 0,
         text: ''
       },
       dialogAddInform: false,
@@ -129,31 +120,42 @@ export default {
       loading: false,
       params: {
         title: '',
-        date: '',
+        createDate: '',
         state: '',
-        mark: '',
         page: '',
         pageSize: null
       }
     }
   },
   mounted () {
-    getInform(this.params).then((result) => {
-      console.log(result)
-      this.tableData = result.data.data.inform
-      console.log(this.tableData)
-    }).catch((err) => {
-      this.$message.error(err)
-    })
+    this.searchInform()
+    // getInformList(this.params).then((result) => {
+    //   if (result.data.status === 200) {
+    //     this.tableData = result.data.data.informList
+    //   } else {
+    //     this.$message.info(result.data.msg)
+    //   }
+    // }).catch((err) => {
+    //   this.$message.error(err)
+    // })
   },
   methods: {
     searchInform () {
-      this.$message.success('yes my love')
+      this.loading = true
+      getInformList(this.params).then((result) => {
+        if (result.status === 200) {
+          this.tableData = result.data.informList
+        } else {
+          this.$message.info(result.msg)
+        }
+        this.loading = false
+      })
     },
     /**
      * 打开对话框  同时清空表单数据、标题改为新增公告
      */
     openDialogAddInform () {
+      this.inform.createDate = moment().format('YYYY-MM-DD HH:mm:ss')
       this.dialogAddInformTitle = '新增'
       this.dialogAddInform = true
     },
@@ -162,9 +164,10 @@ export default {
      */
     clearInform () {
       this.$refs.inform.resetFields()
+      this.inform.id = 0
       this.inform.title = ''
-      this.inform.date = ''
-      this.inform.mark = 'success'
+      this.inform.userNickname = ''
+      this.inform.state = 0
       this.inform.text = ''
     },
     /**
@@ -173,7 +176,16 @@ export default {
      */
     editInform (id) {
       this.dialogAddInformTitle = '修改'
-      this.inform.title = id
+      getInform(id).then((result) => {
+        if (result.status === 200) {
+          this.inform = result.data.inform
+          this.inform.createDate = moment(this.inform.createDate).format('YYYY-MM-DD HH:mm:ss')
+        } else {
+          this.$message.error('数据错误')
+        }
+      }).catch((err) => {
+        this.$message.error(err)
+      })
       this.dialogAddInform = true
     },
     /**
@@ -194,6 +206,12 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
+            saveInform().then((result) => {
+              if (result.data.status === 200) {
+                this.$message.success(result.data.msg)
+                this.searchInform()
+              }
+            }).catch((err) => { this.$message.error(err) })
             this.$message.success(this.dialogAddInformTitle + '成功!')
             this.dialogAddInform = false
           })
