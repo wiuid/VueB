@@ -14,14 +14,23 @@
 <!--      <p>组件值：{{ searchInformOption.data }}</p>-->
     </el-row>
     <el-row>
-      <el-table v-loading="loading" :data="tableData" stripe style="width: 100%" ref="informTable"  @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="id" type=index label="序号" width="55"></el-table-column>
-        <el-table-column prop="title" label="公告标题"></el-table-column>
-        <el-table-column prop="createDate" label="时间"></el-table-column>
-        <el-table-column prop="state" label="状态"></el-table-column>
-        <el-table-column prop="mark" label="重要标识"></el-table-column>
-        <el-table-column label="操作">
+      <el-table v-loading="loading"
+        :data="tableData"
+        stripe style="width: 100%"
+        ref="informTable"
+        @selection-change="handleSelectionChange"
+        :header-cell-style="{'text-align':'center'}">
+        <el-table-column type="selection" width="55" align="center"></el-table-column>
+        <el-table-column prop="id" type=index label="序号" width="55" align="center"></el-table-column>
+        <el-table-column prop="title" label="公告标题" align="center"></el-table-column>
+        <el-table-column prop="createDate" :formatter="dateFormat" label="时间" align="center"></el-table-column>
+        <el-table-column prop="state" label="状态" align="center">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.state"></el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column prop="mark" label="重要标识" align="center"></el-table-column>
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="editInform(scope.row.id)"><i class="el-icon-edit"></i>修改</el-link>
             <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="deleteInform(scope.row)"><i class="el-icon-delete"></i>删除</el-link>
@@ -72,6 +81,7 @@
 <script>
 import { getInform } from '@/api/system/site/inform'
 import pagination from '@/components/Pagination'
+import moment from 'moment'
 export default {
   name: 'Inform',
   components: { pagination },
@@ -233,6 +243,13 @@ export default {
      */
     handleSelectionChange (val) {
       this.multipleSelection = val
+    },
+    dateFormat (row, column) {
+      var date = row[column.property]
+      if (date === undefined) {
+        return ''
+      }
+      return moment(date).format('YYYY-MM-DD HH:mm:ss')
     }
   }
 }
