@@ -1,5 +1,4 @@
 import axios from 'axios'
-// import QS from 'qs'
 import { Message } from 'element-ui'
 import router from '../../router'
 
@@ -15,7 +14,9 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 instance.interceptors.request.use(
   config => {
     const token = sessionStorage.getItem('token')
-    token && (config.headers.token = token)
+    if (token) {
+      config.headers.token = token
+    }
     return config
   },
   err => {
@@ -32,49 +33,53 @@ instance.interceptors.response.use(
     //   }
     //   return Promise.resolve(response.data)
     // }
-    if (response.status === 200) {
-      return Promise.resolve(response)
+    const res = response.data
+    if (res.status === 200) {
+      return Promise.resolve(res)
     } else {
-      return Promise.reject(response)
+      if (res.status) {
+        switch (res.status) {
+          /**
+           * 还未登录，跳转至登录页
+           */
+          case 0:
+            router.replace({
+              path: '/login',
+              query: {
+                redirect: router.currentRoute.fullPath
+              }
+            })
+            break
+            /**
+             * token过期，清除本地token后跳转至登录页
+             */
+          case 403:
+            sessionStorage.removeItem('token')
+            localStorage.removeItem('token')
+            Message.info('登录过期，请重新登录')
+            router.replace({
+              path: '/login',
+              query: {
+                redirect: router.currentRoute.fullPath
+              }
+            })
+            break
+            /**
+             * 权限不足，进行提示即可
+             */
+          case 300:
+            Message.error('您权限不足，请联系管理员')
+            break
+          default:
+            Message.error(res.mes)
+        }
+      }
+
+      return Promise.reject(res)
     }
   },
   err => {
-    if (err.response.status) {
-      switch (err.response.status) {
-        /**
-         * 还未登录，跳转至登录页
-         */
-        case 0:
-          router.replace({
-            path: '/login',
-            query: {
-              redirect: router.currentRoute.fullPath
-            }
-          })
-          break
-          /**
-           * token过期，清除本地token后跳转至登录页
-           */
-        case 403:
-          sessionStorage.removeItem('token')
-          Message.info('登录过期，请重新登录')
-          router.replace({
-            path: '/login',
-            query: {
-              redirect: router.currentRoute.fullPath
-            }
-          })
-          break
-          /**
-           * 权限不足，进行提示即可
-           */
-        case 300:
-          Message.error('您权限不足，请联系管理员')
-          break
-        default:
-          Message.error(err.response.mes)
-      }
-    }
+    Message.error(err)
     return Promise.reject(err)
   }
 )
