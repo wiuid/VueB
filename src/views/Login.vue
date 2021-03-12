@@ -69,6 +69,7 @@ export default {
         if (this.form.password.length > 5) {
           login(this.form).then((result) => {
             // 登录成功，token存储到sessionStorage，该存储位置，随着浏览器关闭而自动清除
+            localStorage.setItem('token', result.data.data.token)
             sessionStorage.setItem('token', result.data.data.token)
             this.toSystem()
           }).catch((err) => {
