@@ -1,9 +1,9 @@
 <template>
   <div>
     <el-row style="margin-bottom: 10px">
-      <el-input v-model="searchInformOption.title"  style="margin-right: 10px;width: 200px;" placeholder="输入公告标题部分字段" @change="searchInform"></el-input>
-      <el-date-picker v-model="searchInformOption.date" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"  :default-time="['00:00:00', '23:59:59']" style="margin-right: 10px" @change="searchInform"></el-date-picker>
-      <el-select  v-model="searchInformOption.mark" placeholder="公告重要程度" style="margin-right: 10px;" clearable @change="searchInform">
+      <el-input v-model="params.title"  style="margin-right: 10px;width: 200px;" placeholder="输入公告标题部分字段" @change="searchInform"></el-input>
+      <el-date-picker v-model="params.date" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"  :default-time="['00:00:00', '23:59:59']" style="margin-right: 10px" @change="searchInform"></el-date-picker>
+      <el-select  v-model="params.mark" placeholder="公告重要程度" style="margin-right: 10px;" clearable @change="searchInform">
         <el-option v-for="item in markSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
     </el-row>
@@ -16,9 +16,10 @@
     <el-row>
       <el-table v-loading="loading" :data="tableData" stripe style="width: 100%" ref="informTable"  @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="id" label="序号" width="55"></el-table-column>
+        <el-table-column prop="id" type=index label="序号" width="55"></el-table-column>
         <el-table-column prop="title" label="公告标题"></el-table-column>
-        <el-table-column prop="date" label="时间"></el-table-column>
+        <el-table-column prop="createDate" label="时间"></el-table-column>
+        <el-table-column prop="state" label="状态"></el-table-column>
         <el-table-column prop="mark" label="重要标识"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -69,17 +70,13 @@
 </template>
 
 <script>
+import { getInform } from '@/api/system/site/inform'
 import pagination from '@/components/Pagination'
 export default {
   name: 'Inform',
   components: { pagination },
   data () {
     return {
-      searchInformOption: {
-        title: '',
-        date: '',
-        mark: ''
-      },
       rules: {
         title: [
           { required: true, message: '请输入公告标题', trigger: 'blur' }
@@ -94,29 +91,7 @@ export default {
           { required: true, message: '请输入公告正文内容', trigger: 'blur' }
         ]
       },
-      tableData: [
-        {
-          id: '1',
-          title: '我是公告标题1',
-          date: '时间1',
-          mark: '1'
-        }, {
-          id: '2',
-          title: '我是公告标题2',
-          date: '时间2',
-          mark: '2'
-        }, {
-          id: '3',
-          title: '我是公告标题3',
-          date: '时间3',
-          mark: '3'
-        }, {
-          id: '4',
-          title: '我是公告标题4',
-          date: '时间4',
-          mark: '4'
-        }
-      ],
+      tableData: [],
       inform: {
         title: '',
         date: '',
@@ -141,10 +116,25 @@ export default {
         }
       ],
       multipleSelection: [],
-      loading: false
+      loading: false,
+      params: {
+        title: '',
+        date: '',
+        state: '',
+        mark: '',
+        page: '',
+        pageSize: null
+      }
     }
   },
   mounted () {
+    getInform(this.params).then((result) => {
+      console.log(result)
+      this.tableData = result.data.data.inform
+      console.log(this.tableData)
+    }).catch((err) => {
+      this.$message.error(err)
+    })
   },
   methods: {
     searchInform () {
