@@ -43,12 +43,8 @@ export default {
         sessionStorage.setItem('token', localToken)
       } else {
         // 当没有登录信息，所在的页面又是登录之后的页面，需要跳转至登录页
-        const path = this.$route.path
-        console.log('判断之前')
-        console.log(window.location.pathname)
-        if (path !== '/' && path !== '/login') {
-          console.log(new Date() + '执行了一次')
-          console.log(path)
+        const pathName = window.location.pathname
+        if (pathName !== '/' && pathName !== '/login') {
           router.replace({
             path: '/login',
             query: {
