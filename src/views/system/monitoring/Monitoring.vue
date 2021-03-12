@@ -7,9 +7,27 @@
             <div slot="header" class="clearfix">
               <span>CPU</span>
             </div>
-            <el-divider></el-divider>
-            <el-divider></el-divider>
-            <el-divider></el-divider>
+            <div class="fontSize14">
+              <el-row>
+                <el-col span="12">核心</el-col>
+                <el-col span="12">{{cpu.kernel}}</el-col>
+              </el-row>
+              <el-divider class="dividerHeight"></el-divider>
+              <el-row>
+                <el-col span="12">逻辑处理器</el-col>
+                <el-col span="12">{{cpu.logicalProcessor}}</el-col>
+              </el-row>
+              <el-divider class="dividerHeight"></el-divider>
+              <el-row>
+                <el-col span="12">使用率</el-col>
+                <el-col span="12">{{cpu.usageRate}}</el-col>
+              </el-row>
+              <el-divider class="dividerHeight"></el-divider>
+              <el-row>
+                <el-col span="12">空闲率</el-col>
+                <el-col span="12">{{cpu.vacancyRate}}</el-col>
+              </el-row>
+            </div>
           </el-card>
         </el-row>
         <el-row>
@@ -17,8 +35,32 @@
             <div slot="header" class="clearfix">
               <span>服务器信息</span>
             </div>
-            <el-divider></el-divider>
-            <el-divider></el-divider>
+            <div class="fontSize14">
+              <el-row>
+                <el-col span="12">运行时长</el-col>
+                <el-col span="12">{{system.date}}</el-col>
+              </el-row>
+              <el-divider class="dividerHeight"></el-divider>
+              <el-row>
+                <el-col span="12">主机名</el-col>
+                <el-col span="12">{{system.hostname}}</el-col>
+              </el-row>
+              <el-divider class="dividerHeight"></el-divider>
+              <el-row>
+                <el-col span="12">地址</el-col>
+                <el-col span="12">{{system.ip}}</el-col>
+              </el-row>
+              <el-divider class="dividerHeight"></el-divider>
+              <el-row>
+                <el-col span="12">系统</el-col>
+                <el-col span="12">{{system.system}}</el-col>
+              </el-row>
+              <el-divider class="dividerHeight"></el-divider>
+              <el-row>
+                <el-col span="12">版本</el-col>
+                <el-col span="12">{{system.version}}</el-col>
+              </el-row>
+            </div>
           </el-card>
         </el-row>
         <el-row>
@@ -26,8 +68,10 @@
             <div slot="header" class="clearfix">
               <span>Java虚拟机信息</span>
             </div>
-            <el-divider></el-divider>
-            <el-divider></el-divider>
+            <div class="fontSize14">
+              <el-divider class="dividerHeight"></el-divider>
+              <el-divider class="dividerHeight"></el-divider>
+            </div>
           </el-card>
         </el-row>
       </el-col>
@@ -37,8 +81,27 @@
             <div slot="header" class="clearfix">
               <span>内存</span>
             </div>
-            <el-divider></el-divider>
-            <el-divider></el-divider>
+            <div class="fontSize14">
+              <el-row>
+                <el-col span="12">大小</el-col>
+                <el-col span="12">{{memory.total}}M</el-col>
+              </el-row>
+              <el-divider class="dividerHeight"></el-divider>
+              <el-row>
+                <el-col span="12">已用</el-col>
+                <el-col span="12">{{memory.current}}M</el-col>
+              </el-row>
+              <el-divider class="dividerHeight"></el-divider>
+              <el-row>
+                <el-col span="12">空闲</el-col>
+                <el-col span="12">{{memory.available}}M</el-col>
+              </el-row>
+              <el-divider class="dividerHeight"></el-divider>
+              <el-row>
+                <el-col span="12">使用率</el-col>
+                <el-col span="12">{{memory.usageRate}}</el-col>
+              </el-row>
+            </div>
           </el-card>
         </el-row>
         <el-row>
@@ -46,11 +109,22 @@
             <div slot="header" class="clearfix">
               <span>磁盘状态</span>
             </div>
-            <el-divider></el-divider>
-            <el-divider></el-divider>
-            <el-divider></el-divider>
-            <el-divider></el-divider>
-            <el-divider></el-divider>
+            <div class="fontSize14">
+              <!-- <el-divider class="dividerHeight"></el-divider> -->
+              {{disk.partitions}}
+            </div>
+          </el-card>
+        </el-row>
+        <el-row>
+          <el-card class="marginB10px">
+            <div class="fontSize14">
+              本页面的数据是通过后台接入的插件而实现的，该插件名为·oshi·
+              <br/>
+              github传送门：
+              <a href="https://github.com/oshi/oshi" target="_blank">
+              <img src="@/assets/icon/ic-github.svg" height="30px"/>
+              </a>
+            </div>
           </el-card>
         </el-row>
       </el-col>
@@ -62,15 +136,22 @@
 import { getMonitoring } from '@/api/system/monitoring'
 export default {
   name: 'Monitoring',
+  data () {
+    return {
+      cpu: {},
+      disk: {},
+      memory: {},
+      system: {}
+    }
+  },
   mounted () {
     getMonitoring().then((result) => {
-      if (result.data.status !== 200) {
-        this.$message.error('您当前未登录')
-      }
+      this.cpu = result.data.data.cpu
+      this.disk = result.data.data.disk
+      this.memory = result.data.data.memory
+      this.system = result.data.data.system
     }).catch((err) => {
-      console.log('----------------------')
-      console.log(err)
-      // this.$message.error(err)
+      this.$message.error(err)
     })
   }
 }
@@ -79,5 +160,12 @@ export default {
 <style scoped>
   .marginB10px {
     margin-bottom: 10px;
+  }
+  .dividerHeight {
+    height: 1px;
+    margin: 5px 0;
+  }
+  .fontSize14 {
+    font-size: 14px;
   }
 </style>
