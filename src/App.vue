@@ -28,8 +28,38 @@
 
 </style>
 <script>
-
+import router from '@/router'
 export default {
-  name: 'app'
+  name: 'app',
+  mounted () {
+    // 判断session 是否存有token   面对刷新当前页面的情况
+    const sessionToken = sessionStorage.getItem('token')
+    if (sessionToken) {
+      localStorage.setItem('token', sessionToken)
+    } else {
+      // 面对标签页之间的登录信息交换
+      const localToken = localStorage.getItem('token')
+      if (localToken) {
+        sessionStorage.setItem('token', localToken)
+      } else {
+        // 当没有登录信息，所在的页面又是登录之后的页面，需要跳转至登录页
+        const path = this.$route.path
+        console.log('判断之前')
+        console.log(window.location.pathname)
+        if (path !== '/' && path !== '/login') {
+          console.log(new Date() + '执行了一次')
+          console.log(path)
+          router.replace({
+            path: '/login',
+            query: {
+              redirect: router.currentRoute.fullPath
+            }
+          })
+        }
+      }
+    }
+  },
+  activated () {
+  }
 }
 </script>
