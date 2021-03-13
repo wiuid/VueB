@@ -40,6 +40,6 @@ export function saveInformApi (params) {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
-    data: JSON.stringify(params)
+    data: params
   })
 }
