@@ -24,14 +24,16 @@ export default {
       console.log(key, keyPath)
     },
     logout () {
-      const token = sessionStorage.getItem('token')
+      const sessionToken = sessionStorage.getItem('token')
+      const localToken = localStorage.getItem('token')
 
-      if (token !== null && token !== '') {
+      if (sessionToken !== null && localToken !== null) {
         logout().then((result) => {
-          if (result.data.status === 200) {
+          if (result.status === 200) {
             sessionStorage.removeItem('token')
+            localStorage.removeItem('token')
           } else {
-            this.$message.error(result.data.msg)
+            this.$message.error(result.msg)
           }
         }).catch((err) => {
           this.$message.error(err)
