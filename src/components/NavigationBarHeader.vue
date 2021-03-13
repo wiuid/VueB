@@ -13,6 +13,7 @@
 
 <script>
 import { logout } from '@/api/login'
+import router from '@/router'
 export default {
   name: 'NavigationBarHeader',
   data () {
@@ -32,6 +33,12 @@ export default {
           if (result.status === 200) {
             sessionStorage.removeItem('token')
             localStorage.removeItem('token')
+            router.replace({
+              path: '/login',
+              query: {
+                redirect: router.currentRoute.fullPath
+              }
+            })
           } else {
             this.$message.error(result.msg)
           }
