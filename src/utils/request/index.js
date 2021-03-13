@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import router from '../../router'
+import qs from 'qs'
 
 const instance = axios.create({
   baseURL: '/api',
@@ -17,6 +18,10 @@ instance.interceptors.request.use(
     if (token) {
       config.headers.token = token
     }
+    if (config.type === 'formData' || config.method !== 'post') {
+      return config
+    }
+    config.data = qs.stringify(config.data)
     return config
   },
   err => {
