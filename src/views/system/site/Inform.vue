@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { getInformList, getInform, saveInformApi } from '@/api/system/site/inform'
+import { getInformList, getInform, saveInformApi, deleteInformApi } from '@/api/system/site/inform'
 import pagination from '@/components/Pagination'
 import moment from 'moment'
 export default {
@@ -210,11 +210,12 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.$message.info(this.inform.createDate + this.inform.updateDate)
             saveInformApi(this.inform).then((result) => {
               if (result.status === 200) {
                 this.$message.success(result.msg)
                 this.searchInform()
+              } else {
+                this.$message.success(result.msg)
               }
             }).catch((err) => { this.$message.error(err) })
             this.dialogAddInform = false
@@ -234,7 +235,14 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.success('删除成功!')
+        deleteInformApi(row.id).then((res) => {
+          if (res.status === 200) {
+            this.$message.success(res.msg)
+            this.searchInform()
+          } else {
+            this.$message.error(res.msg)
+          }
+        }).catch((err) => { this.$message.error(err) })
         this.dialogAddInform = false
       })
     },
