@@ -53,10 +53,7 @@ export function deleteInformApi (id) {
   return request({
     url: '/system/site/inform/delete',
     method: 'delete',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    data: {
+    params: {
       id: id
     }
   })
