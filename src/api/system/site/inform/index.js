@@ -1,5 +1,5 @@
 import request from '@/utils/request/index'
-
+// import qs from 'qs'
 /**
  * 获取公告列表
  * @param {*} params 各种参数
@@ -33,13 +33,13 @@ export function getInform (id) {
  * @param {*} params  params
  * @returns inform
  */
-export function saveInform (params) {
+export function saveInformApi (params) {
   return request({
     url: '/system/site/inform/save',
     method: 'post',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
-    params
+    data: JSON.stringify(params)
   })
 }

@@ -8,9 +8,8 @@ const instance = axios.create({
 })
 // const responseTypeList = new Set(['blob', 'arraybuffer', 'stream'])
 
-// post请求头的设置
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
-
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+// instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 // 请求拦截配置
 instance.interceptors.request.use(
   config => {

@@ -25,12 +25,11 @@ export default {
       console.log(key, keyPath)
     },
     logout () {
-      const sessionToken = sessionStorage.getItem('token')
-      const localToken = localStorage.getItem('token')
+      const token = sessionStorage.getItem('token')
 
-      if (sessionToken !== null && localToken !== null) {
+      if (token !== null && token !== '') {
         logout().then((result) => {
-          if (result.status === 200) {
+          if (result.data.status === 200) {
             sessionStorage.removeItem('token')
             localStorage.removeItem('token')
             router.replace({
@@ -40,7 +39,7 @@ export default {
               }
             })
           } else {
-            this.$message.error(result.msg)
+            this.$message.error(result.data.msg)
           }
         }).catch((err) => {
           this.$message.error(err)
