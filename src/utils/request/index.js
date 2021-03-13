@@ -11,6 +11,7 @@ const instance = axios.create({
 // post请求头的设置
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 
+// 请求拦截配置
 instance.interceptors.request.use(
   config => {
     const token = sessionStorage.getItem('token')
@@ -24,6 +25,7 @@ instance.interceptors.request.use(
   }
 )
 
+// 响应拦截
 instance.interceptors.response.use(
   response => {
     // 第一版，看不懂，暂时注释
