@@ -1,10 +1,14 @@
 import request from '@/utils/request/index'
+import qs from 'qs'
 
 export function login (params) {
   return request({
     url: '/login',
     method: 'post',
-    params
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    params: qs.parse(params)
   })
 }
 
