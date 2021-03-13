@@ -31,7 +31,7 @@ export function getInform (id) {
 /**
  * 新建/修改 单条 数据
  * @param {*} params  params
- * @returns inform
+ * @returns res
  */
 export function saveInformApi (params) {
   return request({
@@ -41,5 +41,23 @@ export function saveInformApi (params) {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
     data: params
+  })
+}
+
+/**
+ * 删除 单条 数据
+ * @param {*} params  公告id
+ * @returns res
+ */
+export function deleteInformApi (id) {
+  return request({
+    url: '/system/site/inform/delete',
+    method: 'delete',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    data: {
+      id: id
+    }
   })
 }
