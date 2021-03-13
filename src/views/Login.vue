@@ -47,8 +47,8 @@ export default {
         ]
       },
       form: {
-        username: '',
-        password: ''
+        username: 'admin',
+        password: '123qwe'
       },
       // 获取设备宽度、高度
       fullWidth: document.documentElement.clientWidth,
