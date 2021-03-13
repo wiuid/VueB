@@ -93,9 +93,10 @@ export default {
       },
       tableData: [],
       inform: {
-        id: 0,
+        id: null,
         title: '',
         createDate: '',
+        updateDate: '',
         state: 0,
         text: ''
       },
@@ -155,7 +156,9 @@ export default {
      * 打开对话框  同时清空表单数据、标题改为新增公告
      */
     openDialogAddInform () {
-      this.inform.createDate = moment().format('YYYY-MM-DD HH:mm:ss')
+      const date = moment().format('YYYY-MM-DD HH:mm:ss')
+      this.inform.createDate = date
+      this.inform.updateDate = date
       this.dialogAddInformTitle = '新增'
       this.dialogAddInform = true
     },
@@ -164,7 +167,7 @@ export default {
      */
     clearInform () {
       this.$refs.inform.resetFields()
-      this.inform.id = 0
+      this.inform.id = null
       this.inform.title = ''
       this.inform.userNickname = ''
       this.inform.state = 0
@@ -180,6 +183,7 @@ export default {
         if (result.status === 200) {
           this.inform = result.data.inform
           this.inform.createDate = moment(this.inform.createDate).format('YYYY-MM-DD HH:mm:ss')
+          this.inform.updateDate = moment().format('YYYY-MM-DD HH:mm:ss')
         } else {
           this.$message.error('数据错误')
         }
@@ -206,7 +210,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.inform.createDate = ''
+            this.$message.info(this.inform.createDate + this.inform.updateDate)
             saveInformApi(this.inform).then((result) => {
               if (result.status === 200) {
                 this.$message.success(result.msg)
