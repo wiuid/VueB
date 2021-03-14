@@ -58,3 +58,18 @@ export function deleteInformApi (id) {
     }
   })
 }
+
+/**
+ * 删除 单条 数据
+ * @param {*} params  公告id
+ * @returns res
+ */
+export function deleteInformsApi (ids) {
+  return request({
+    url: '/system/site/inform/deletes',
+    method: 'delete',
+    params: {
+      ids: ids
+    }
+  })
+}
