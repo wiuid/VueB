@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { getInformList, getInform, saveInformApi, deleteInformApi } from '@/api/system/site/inform'
+import { getInformList, getInform, saveInformApi, deleteInformApi, deleteInformsApi } from '@/api/system/site/inform'
 import pagination from '@/components/Pagination'
 import moment from 'moment'
 export default {
@@ -218,6 +218,7 @@ export default {
                 this.$message.success(result.msg)
               }
             }).catch((err) => { this.$message.error(err) })
+            this.clearInform()
             this.dialogAddInform = false
           })
         } else {
@@ -252,16 +253,26 @@ export default {
     deleteInforms () {
       const informList = this.multipleSelection
       const idList = []
+      const titleList = []
       if (informList.length !== 0) {
         for (const index in informList) {
           idList.push(informList[index].id)
+          titleList.push(informList[index].title)
         }
-        this.$confirm('是否确认删除序号为"' + idList.toString() + '"的公告通知?', '提示', {
+
+        this.$confirm('是否确认删除标题为 "' + titleList.toString() + '" 的公告通知?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message.success('删除成功!')
+          deleteInformsApi(idList.toString()).then((res) => {
+            if (res.status === 200) {
+              this.$message.success(res.msg)
+              this.searchInform()
+            } else {
+              this.$message.error(res.msg)
+            }
+          }).catch((err) => { this.$message.error(err) })
         })
       } else {
         this.$message.warning('你应该至少选中一个！')
