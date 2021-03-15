@@ -1,5 +1,4 @@
 import request from '@/utils/request/index'
-// import qs from 'qs'
 /**
  * 获取公告列表
  * @param {*} params 各种参数

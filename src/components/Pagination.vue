@@ -1,9 +1,11 @@
 <template>
   <div class="block" style="margin: 20px 0">
     <el-pagination
+      @current-change="handleSizeChange"
       layout="prev, pager, next"
       :hide-on-single-page="1"
-      :total="total">
+      :total="total"
+      :current-page="pager">
     </el-pagination>
   </div>
 </template>
@@ -11,7 +13,13 @@
 <script>
 export default {
   name: 'Pagination',
-  props: ['total']
+  props: ['total', 'pager', 'current'],
+  methods: {
+    handleSizeChange (val) {
+      console.log(val)
+      this.current(val)
+    }
+  }
 }
 </script>
 

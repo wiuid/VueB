@@ -1,15 +1,17 @@
 <template>
   <div>
     <el-row style="margin-bottom: 10px">
-      <el-input v-model="params.title"  style="margin-right: 10px;width: 200px;" placeholder="输入公告标题部分字段" @change="searchInform"></el-input>
-      <el-date-picker v-model="params.createDate" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"  :default-time="['00:00:00', '23:59:59']" style="margin-right: 10px" @change="searchInform"></el-date-picker>
-      <el-switch  v-model="params.state" @change="searchInform" :active-value="0" :inactive-value="1"></el-switch>
+      <el-input v-model="params.title"  style="margin-right: 10px;width: 200px;" placeholder="输入公告标题部分字段"></el-input>
+      <el-date-picker v-model="searchDate" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"  :default-time="['00:00:00', '23:59:59']" style="margin-right: 10px"></el-date-picker>
+      <el-select  v-model="params.state" style="margin-right: 10px;" clearable placeholder="公告状态">
+        <el-option v-for="item in stateSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
+      </el-select>
+      <el-button type="primary" plain icon="el-icon-refresh" @click="clearSearchInform">重置</el-button>
+      <el-button type="primary" plain icon="el-icon-search" @click="searchInform">搜索</el-button>
     </el-row>
     <el-row>
       <el-button type="primary" plain icon="el-icon-plus"  @click="openDialogAddInform">新 增</el-button>
       <el-button type="danger" plain icon="el-icon-delete"  @click="deleteInforms">删 除</el-button>
-
-<!--      <p>组件值：{{ searchInformOption.data }}</p>-->
     </el-row>
     <el-row>
       <el-table v-loading="loading"
@@ -37,7 +39,7 @@
       </el-table>
     </el-row>
     <el-row style="text-align: center">
-      <pagination :total="20"></pagination>
+      <pagination :total="total" :pager="params.page" :current="pageJump"></pagination>
     </el-row>
 
     <el-dialog :title="dialogAddInformTitle+'公告'" :visible.sync="dialogAddInform" :before-close="closeDialog">
@@ -121,36 +123,69 @@ export default {
       loading: false,
       params: {
         title: '',
-        createDate: '',
         state: '',
-        page: '',
-        pageSize: null
-      }
+        page: 1,
+        createDateStart: '',
+        createDateEnd: ''
+      },
+      searchDate: [],
+      stateSelect: [
+        {
+          value: 0,
+          label: '正常'
+        },
+        {
+          value: 1,
+          label: '停用'
+        }
+      ],
+      total: ''
     }
   },
   mounted () {
     this.searchInform()
-    // getInformList(this.params).then((result) => {
-    //   if (result.data.status === 200) {
-    //     this.tableData = result.data.data.informList
-    //   } else {
-    //     this.$message.info(result.data.msg)
-    //   }
-    // }).catch((err) => {
-    //   this.$message.error(err)
-    // })
   },
   methods: {
     searchInform () {
       this.loading = true
-      getInformList(this.params).then((result) => {
-        if (result.status === 200) {
-          this.tableData = result.data.informList
-        } else {
-          this.$message.info(result.msg)
-        }
+      // 时间处理
+      if (this.searchDate.length !== 0) {
+        this.params.createDateStart = this.searchDate[0]
+        this.params.createDateEnd = this.searchDate[1]
+      }
+      // 数据请求
+      const res = new Promise((resolve, reject) => {
+        getInformList(this.params).then((result) => {
+          if (result.status === 200) {
+            resolve(result.data)
+          } else {
+            reject(res.msg)
+          }
+        }).catch((err) => { reject(err) })
+      })
+      // 结果处理
+      res.then((res) => {
+        this.tableData = res.informList
+        this.total = res.total
+        console.log('数据条数：' + this.total)
+        this.loading = false
+      }).catch(() => {
+        this.tableData = []
+        this.$message.info('暂无数据')
         this.loading = false
       })
+    },
+    pageJump (page) {
+      this.params.page = page
+      this.searchInform()
+    },
+    clearSearchInform () {
+      this.params.title = ''
+      this.params.state = ''
+      this.params.page = 1
+      this.params.createDateStart = ''
+      this.params.createDateEnd = ''
+      this.searchInform()
     },
     /**
      * 打开对话框  同时清空表单数据、标题改为新增公告
