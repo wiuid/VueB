@@ -105,20 +105,6 @@ export default {
       dialogAddInform: false,
       dialogAddInformTitle: '',
       formLabelWidth: '80px',
-      markSelect: [
-        {
-          value: 'success',
-          label: '普通'
-        },
-        {
-          value: 'warning',
-          label: '警告'
-        },
-        {
-          value: 'danger',
-          label: '紧急'
-        }
-      ],
       multipleSelection: [],
       loading: false,
       params: {
