@@ -28,7 +28,6 @@
 
 </style>
 <script>
-import router from '@/router'
 export default {
   name: 'app',
   mounted () {
@@ -39,23 +38,18 @@ export default {
     }
     // 判断session 是否存有token   面对刷新当前页面的情况
     const sessionToken = sessionStorage.getItem('token')
-    if (sessionToken) {
+    if (sessionToken !== null) {
       localStorage.setItem('token', sessionToken)
     } else {
       // 面对标签页之间的登录信息交换
       const localToken = localStorage.getItem('token')
-      if (localToken) {
+      if (localToken !== null) {
         sessionStorage.setItem('token', localToken)
       } else {
         // 当没有登录信息，所在的页面又是登录之后的页面，需要跳转至登录页
         const pathName = window.location.pathname
         if (pathName !== '/' && pathName !== '/login') {
-          router.replace({
-            path: '/login',
-            query: {
-              redirect: router.currentRoute.fullPath
-            }
-          })
+          this.$router.replace('/login')
         }
       }
     }
