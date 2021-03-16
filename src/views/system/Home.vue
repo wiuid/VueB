@@ -137,11 +137,6 @@
           <el-date-picker v-model="searchDate" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"  :default-time="['00:00:00', '23:59:59']" style="margin-left: 10px"></el-date-picker>
         </el-row>
         <el-row>
-          <el-select  v-model="params.state" placeholder="请选择" style="margin-left: 10px;" clearable>
-            <el-option v-for="item in markSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
-          </el-select>
-        </el-row>
-        <el-row>
           <el-button type="primary" plain icon="el-icon-refresh" @click="clearSearchInform" style="margin-left: 10px">重置</el-button>
           <el-button type="primary" plain icon="el-icon-search" @click="searchInform">搜索</el-button>
         </el-row>
@@ -196,7 +191,6 @@ export default {
       drawer: false,
       params: {
         title: '',
-        state: '',
         page: 1,
         createDateStart: '',
         createDateEnd: ''
@@ -207,17 +201,7 @@ export default {
         page: 1,
         pageSize: 6
       },
-      searchDate: [],
-      markSelect: [
-        {
-          value: 0,
-          label: '正常'
-        },
-        {
-          value: 1,
-          label: '停用'
-        }
-      ]
+      searchDate: []
     }
   },
   mounted () {
@@ -282,7 +266,6 @@ export default {
     },
     clearSearchInform () {
       this.params.title = ''
-      this.params.state = ''
       this.params.page = 1
       this.params.createDateStart = ''
       this.params.createDateEnd = ''
