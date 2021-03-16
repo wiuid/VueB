@@ -22,10 +22,19 @@
         <el-row>
           <el-card class="marginB10px">
             <div slot="header" class="clearfix">
-              <span>联系方式</span>
+              <span>联系方式<small> 有任何相关技术问题均可以添加询问</small></span>
             </div>
-            <el-divider></el-divider>
-            <el-divider></el-divider>
+            <el-collapse v-model="activeName" accordion>
+              <el-collapse-item title="邮箱" name="1">
+                <div>li_zhm@qq.com</div>
+              </el-collapse-item>
+              <el-collapse-item title="微信" name="2">
+                <div>yu5921jing</div>
+              </el-collapse-item>
+              <el-collapse-item title="QQ群" name="3">
+                <div>693365092   <el-link href="https://jq.qq.com/?_wv=1027&k=znMesECm" target="_blank">直达连接</el-link></div>
+              </el-collapse-item>
+            </el-collapse>
           </el-card>
         </el-row>
         <el-row>
@@ -33,8 +42,7 @@
             <div slot="header" class="clearfix">
               <span>技术选型</span>
             </div>
-            <el-divider></el-divider>
-            <el-divider></el-divider>
+            <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
           </el-card>
         </el-row>
       </el-col>
@@ -42,22 +50,25 @@
         <el-row>
           <el-card class="marginB10px">
             <div slot="header" class="clearfix">
-              <span>捐赠支持</span>
+              <span><del>捐赠支持</del><small> 欢迎白嫖 </small></span>
             </div>
-            <el-divider></el-divider>
-            <el-divider></el-divider>
+            <img src="@/assets/images/w-money.png" height="250px" title="微信收款码">
+            <img src="@/assets/images/z-money.jpg" height="250px" title="支付宝收款码">
           </el-card>
         </el-row>
         <el-row>
           <el-card class="marginB10px">
             <div slot="header" class="clearfix">
-              <span>更新日志</span>
+              <span>版本更新日志</span>
             </div>
-            <el-divider></el-divider>
-            <el-divider></el-divider>
-            <el-divider></el-divider>
-            <el-divider></el-divider>
-            <el-divider></el-divider>
+            <el-collapse v-model="activeName1" accordion>
+              <el-collapse-item title="0.1.0" name="1">
+                <div>1、图表、信息展示</div>
+                <div>2、角色、权限、左侧导航栏控制</div>
+                <div>3、数据管理及导出</div>
+                <div>4、系统状态监控</div>
+              </el-collapse-item>
+            </el-collapse>
           </el-card>
         </el-row>
       </el-col>
@@ -69,7 +80,60 @@
 // import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
-  name: 'About'
+  name: 'About',
+  data () {
+    return {
+      activeName: 1,
+      activeName1: 1,
+      data: [{
+        label: '前端',
+        children: [
+          {
+            label: 'Vue2.0'
+          },
+          {
+            label: 'Element'
+          },
+          {
+            label: '其他组件',
+            children: [{
+              label: '路由：Router'
+            }, {
+              label: '交互：Axios'
+            }, {
+              label: '图表：Echarts'
+            }, {
+              label: '图标：Element+Iconfont+官网Favicon'
+            }, {
+              label: '树形选择：TreeSelect'
+            }
+            ]
+          }
+        ]
+      }, {
+        label: '后端',
+        children: [{
+          label: '语言：Java'
+        }, {
+          label: '框架：SpringBoot',
+          children: [{
+            label: '安全：SpringSecurity'
+          }]
+        }, {
+          label: '持久框架：MybatisPlus'
+        }, {
+          label: '分页：PageHelper'
+        }, {
+          label: '驱动：MySql'
+        }, {
+          label: '状态监控：Oshi'
+        }, {
+          label: 'Token：Jjwt'
+        }
+        ]
+      }]
+    }
+  }
   // components: {
   //   HelloWorld
   // }
