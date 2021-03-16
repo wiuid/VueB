@@ -1,57 +1,60 @@
 <template>
-<!--  <div class="home">-->
-<!--    <img alt="Vue logo" src="../assets/logo.png">-->
-<!--    <HelloWorld msg="Welcome to Your Vue.js App"/>-->
-<!--  </div>-->
-  <!--首页顶部信息展示-->
   <div>
     <el-row>
       <!--基础信息展示-->
       <el-col :span="15" :xs="24">
-        <el-col :span="12" :xs="24"><el-card class="card-home" shadow="hover">
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <img src="@/assets/images/user.png" style="max-height: 60px"/>
-            </el-col>
-            <el-col :span="12" style="float:right;">
-              <el-row>人员情况1</el-row>
-              <el-row>xxxxxx</el-row>
-            </el-col>
-          </el-row>
-        </el-card></el-col>
-        <el-col :span="12" :xs="24"><el-card class="card-home" shadow="hover">
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <img src="@/assets/images/user.png" style="max-height: 60px"/>
-            </el-col>
-            <el-col :span="12" style="float:right;">
-              <el-row>人员情况2</el-row>
-              <el-row>xxxxxx</el-row>
-            </el-col>
-          </el-row>
-        </el-card></el-col>
-        <el-col :span="12" :xs="24"><el-card class="card-home" shadow="hover">
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <img src="@/assets/images/user.png" style="max-height: 60px"/>
-            </el-col>
-            <el-col :span="12" style="float:right;">
-              <el-row>人员情况3</el-row>
-              <el-row>xxxxxx</el-row>
-            </el-col>
-          </el-row>
-        </el-card></el-col>
-        <el-col :span="12" :xs="24"><el-card class="card-home" shadow="hover">
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <img src="@/assets/images/user.png" style="max-height: 60px"/>
-            </el-col>
-            <el-col :span="12" style="float:right;">
-              <el-row>人员情况4</el-row>
-              <el-row>xxxxxx</el-row>
-            </el-col>
-          </el-row>
-        </el-card></el-col>
+        <el-col :span="12" :xs="24">
+          <el-card class="card-home" shadow="hover">
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <img src="@/assets/images/user.png" style="max-height: 60px"/>
+              </el-col>
+              <el-col :span="12" style="float:right;">
+                <el-row>人员情况1</el-row>
+                <el-row>xxxxxx</el-row>
+              </el-col>
+            </el-row>
+          </el-card>
+        </el-col>
+        <el-col :span="12" :xs="24">
+          <el-card class="card-home" shadow="hover">
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <img src="@/assets/images/user.png" style="max-height: 60px"/>
+              </el-col>
+              <el-col :span="12" style="float:right;">
+                <el-row>人员情况2</el-row>
+                <el-row>xxxxxx</el-row>
+              </el-col>
+            </el-row>
+          </el-card>
+        </el-col>
+        <el-col :span="12" :xs="24">
+          <el-card class="card-home" shadow="hover">
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <img src="@/assets/images/user.png" style="max-height: 60px"/>
+              </el-col>
+              <el-col :span="12" style="float:right;">
+                <el-row>人员情况3</el-row>
+                <el-row>xxxxxx</el-row>
+              </el-col>
+            </el-row>
+          </el-card>
+        </el-col>
+        <el-col :span="12" :xs="24">
+          <el-card class="card-home" shadow="hover">
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <img src="@/assets/images/user.png" style="max-height: 60px"/>
+              </el-col>
+              <el-col :span="12" style="float:right;">
+                <el-row>人员情况4</el-row>
+                <el-row>xxxxxx</el-row>
+              </el-col>
+            </el-row>
+          </el-card>
+        </el-col>
       </el-col>
       <!--管理公告！-->
       <el-col :span="9" :xs="24"><el-card style="height: 220px;margin: 10px;flex-grow:1;" shadow="hover" >
@@ -87,16 +90,30 @@
     </el-row>
     <el-row>
       <el-card style="margin: 10px;" shadow="hover">
-        <div id="myChart" style="height: 500px;width: 100%;"></div>
+        <div id="myChart1" style="height: 500px;width: 100%;"></div>
       </el-card>
     </el-row>
     <el-row>
       <el-col :span="12" :xs="24">
-        <el-card class="card-home" shadow="hover">财务数据板</el-card>
+        <el-card class="card-home" shadow="hover" style="height: 600px;">
+          <div id="myChart2" style="height: 500px;width: 100%;"></div>
+        </el-card>
       </el-col>
       <el-col :span="12" :xs="24">
-        <el-card class="card-home" shadow="hover">其他板</el-card>
+        <el-card class="card-home" shadow="hover" style="height: 600px;">
+          <div id="myChart3" style="height: 500px;width: 100%;"></div>
+        </el-card>
       </el-col>
+    </el-row>
+    <el-row>
+      <el-card class="card-home" shadow="hover" style="height: 300px">
+        <p>本业顶部人员情况四个板块，不晓得要放什么数据，索性就空出来了</p>
+        <p>右上角公告采用了Element的抽屉和对话框的样式，对接了公告API</p>
+        <p>中间及下面的三张图标采用了Echarts的折线图及饼图，未对接后台数据，这个要根据自身的业务去做合理的规划对接</p>
+        <p>Echarts官网传送门：<a href="https://echarts.apache.org/zh/index.html" target="_blank">
+        <img src="@/assets/icon/ic-echarts.png" height="30px"/></a>  Echarts Github传送门：<a href="https://github.com/apache/echarts" target="_blank">
+        <img src="@/assets/icon/ic-github.svg" height="30px"/></a></p>
+      </el-card>
     </el-row>
 
     <el-dialog center :title="dialogInformText.title" :visible.sync="dialogInformInfo">
@@ -204,7 +221,9 @@ export default {
     }
   },
   mounted () {
-    this.drawLine()
+    this.drawLine1()
+    this.drawLine2()
+    this.drawLine3()
     this.getNewTableData()
   },
   filters: {
@@ -226,27 +245,6 @@ export default {
         }
       }).catch((err) => { console.log(err) })
     },
-    drawLine () {
-      // 基于准备好的dom，初始化echarts实例
-      const myChart = this.$echarts.init(document.getElementById('myChart'))
-      // 绘制图表
-      myChart.setOption({
-        title: { text: '在Vue中使用echarts' },
-        tooltip: {},
-        xAxis: {
-          data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-        },
-        yAxis: {},
-        series: [{
-          name: '销量',
-          type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
-        }]
-      })
-      window.addEventListener('resize', function () {
-        myChart.resize()
-      })
-    },
     searchInform () {
       if (this.searchDate.length !== 0) {
         this.params.createDateStart = this.searchDate[0]
@@ -266,7 +264,6 @@ export default {
       res.then((res) => {
         this.allTableData = res.informList
         this.total = res.total
-        this.$message.info('总数据量：' + this.total)
       }).catch(() => {
         this.tableData = []
         this.$message.info('暂无数据')
@@ -295,6 +292,207 @@ export default {
     pageJump (page) {
       this.params.page = page
       this.searchInform()
+    },
+    drawLine1 () {
+      // 基于准备好的dom，初始化echarts实例
+      const myChart = this.$echarts.init(document.getElementById('myChart1'))
+      // 绘制图表
+      myChart.setOption({
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
+        legend: {
+          data: ['webra1', 'webra2', 'webra3', 'webra4', 'webra5']
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            boundaryGap: false,
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value'
+          }
+        ],
+        series: [
+          {
+            name: 'webra1',
+            type: 'line',
+            stack: '总量',
+            areaStyle: {},
+            emphasis: {
+              focus: 'series'
+            },
+            data: [120, 132, 101, 134, 90, 230, 210]
+          },
+          {
+            name: 'webra2',
+            type: 'line',
+            stack: '总量',
+            areaStyle: {},
+            emphasis: {
+              focus: 'series'
+            },
+            data: [220, 182, 191, 234, 290, 330, 310]
+          },
+          {
+            name: 'webra3',
+            type: 'line',
+            stack: '总量',
+            areaStyle: {},
+            emphasis: {
+              focus: 'series'
+            },
+            data: [150, 232, 201, 154, 190, 330, 410]
+          },
+          {
+            name: 'webra4',
+            type: 'line',
+            stack: '总量',
+            areaStyle: {},
+            emphasis: {
+              focus: 'series'
+            },
+            data: [320, 332, 301, 334, 390, 330, 320]
+          },
+          {
+            name: 'webra5',
+            type: 'line',
+            stack: '总量',
+            label: {
+              show: true,
+              position: 'top'
+            },
+            areaStyle: {},
+            emphasis: {
+              focus: 'series'
+            },
+            data: [820, 932, 901, 934, 1290, 1330, 1320]
+          }
+        ]
+      })
+      window.addEventListener('resize', function () {
+        myChart.resize()
+      })
+    },
+    drawLine2 () {
+      // 基于准备好的dom，初始化echarts实例
+      const myChart = this.$echarts.init(document.getElementById('myChart2'))
+      myChart.setOption({
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+          top: '5%'
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: { show: true }
+          }
+        },
+        series: [
+          {
+            name: 'webra',
+            type: 'pie',
+            radius: [10, 200],
+            center: ['50%', '50%'],
+            roseType: 'area',
+            itemStyle: {
+              borderRadius: 8
+            },
+            data: [
+              { value: 40, name: 'webra 1' },
+              { value: 38, name: 'webra 2' },
+              { value: 32, name: 'webra 3' },
+              { value: 30, name: 'webra 4' },
+              { value: 28, name: 'webra 5' },
+              { value: 26, name: 'webra 6' },
+              { value: 22, name: 'webra 7' },
+              { value: 18, name: 'webra 8' }
+            ]
+          }
+        ]
+      })
+      window.addEventListener('resize', function () {
+        myChart.resize()
+      })
+    },
+    drawLine3 () {
+      // 基于准备好的dom，初始化echarts实例
+      const myChart = this.$echarts.init(document.getElementById('myChart3'))
+      myChart.setOption({
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          top: '5%',
+          left: 'center'
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: { show: true }
+          }
+        },
+        series: [
+          {
+            name: 'webra',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            avoidLabelOverlap: false,
+            itemStyle: {
+              borderRadius: 10,
+              borderColor: '#fff',
+              borderWidth: 2
+            },
+            label: {
+              show: false,
+              position: 'center'
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: '40',
+                fontWeight: 'bold'
+              }
+            },
+            labelLine: {
+              show: false
+            },
+            data: [
+              { value: 1048, name: 'webra1' },
+              { value: 735, name: 'webra2' },
+              { value: 580, name: 'webra3' },
+              { value: 484, name: 'webra4' },
+              { value: 300, name: 'webra5' }
+            ]
+          }
+        ]
+      })
+      window.addEventListener('resize', function () {
+        myChart.resize()
+      })
     }
   }
 }
