@@ -153,7 +153,6 @@ export default {
       res.then((res) => {
         this.tableData = res.informList
         this.total = res.total
-        console.log('数据条数：' + this.total)
         this.loading = false
       }).catch(() => {
         this.tableData = []
@@ -171,6 +170,7 @@ export default {
       this.params.page = 1
       this.params.createDateStart = ''
       this.params.createDateEnd = ''
+      this.searchDate = []
       this.searchInform()
     },
     /**
