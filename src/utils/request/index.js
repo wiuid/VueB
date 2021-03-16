@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
+import router from '@/router'
 import qs from 'qs'
 
 const instance = axios.create({
@@ -48,7 +49,7 @@ instance.interceptors.response.use(
            * 还未登录，跳转至登录页
            */
           case 0:
-            this.$router.replace('/login')
+            router.replace('/login')
             // router.replace({
             //   path: '/login',
             //   query: {
@@ -63,7 +64,7 @@ instance.interceptors.response.use(
             sessionStorage.removeItem('token')
             localStorage.removeItem('token')
             Message.info('登录过期，请重新登录')
-            this.$router.replace('/login')
+            router.replace('/login')
             break
             /**
              * 权限不足，进行提示即可
