@@ -16,7 +16,6 @@ export default {
   props: ['total', 'pager', 'current'],
   methods: {
     handleSizeChange (val) {
-      console.log(val)
       this.current(val)
     }
   }
