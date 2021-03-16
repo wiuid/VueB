@@ -21,12 +21,13 @@
         @selection-change="handleSelectionChange"
         :header-cell-style="{'text-align':'center'}">
         <el-table-column type="selection" width="55" align="center"></el-table-column>
-        <el-table-column prop="id" type=index label="序号" width="55" align="center"></el-table-column>
+        <el-table-column type="index" label="序号" width="55" align="center"></el-table-column>
+        <el-table-column prop="id" v-if="flase" width="0"></el-table-column>
         <el-table-column prop="title" label="公告标题" align="center"></el-table-column>
         <el-table-column prop="createDate" :formatter="dateFormat" label="时间" align="center"></el-table-column>
         <el-table-column prop="state" label="状态" align="center">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.state" :active-value="0" :inactive-value="1"></el-switch>
+            <el-switch v-model="scope.row.state" :active-value="0" :inactive-value="1" @change="informState(scope.row)"></el-switch>
           </template>
         </el-table-column>
         <el-table-column prop="userNickname" label="发布人" align="center"></el-table-column>
@@ -246,6 +247,21 @@ export default {
           return false
         }
       })
+    },
+    informState (row) {
+      const inform = {
+        id: row.id,
+        state: row.state
+      }
+      saveInformApi(inform).then((result) => {
+        if (result.status === 200) {
+          this.$message.success(result.msg)
+          this.searchInform()
+        } else {
+          this.$message.success(result.msg)
+        }
+      }).catch((err) => { this.$message.error(err) })
+      this.searchInform()
     },
     /**
      * 删除后台数据库中的该行数据
