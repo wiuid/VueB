@@ -7,9 +7,9 @@
       @open="handleOpen"
       @close="handleClose">
       <router-link to="/system">
-        <div style="height: 50px;padding: 5px 0">
+        <div class="spanJuZhong">
           <img src="../assets/images/logo.png" style="height: 50px;width: 50px;"/>
-          <span style="font-size: 20px;max-width: 150px;line-height: 1.7" >Webra</span>
+          <span class="spanJuZhongPan">Webra</span>
         </div>
       </router-link>
       <el-menu-item index="/system">
@@ -82,5 +82,25 @@ export default {
   }
   .el-menu {
     border-right: solid 0 !important;
+  }
+  .spanJuZhong:hover {
+    color: black;
+  }
+  .spanJuZhong {
+    width:100%;
+    height: 60px;
+    position:relative;
+    border-bottom: solid 1px #e6e6e6;
+  }
+  .spanJuZhongPan {
+    color: black;
+    font-size: 25px;
+    margin: 25px 0 25px 50px;
+    display: block;
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
 </style>
