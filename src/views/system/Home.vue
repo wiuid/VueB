@@ -56,7 +56,7 @@
       <!--管理公告！-->
       <el-col :span="9" :xs="24"><el-card style="height: 220px;margin: 10px;flex-grow:1;" shadow="hover" >
         <el-row><span>网站公示板</span>
-          <el-link :underline="false" type="primary" title="更多公告" @click="drawer = true">
+          <el-link :underline="false" type="primary" title="更多公告" @click="searchInform">
             <i class="el-icon-more-outline" style="padding: 0 10px"></i>
           </el-link>
         </el-row>
@@ -114,35 +114,38 @@
     <el-drawer title="所有公告" :visible.sync="drawer" :with-header="true">
       <el-row style="padding: 0 20px 40px 20px">
         <el-row>
-          <el-input v-model="params.title"  style="margin-left: 10px;width: 200px;" placeholder="标题" @change="searchInform"></el-input>
+          <el-input v-model="params.title"  style="margin-left: 10px;width: 200px;" placeholder="标题" clearable></el-input>
         </el-row>
         <el-row>
-          <el-date-picker v-model="searchDate" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"  :default-time="['00:00:00', '23:59:59']" style="margin-left: 10px" @change="searchInform"></el-date-picker>
+          <el-date-picker v-model="searchDate" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"  :default-time="['00:00:00', '23:59:59']" style="margin-left: 10px"></el-date-picker>
         </el-row>
         <el-row>
-          <el-select  v-model="params.state" placeholder="请选择" style="margin-left: 10px;" clearable @change="searchInform">
+          <el-select  v-model="params.state" placeholder="请选择" style="margin-left: 10px;" clearable>
             <el-option v-for="item in markSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-row>
+        <el-row>
+          <el-button type="primary" plain icon="el-icon-refresh" @click="clearSearchInform" style="margin-left: 10px">重置</el-button>
+          <el-button type="primary" plain icon="el-icon-search" @click="searchInform">搜索</el-button>
+        </el-row>
       </el-row>
-      <el-row style="padding: 0 20px">
-        <!--white-space: nowrap;  强制不换行
-        display: inline-block;    将span当做块级元素对待
-        width: 100%;            宽度限制
-        overflow: hidden;       超出隐藏
-        text-overflow: ellipsis; 超出部分用。。。 代替
-        -->
-        <el-col :span="17">
-          <el-link type="primary" :underline="false" @click="dialogInformInfo = true" style="white-space: nowrap;display: inline-block; width: 100%; overflow: hidden;text-overflow: ellipsis;">
-            <span>我是公告标题我是公告标题我是公告标题</span>
+      <el-row style="margin: 20px 20px"
+        v-for="item in allTableData"
+        :key="item.id">
+        <el-col :span="12">
+          <el-link type="primary"
+            :underline="false"
+            @click="viewInform($event)"
+            style="white-space: nowrap;display: inline-block; width: 100%; overflow: hidden;text-overflow: ellipsis;">
+            <span name="id" style="display:none">{{item.id}}</span>
+            <span>{{item.title}}</span>
           </el-link>
         </el-col>
-        <el-col :span="5">time</el-col>
-        <el-col :span="1"><el-tag size="mini"><i class="el-icon-warning"></i></el-tag></el-col>
+        <el-col :span="8">{{item.createDate | formatDate }}</el-col>
+        <el-col :span="4">{{item.userNickname}}</el-col>
       </el-row>
-
       <el-row style="text-align: center">
-        <pagination :total="20"></pagination>
+        <pagination :total="total" :pager="params.page" :current="pageJump"></pagination>
       </el-row>
 
     </el-drawer>
@@ -181,6 +184,7 @@ export default {
         createDateStart: '',
         createDateEnd: ''
       },
+      total: '',
       newParams: {
         state: 0,
         page: 1,
@@ -222,9 +226,6 @@ export default {
         }
       }).catch((err) => { console.log(err) })
     },
-    searchInform () {
-      this.$message.success('yes my love')
-    },
     drawLine () {
       // 基于准备好的dom，初始化echarts实例
       const myChart = this.$echarts.init(document.getElementById('myChart'))
@@ -246,6 +247,33 @@ export default {
         myChart.resize()
       })
     },
+    searchInform () {
+      if (this.searchDate.length !== 0) {
+        this.params.createDateStart = this.searchDate[0]
+        this.params.createDateEnd = this.searchDate[1]
+      }
+      // 数据请求
+      const res = new Promise((resolve, reject) => {
+        getInformList(this.params).then((result) => {
+          if (result.status === 200) {
+            resolve(result.data)
+          } else {
+            reject(res.msg)
+          }
+        }).catch((err) => { reject(err) })
+      })
+      // 结果处理
+      res.then((res) => {
+        this.allTableData = res.informList
+        this.total = res.total
+        this.$message.info('总数据量：' + this.total)
+      }).catch(() => {
+        this.tableData = []
+        this.$message.info('暂无数据')
+      })
+
+      this.drawer = true
+    },
     viewInform (event) {
       var informId = event.currentTarget.firstElementChild.firstElementChild.innerHTML
       getInform(informId).then((res) => {
@@ -254,6 +282,19 @@ export default {
           this.dialogInformInfo = true
         }
       }).catch((err) => { console.log(err) })
+    },
+    clearSearchInform () {
+      this.params.title = ''
+      this.params.state = ''
+      this.params.page = 1
+      this.params.createDateStart = ''
+      this.params.createDateEnd = ''
+      this.searchDate = []
+      this.searchInform()
+    },
+    pageJump (page) {
+      this.params.page = page
+      this.searchInform()
     }
   }
 }
