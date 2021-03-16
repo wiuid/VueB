@@ -1,9 +1,12 @@
 <template>
   <el-menu router :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-    <el-menu-item><i class="el-icon-s-fold"></i></el-menu-item>
+    <el-menu-item @click="off">
+      <i v-if="close" class="el-icon-s-fold"></i>
+      <i v-if="open" class="el-icon-s-unfold"></i>
+    </el-menu-item>
     <el-submenu style="float: right" index="2">
       <template slot="title">
-        <img src="../assets/images/touxiang.gif" style="width: 40px;height: 40px">
+        <img src="@/assets/images/touxiang.gif" style="width: 40px;height: 40px">
       </template>
       <el-menu-item index="/system/info">个人中心</el-menu-item>
       <el-menu-item @click="logout">退出登录</el-menu-item>
@@ -16,6 +19,7 @@ import { logout } from '@/api/login'
 import router from '@/router'
 export default {
   name: 'NavigationBarHeader',
+  props: ['close', 'open', 'off'],
   data () {
     return {
     }

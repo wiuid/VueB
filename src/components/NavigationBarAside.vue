@@ -1,6 +1,7 @@
 <template>
   <el-col :span="12">
     <el-menu
+      :collapse="collapse"
       router
       default-active="2"
       class="el-menu-vertical-demo"
@@ -9,7 +10,7 @@
       <router-link to="/system">
         <div class="spanJuZhong">
           <img src="../assets/images/logo.png" style="height: 50px;width: 50px;"/>
-          <span class="spanJuZhongPan">Webra</span>
+          <span v-if="!collapse" class="spanJuZhongPan">Webra</span>
         </div>
       </router-link>
       <el-menu-item index="/system">
@@ -59,6 +60,7 @@
 <script>
 export default {
   name: 'NavigationBarAside',
+  props: ['collapse'],
   data () {
     return {
       isCollapse: true
