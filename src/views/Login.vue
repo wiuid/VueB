@@ -30,7 +30,6 @@
 <script>
 
 import { login } from '@/api/login'
-import router from '@/router'
 
 export default {
   name: 'Login',
@@ -56,12 +55,18 @@ export default {
     }
   },
   created () {
+    const token = sessionStorage.getItem('token')
+    if (token !== null) {
+      this.$router.replace('/system')
+    }
     // 添加监听，监听设备宽高
     window.addEventListener('resize', this.handleResize)
   },
   beforeDestroy: function () {
     // 销毁监听
     window.removeEventListener('resize', this.handleResize)
+  },
+  mounted () {
   },
   methods: {
     login () {
@@ -87,12 +92,13 @@ export default {
       }
     },
     toSystem () {
-      router.replace({
-        path: '/system',
-        query: {
-          redirect: router.currentRoute.fullPath
-        }
-      })
+      this.$router.push({ path: '/system' })
+      // router.replace({
+      //   path: '/system',
+      //   query: {
+      //     redirect: router.currentRoute.fullPath
+      //   }
+      // })
     }
   }
 }
