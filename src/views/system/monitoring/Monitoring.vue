@@ -69,8 +69,25 @@
               <span>Java虚拟机信息</span>
             </div>
             <div class="fontSize14">
+              <el-row>
+                <el-col span="12">版本</el-col>
+                <el-col span="12">{{jvm.version}}</el-col>
+              </el-row>
               <el-divider class="dividerHeight"></el-divider>
+              <el-row>
+                <el-col span="12">运行时间</el-col>
+                <el-col span="12">{{jvm.date}}</el-col>
+              </el-row>
               <el-divider class="dividerHeight"></el-divider>
+              <el-row>
+                <el-col span="12">堆初始大小</el-col>
+                <el-col span="12">{{jvm.memorySize}}M</el-col>
+              </el-row>
+              <el-divider class="dividerHeight"></el-divider>
+              <el-row>
+                <el-col span="12">堆最大</el-col>
+                <el-col span="12">{{jvm.memoryMax}}M</el-col>
+              </el-row>
             </div>
           </el-card>
         </el-row>
@@ -118,12 +135,10 @@
         <el-row>
           <el-card class="marginB10px">
             <div class="fontSize14">
-              本页面的数据是通过后台接入的插件而实现的，该插件名为·oshi·
-              <br/>
-              github传送门：
-              <a href="https://github.com/oshi/oshi" target="_blank">
-              <img src="@/assets/icon/ic-github.svg" height="30px"/>
-              </a>
+              <p>本页面的数据是通过后台接入的插件而实现的，该插件名为·oshi·</p>
+              <p>github传送门：<a href="https://github.com/oshi/oshi" target="_blank">
+              <img src="@/assets/icon/ic-github.svg" height="30px"/></a></p>
+              <p>Jvm的数据是通过Java自带的ManagementFactory查询获得的</p>
             </div>
           </el-card>
         </el-row>
@@ -141,15 +156,17 @@ export default {
       cpu: {},
       disk: {},
       memory: {},
-      system: {}
+      system: {},
+      jvm: {}
     }
   },
   mounted () {
     getMonitoring().then((result) => {
-      this.cpu = result.data.data.cpu
-      this.disk = result.data.data.disk
-      this.memory = result.data.data.memory
-      this.system = result.data.data.system
+      this.cpu = result.data.cpu
+      this.disk = result.data.disk
+      this.memory = result.data.memory
+      this.system = result.data.system
+      this.jvm = result.data.jvm
     }).catch((err) => {
       this.$message.error(err)
     })
