@@ -6,7 +6,7 @@ import request from '@/utils/request/index'
  */
 export function getInformList (params) {
   return request({
-    url: '/system/site/inform/get/list',
+    url: '/system/site/inform',
     method: 'get',
     params
   })
