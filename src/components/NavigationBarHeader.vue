@@ -32,21 +32,24 @@ export default {
       const token = sessionStorage.getItem('token')
 
       if (token !== null && token !== '') {
-        logout().then((result) => {
-          if (result.data.status === 200) {
+        const res = new Promise((resolve, reject) => {
+          logout().then((result) => {
+            resolve(result)
+          }).catch((err) => {
+            reject(err)
+            this.$message.error(err)
+          })
+        })
+        res.then((result) => {
+          if (result.status === 200) {
             sessionStorage.removeItem('token')
             localStorage.removeItem('token')
-            router.replace({
-              path: '/login',
-              query: {
-                redirect: router.currentRoute.fullPath
-              }
-            })
+            this.$router.replace('/login')
           } else {
-            this.$message.error(result.data.msg)
+            this.$message.info(result.msg)
           }
-        }).catch((err) => {
-          this.$message.error(err)
+        }).catch(() => {
+          this.$message.error('后端异常')
         })
       } else {
         this.$message.error('您当前未登录')
