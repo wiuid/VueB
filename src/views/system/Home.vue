@@ -2,7 +2,7 @@
   <div>
     <el-row>
       <!--基础信息展示-->
-      <el-col :span="15" :xs="24">
+      <el-col :md="15" :sm="24" :xs="24">
         <el-col :span="12" :xs="24">
           <el-card class="card-home" shadow="hover">
             <el-row :gutter="20">
@@ -57,7 +57,7 @@
         </el-col>
       </el-col>
       <!--管理公告！-->
-      <el-col :span="9" :xs="24"><el-card style="height: 220px;margin: 10px;flex-grow:1;" shadow="hover" >
+      <el-col :md="9" :sm="24" :xs="24"><el-card style="height: 220px;margin: 10px;flex-grow:1;" shadow="hover" >
         <el-row><span>网站公示板</span>
           <el-link :underline="false" type="primary" title="更多公告" @click="searchInform">
             <i class="el-icon-more-outline" style="padding: 0 10px"></i>
