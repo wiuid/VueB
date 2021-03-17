@@ -45,4 +45,7 @@ export default {
 </script>
 
 <style scoped>
+.el-aside, .el-header {
+    box-shadow: 1px 3px 5px 0 rgb(0 0 0 / 10%) !important;
+}
 </style>
