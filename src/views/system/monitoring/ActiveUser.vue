@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import { getListAPI } from '@/api/auth/index.js'
 export default {
   name: 'ActiveUser',
   data () {
@@ -17,11 +16,6 @@ export default {
   },
   methods: {
     getApi () {
-      getListAPI().then((result) => {
-        console.log(result.data)
-      }).catch((err) => {
-        console.log(err.data)
-      })
     }
   }
 }
