@@ -325,6 +325,8 @@ export default {
             emphasis: {
               focus: 'series'
             },
+            // symbol: 'none', // 去除折线图中的节点 小圆点
+            smooth: true, // 将折线图中的折线 变为平滑曲线
             data: [120, 132, 101, 134, 90, 230, 210]
           },
           {
@@ -335,6 +337,7 @@ export default {
             emphasis: {
               focus: 'series'
             },
+            smooth: true,
             data: [220, 182, 191, 234, 290, 330, 310]
           },
           {
@@ -345,6 +348,7 @@ export default {
             emphasis: {
               focus: 'series'
             },
+            smooth: true,
             data: [150, 232, 201, 154, 190, 330, 410]
           },
           {
@@ -355,6 +359,7 @@ export default {
             emphasis: {
               focus: 'series'
             },
+            smooth: true,
             data: [320, 332, 301, 334, 390, 330, 320]
           },
           {
@@ -369,6 +374,7 @@ export default {
             emphasis: {
               focus: 'series'
             },
+            smooth: true,
             data: [820, 932, 901, 934, 1290, 1330, 1320]
           }
         ]
@@ -408,11 +414,7 @@ export default {
               { value: 40, name: 'webra 1' },
               { value: 38, name: 'webra 2' },
               { value: 32, name: 'webra 3' },
-              { value: 30, name: 'webra 4' },
-              { value: 28, name: 'webra 5' },
-              { value: 26, name: 'webra 6' },
-              { value: 22, name: 'webra 7' },
-              { value: 18, name: 'webra 8' }
+              { value: 30, name: 'webra 4' }
             ]
           }
         ]
