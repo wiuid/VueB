@@ -4,12 +4,30 @@
       <el-button type="primary" plain icon="el-icon-plus"  @click="openDialogAddDepartment">新 增</el-button>
     </el-row>
     <el-row>
-      <el-table lazy v-loading="loading" row-key="id" :data="tableData" size="mini" style="width: 100%" ref="departmentTable">
+      <el-table
+        lazy
+        v-loading="loading"
+        row-key="id"
+        :data="tableData"
+        style="width: 100%"
+        ref="departmentTable">
         <el-table-column prop="title" label="部门名称"></el-table-column>
-        <el-table-column prop="leader" label="负责人"></el-table-column>
-        <el-table-column prop="state" label="状态"></el-table-column>
-        <el-table-column prop="date" label="时间"></el-table-column>
-        <el-table-column label="操作">
+        <el-table-column prop="userId" label="负责人" align="center">
+          <template slot-scope="scope">
+            {{scope.row.userId | nullReturn()}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="state" label="状态" align="center">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.state" :active-value="0" :inactive-value="1"></el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column prop="createDate" label="时间" align="center">
+          <template slot-scope="scope">
+            {{scope.row.createDate | formatData()}}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="editDepartment(scope.row.id)"><i class="el-icon-edit"></i>修改</el-link>
             <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="openDialogAddDepartment2(scope.row.title)"><i class="el-icon-plus"></i>新增</el-link>
@@ -17,9 +35,6 @@
           </template>
         </el-table-column>
       </el-table>
-    </el-row>
-    <el-row style="text-align: center">
-      <pagination :total="20"></pagination>
     </el-row>
     <el-dialog :title="dialogAddDepartmentTitle+'部门'" :visible.sync="dialogAddDepartment" :before-close="closeDialog">
       <el-form :model="department" :rules="rules" ref="department">
@@ -77,37 +92,13 @@
 <script>
 import treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import pagination from '@/components/Pagination'
+import { getDepartmentList } from '@/api/system/department'
 export default {
   name: 'Department',
-  components: { pagination, treeselect },
+  components: { treeselect },
   data () {
     return {
-      tableData: [
-        {
-          id: '1',
-          title: '部门1',
-          leader: '张三',
-          state: '正常',
-          date: '2020-11-20'
-        },
-        {
-          id: '2',
-          title: '部门2',
-          leader: '李四',
-          state: '正常',
-          date: '2020-11-20',
-          children: [
-            {
-              id: '3',
-              title: '部门3',
-              leader: '王五',
-              state: '正常',
-              date: '2020-11-20'
-            }
-          ]
-        }
-      ],
+      tableData: [],
       loading: false,
       rules: {
         title: [
@@ -152,10 +143,44 @@ export default {
       ]
     }
   },
+  mounted () {
+    this.getDepartmentList()
+  },
+  filters: {
+    formatData (time) {
+      var data = new Date(time)
+      var y = data.getFullYear()
+      var M = data.getMonth() + 1
+      var d = data.getDate()
+
+      var h = data.getHours()
+      var m = data.getMinutes()
+      return y + '-' + M + '-' + d + ' ' + h + ':' + m
+    },
+    nullReturn (param) {
+      if (param === null) {
+        return '暂无'
+      } else {
+        return param
+      }
+    }
+  },
   methods: {
+    getDepartmentList () {
+      this.loading = true
+      const res = new Promise((resolve, reject) => {
+        getDepartmentList().then((result) => { resolve(result) }).catch((err) => { reject(err) })
+      })
+      res.then((result) => {
+        if (result.status === 200) {
+          this.tableData = result.data.departmentList
+          this.loading = false
+        }
+      })
+    },
     /**
-     * 打开新增部门对话框（默认顶级部门）
-     */
+   * 打开新增部门对话框（默认顶级部门）
+   */
     openDialogAddDepartment () {
       this.dialogAddDepartmentTitle = '新增'
       this.dialogAddDepartment = true
