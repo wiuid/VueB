@@ -16,7 +16,6 @@
 
 <script>
 import { logout } from '@/api/login'
-import router from '@/router'
 export default {
   name: 'NavigationBarHeader',
   props: ['close', 'open', 'off'],
