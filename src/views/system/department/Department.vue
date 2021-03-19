@@ -1,25 +1,24 @@
 <template>
   <div>
     <el-row>
-      <el-button type="primary" plain icon="el-icon-plus"  @click="openDialogAddDepartment">新 增</el-button>
+      <el-button type="primary" plain icon="el-icon-plus" @click="openDialogAddDepartment">新 增</el-button>
     </el-row>
     <el-row>
-      <el-table
-        lazy
-        v-loading="loading"
-        row-key="id"
-        :data="tableData"
-        style="width: 100%"
-        ref="departmentTable">
+      <el-table lazy v-loading="loading" row-key="id" :data="tableData" style="width: 100%" ref="departmentTable">
         <el-table-column prop="title" label="部门名称"></el-table-column>
-        <el-table-column prop="userId" label="负责人" align="center">
+        <el-table-column prop="nickname" label="负责人" align="center">
           <template slot-scope="scope">
-            {{scope.row.userId | nullReturn()}}
+            {{scope.row.nickname | nullReturn()}}
           </template>
         </el-table-column>
         <el-table-column prop="state" label="状态" align="center">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.state" :active-value="0" :inactive-value="1"></el-switch>
+            <el-switch
+            v-model="scope.row.state"
+            :active-value="0"
+            :inactive-value="1"
+            @change="editSwitch(scope.row.id)">
+           </el-switch>
           </template>
         </el-table-column>
         <el-table-column prop="createDate" label="时间" align="center">
@@ -30,7 +29,7 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="editDepartment(scope.row.id)"><i class="el-icon-edit"></i>修改</el-link>
-            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="openDialogAddDepartment2(scope.row.title)"><i class="el-icon-plus"></i>新增</el-link>
+            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="openDialogAddDepartment2(scope.row.id)"><i class="el-icon-plus"></i>新增</el-link>
             <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="deleteDepartment(scope.row)"><i class="el-icon-delete"></i>删除</el-link>
           </template>
         </el-table-column>
@@ -40,10 +39,7 @@
       <el-form :model="department" :rules="rules" ref="department">
         <el-row>
           <el-form-item label="上级部门" :label-width="formLabelWidth" prop="superior">
-            <treeselect v-model="department.superior" :options="options" placeholder="请选择上级部门，不填写则为顶级部门">
-              <label slot="option-label" slot-scope="{ node, labelClassName }" :class="labelClassName">
-                {{ node.label }}
-              </label>
+            <treeselect :normalizer="normalizer" v-model="department.superId" :options="tableData" placeholder="请选择上级部门，不填写则为顶级部门">
             </treeselect>
           </el-form-item>
         </el-row>
@@ -55,7 +51,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="负责人" :label-width="formLabelWidth" prop="principal">
-              <el-input v-model="department.principal" autocomplete="off"></el-input>
+              <el-input v-model="department.userId" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -73,7 +69,7 @@
         </el-row>
         <el-row>
           <el-form-item label="部门状态" :label-width="formLabelWidth" prop="state">
-            <el-radio-group v-model="department.state">
+            <el-radio-group v-model="department.state" @change="stateHint()">
               <el-radio :label="0">正常</el-radio>
               <el-radio :label="1">停用</el-radio>
             </el-radio-group>
@@ -92,28 +88,34 @@
 <script>
 import treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { getDepartmentList } from '@/api/system/department'
+import { getDepartmentList, getDepartmentById, saveDepartment, updateState, delectDepartment } from '@/api/system/department'
 export default {
   name: 'Department',
   components: { treeselect },
   data () {
     return {
+      // 表格数据
       tableData: [],
+      // 表格加载
       loading: false,
+      // 部门表单验证
       rules: {
         title: [
           { required: true, message: '请输入部门名称', trigger: 'blur' }
         ]
       },
+      // 修改/保存 表单
       department: {
+        id: 0,
         title: '',
-        superior: null,
-        principal: '',
+        superId: null,
+        nickname: '',
         email: '',
         phone: '',
-        state: 0,
-        date: ''
+        state: 0
       },
+      restaurants: [], // 搜索的用户返回的结果显示
+      timeout: null, // 搜索用户
       dialogAddDepartmentTitle: '新增',
       dialogAddDepartment: false,
       formLabelWidth: '80px',
@@ -129,8 +131,7 @@ export default {
             {
               id: 'ab',
               label: 'ab'
-            }
-          ]
+            }]
         },
         {
           id: 'b',
@@ -158,7 +159,7 @@ export default {
       return y + '-' + M + '-' + d + ' ' + h + ':' + m
     },
     nullReturn (param) {
-      if (param === null) {
+      if (param === null || param === '') {
         return '暂无'
       } else {
         return param
@@ -166,6 +167,15 @@ export default {
     }
   },
   methods: {
+    // 属性列表选择框 属性定义
+    normalizer (node) {
+      return {
+        id: node.id,
+        label: node.title,
+        children: node.children
+      }
+    },
+    // 获得部门列表
     getDepartmentList () {
       this.loading = true
       const res = new Promise((resolve, reject) => {
@@ -179,8 +189,8 @@ export default {
       })
     },
     /**
-   * 打开新增部门对话框（默认顶级部门）
-   */
+     * 打开新增部门对话框（默认顶级部门）
+     */
     openDialogAddDepartment () {
       this.dialogAddDepartmentTitle = '新增'
       this.dialogAddDepartment = true
@@ -189,18 +199,32 @@ export default {
      * 打开新增部门对话框（自动定位上级部门）
      * @param title
      */
-    openDialogAddDepartment2 (title) {
+    openDialogAddDepartment2 (id) {
+      this.department.superId = id
       this.dialogAddDepartmentTitle = '新增'
       this.dialogAddDepartment = true
-      this.department.superior = title
     },
     /**
      * 打开修改部门对话框
      * @param id
      */
     editDepartment (id) {
-      this.dialogAddDepartmentTitle = '修改'
-      this.dialogAddDepartment = true
+      const res = new Promise((resolve, reject) => {
+        getDepartmentById(id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
+      })
+      res.then((result) => {
+        if (result.status === 200) {
+          this.department.id = result.data.department.id
+          this.department.title = result.data.department.title
+          this.department.superId = result.data.department.superId
+          this.department.nickname = result.data.department.nickname
+          this.department.email = result.data.department.email
+          this.department.phone = result.data.department.phone
+          this.department.state = result.data.department.state
+          this.dialogAddDepartmentTitle = '修改'
+          this.dialogAddDepartment = true
+        }
+      })
       /**
        * 这里通过传入的id参数从后台获取数据传入到department表单
        */
@@ -210,6 +234,13 @@ export default {
      */
     clearDepartment () {
       this.$refs.department.resetFields()
+      this.department.id = 0
+      this.department.title = ''
+      this.department.superId = null
+      this.department.nickname = ''
+      this.department.email = ''
+      this.department.phone = ''
+      this.department.state = 0
     },
     /**
      * 离开对话框并清除校验规则
@@ -230,8 +261,17 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.$message.success(this.dialogAddDepartmentTitle + '部门成功!')
-            this.dialogAddDepartment = false
+            const res = new Promise((resolve, reject) => {
+              saveDepartment(this.department).then((result) => { resolve(result) }).catch((err) => { reject(err) })
+            })
+            res.then((result) => {
+              if (result.status === 200) {
+                this.$message.success(this.dialogAddDepartmentTitle + '部门成功!')
+                this.dialogAddDepartment = false
+                this.clearDepartment()
+                this.getDepartmentList()
+              }
+            })
           })
         } else {
           return false
@@ -248,9 +288,42 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.success('删除成功!')
-        this.dialogAddInform = false
+        const res = new Promise((resolve, reject) => {
+          delectDepartment(row.id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
+        })
+        res.then((result) => {
+          if (result.status === 200) {
+            this.$message.success(result.msg)
+            this.getDepartmentList()
+          } else {
+            this.$message.error(result.msg)
+          }
+        })
       })
+    },
+    editSwitch (id) {
+      this.$confirm('此操作将使本部门及下级部门一同更改状态属性, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        const res = new Promise((resolve, reject) => {
+          updateState(id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
+        })
+        res.then((result) => {
+          if (result.status === 200) {
+            this.$message.success(result.msg)
+            this.getDepartmentList()
+          } else {
+            this.$message.error(result.msg)
+          }
+        })
+      }).catch(() => {
+        this.getDepartmentList()
+      })
+    },
+    stateHint () {
+      this.$message.info('提示：修改状态并提交后，下级部门的状态将一并修改')
     }
   }
 }
