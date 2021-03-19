@@ -40,7 +40,9 @@
       </el-table>
     </el-row>
     <el-row style="text-align: center">
-      <pagination :total="total" :pager="params.page" :current="pageJump"></pagination>
+      <pagination :total="total"
+      :pager="params.page"
+      :current="pageJump"></pagination>
     </el-row>
 
     <el-dialog :title="dialogAddInformTitle+'公告'" :visible.sync="dialogAddInform" :before-close="closeDialog">
