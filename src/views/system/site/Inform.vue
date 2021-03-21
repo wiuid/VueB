@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { getInformList, getInform, saveInformApi, deleteInformApi, deleteInformsApi } from '@/api/system/site/inform'
+import { getData, getInform, saveInform, deleteInform, deleteInforms } from '@/api/system/site/inform'
 import pagination from '@/components/Pagination'
 import moment from 'moment'
 export default {
@@ -144,7 +144,7 @@ export default {
       }
       // 数据请求
       const res = new Promise((resolve, reject) => {
-        getInformList(this.params).then((result) => {
+        getData(this.params).then((result) => {
           if (result.status === 200) {
             resolve(result.data)
           } else {
@@ -234,7 +234,7 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            saveInformApi(this.inform).then((result) => {
+            saveInform(this.inform).then((result) => {
               if (result.status === 200) {
                 this.$message.success(result.msg)
                 this.searchInform()
@@ -255,7 +255,7 @@ export default {
         id: row.id,
         state: row.state
       }
-      saveInformApi(inform).then((result) => {
+      saveInform(inform).then((result) => {
         if (result.status === 200) {
           this.$message.success(result.msg)
           this.searchInform()
@@ -275,7 +275,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteInformApi(row.id).then((res) => {
+        deleteInform(row.id).then((res) => {
           if (res.status === 200) {
             this.$message.success(res.msg)
             this.searchInform()
@@ -304,7 +304,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          deleteInformsApi(idList.toString()).then((res) => {
+          deleteInforms(idList.toString()).then((res) => {
             if (res.status === 200) {
               this.$message.success(res.msg)
               this.searchInform()

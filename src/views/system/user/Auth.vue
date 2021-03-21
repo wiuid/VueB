@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import { getRoleList, getRole, getAuthTree, saveRole, updateSwitch, deleteRole, deleteRoles } from '@/api/system/user/auth'
+import { getData, getRole, getAuthTree, saveRole, updateState, deleteRole, deleteRoles } from '@/api/system/user/auth'
 import moment from 'moment'
 export default {
   name: 'Auth',
@@ -183,7 +183,7 @@ export default {
         this.params.createDateEnd = this.searchDate[1]
       }
       var res = new Promise((resolve, reject) => {
-        getRoleList(this.params).then((result) => { resolve(result) }).catch((err) => { reject(err) })
+        getData(this.params).then((result) => { resolve(result) }).catch((err) => { reject(err) })
       })
       res.then((result) => {
         if (result.status === 200) {
@@ -264,7 +264,7 @@ export default {
     },
     roleState (id) {
       var res = new Promise((resolve, reject) => {
-        updateSwitch(id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
+        updateState(id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
       })
       res.then((result) => {
         if (result.status === 200) {

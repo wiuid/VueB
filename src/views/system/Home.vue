@@ -169,7 +169,7 @@
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue'
 import pagination from '@/components/Pagination'
-import { getInformList, getInform } from '@/api/system/site/inform'
+import { getData, getInform } from '@/api/system/site/inform'
 
 export default {
   name: 'Home',
@@ -221,7 +221,7 @@ export default {
   },
   methods: {
     getNewTableData () {
-      getInformList(this.newParams).then((result) => {
+      getData(this.newParams).then((result) => {
         if (result.status === 200) {
           this.newTableData = result.data.informList
         } else {
@@ -236,7 +236,7 @@ export default {
       }
       // 数据请求
       const res = new Promise((resolve, reject) => {
-        getInformList(this.params).then((result) => {
+        getData(this.params).then((result) => {
           if (result.status === 200) {
             resolve(result.data)
           } else {

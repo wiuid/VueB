@@ -148,7 +148,7 @@
 </template>
 
 <script>
-import { getMonitoring } from '@/api/system/monitoring'
+import { getData } from '@/api/system/monitoring'
 export default {
   name: 'Monitoring',
   data () {
@@ -161,7 +161,7 @@ export default {
     }
   },
   mounted () {
-    getMonitoring().then((result) => {
+    getData().then((result) => {
       this.cpu = result.data.cpu
       this.disk = result.data.disk
       this.memory = result.data.memory

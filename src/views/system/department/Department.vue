@@ -88,7 +88,7 @@
 <script>
 import treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { getDepartmentList, getDepartmentById, saveDepartment, updateState, delectDepartment } from '@/api/system/department'
+import { getData, getDepartment, saveDepartment, updateState, delectDepartment } from '@/api/system/department'
 export default {
   name: 'Department',
   components: { treeselect },
@@ -122,7 +122,7 @@ export default {
     }
   },
   mounted () {
-    this.getDepartmentList()
+    this.getData()
   },
   filters: {
     formatData (time) {
@@ -153,10 +153,10 @@ export default {
       }
     },
     // 获得部门列表
-    getDepartmentList () {
+    getData () {
       this.loading = true
       const res = new Promise((resolve, reject) => {
-        getDepartmentList().then((result) => { resolve(result) }).catch((err) => { reject(err) })
+        getData().then((result) => { resolve(result) }).catch((err) => { reject(err) })
       })
       res.then((result) => {
         if (result.status === 200) {
@@ -187,7 +187,7 @@ export default {
      */
     editDepartment (id) {
       const res = new Promise((resolve, reject) => {
-        getDepartmentById(id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
+        getDepartment(id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
       })
       res.then((result) => {
         if (result.status === 200) {
@@ -246,7 +246,7 @@ export default {
                 this.$message.success(this.dialogAddDepartmentTitle + '部门成功!')
                 this.dialogAddDepartment = false
                 this.clearDepartment()
-                this.getDepartmentList()
+                this.getData()
               }
             })
           })
@@ -271,7 +271,7 @@ export default {
         res.then((result) => {
           if (result.status === 200) {
             this.$message.success(result.msg)
-            this.getDepartmentList()
+            this.getData()
           } else {
             this.$message.error(result.msg)
           }
@@ -290,13 +290,13 @@ export default {
         res.then((result) => {
           if (result.status === 200) {
             this.$message.success(result.msg)
-            this.getDepartmentList()
+            this.getData()
           } else {
             this.$message.error(result.msg)
           }
         })
       }).catch(() => {
-        this.getDepartmentList()
+        this.getData()
       })
     },
     stateHint () {

@@ -96,7 +96,7 @@
 
 <script>
 import pagination from '@/components/Pagination'
-import { getPostList, getPostById, savePost, deletePost, deletePosts, updatePostState } from '@/api/system/department/post'
+import { getData, getPost, savePost, deletePost, deletePosts, updateState } from '@/api/system/department/post'
 export default {
   name: 'Post',
   components: { pagination },
@@ -167,7 +167,7 @@ export default {
     editPost (id) {
       this.dialogAddPostTitle = '修改'
       const res = new Promise((resolve, reject) => {
-        getPostById(id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
+        getPost(id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
       })
       res.then((result) => {
         if (result.status === 200) {
@@ -230,7 +230,7 @@ export default {
     },
     editSwitch (id) {
       const res = new Promise((resolve, reject) => {
-        updatePostState(id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
+        updateState(id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
       })
       res.then((result) => {
         if (result.status === 200) {
@@ -245,7 +245,7 @@ export default {
     searchPost () {
       this.loading = true
       const res = new Promise((resolve, reject) => {
-        getPostList(this.params).then((result) => { resolve(result) }).catch((err) => { reject(err) })
+        getData(this.params).then((result) => { resolve(result) }).catch((err) => { reject(err) })
       })
       res.then((result) => {
         this.tableData = result.data.postList

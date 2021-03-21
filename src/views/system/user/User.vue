@@ -183,7 +183,7 @@ import '@/assets/styles/defaultTreeselect.css'
 import treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import pagination from '@/components/Pagination'
-import { getUserList, getUser } from '@/api/system/user'
+import { getData, getUser } from '@/api/system/user'
 import { getRoleTree } from '@/api/system/user/auth'
 
 export default {
@@ -304,7 +304,7 @@ export default {
 
       // 数据请求
       const res = new Promise((resolve, reject) => {
-        getUserList(this.params).then((result) => {
+        getData(this.params).then((result) => {
           resolve(result)
         }).catch((err) => { reject(err) })
       })
