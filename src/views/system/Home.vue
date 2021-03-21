@@ -74,7 +74,7 @@
             text-overflow: ellipsis; 超出部分用。。。 代替
             -->
             <el-col :span="12">
-              <el-link type="primary"
+              <el-link
               :underline="false" @click="viewInform($event)"
               style="white-space: nowrap;display: inline-block; width: 100%; overflow: hidden;text-overflow: ellipsis;">
                 <span name="id" style="display:none">{{item.id}}</span>
