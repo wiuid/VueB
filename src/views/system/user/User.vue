@@ -184,7 +184,7 @@ import treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import pagination from '@/components/Pagination'
 import { getUserList, getUser } from '@/api/system/user'
-import { getRoleAllIdTitle } from '@/api/system/user/auth'
+import { getRoleTree } from '@/api/system/user/auth'
 
 export default {
   name: 'User',
@@ -283,7 +283,7 @@ export default {
   methods: {
     getRoleList () {
       const res = new Promise((resolve, reject) => {
-        getRoleAllIdTitle().then((result) => {
+        getRoleTree().then((result) => {
           resolve(result)
         }).catch((err) => { reject(err) })
       })
