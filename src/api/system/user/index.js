@@ -1,11 +1,11 @@
 import request from '@/utils/request/index'
 
 /**
- * 获取用户列表
- * @param {*} params 各种参数
- * @returns informList
+ * 获取页面数据
+ * @param {*} params 
+ * @returns 
  */
-export function getUserList (params) {
+export function getData (params) {
   return request({
     url: '/system/user',
     method: 'get',
@@ -13,6 +13,11 @@ export function getUserList (params) {
   })
 }
 
+/**
+ * 根据id 获取详细信息
+ * @param {*} id 
+ * @returns 
+ */
 export function getUser (id) {
   return request({
     url: '/system/user/get',

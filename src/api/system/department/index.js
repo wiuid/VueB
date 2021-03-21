@@ -1,13 +1,22 @@
 import request from '@/utils/request/index'
 
-export function getDepartmentList () {
+/**
+ * 获取页面数据
+ * @returns 
+ */
+export function getData () {
   return request({
     url: '/system/department',
     method: 'get'
   })
 }
 
-export function getDepartmentById (id) {
+/**
+ * 根据id 获取详细信息
+ * @param {*} id 
+ * @returns 
+ */
+export function getDepartment (id) {
   return request({
     url: '/system/department/get',
     method: 'get',
@@ -17,13 +26,22 @@ export function getDepartmentById (id) {
   })
 }
 
-export function getDepartmentSelect () {
+/**
+ * 获取数据用于其他api调用
+ * @returns 
+ */
+export function getDepartmentTree () {
   return request({
     url: '/system/department/tree',
     method: 'get'
   })
 }
 
+/**
+ * 新建/修改 数据 一体接口
+ * @param {*} params 
+ * @returns 
+ */
 export function saveDepartment (params) {
   return request({
     url: '/system/department/save',
@@ -32,6 +50,11 @@ export function saveDepartment (params) {
   })
 }
 
+/**
+ * 更新数据状态
+ * @param {*} id 
+ * @returns 
+ */
 export function updateState (id) {
   return request({
     url: '/system/department/state',
@@ -42,6 +65,11 @@ export function updateState (id) {
   })
 }
 
+/**
+ * 删除单条数据（包含下级）
+ * @param {*} id 
+ * @returns 
+ */
 export function delectDepartment (id) {
   return request({
     url: '/system/department/delete',

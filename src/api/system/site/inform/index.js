@@ -1,10 +1,11 @@
 import request from '@/utils/request/index'
+
 /**
- * 获取公告列表
- * @param {*} params 各种参数
- * @returns informList
+ * 获取页面数据
+ * @param {*} params 
+ * @returns 
  */
-export function getInformList (params) {
+export function getData (params) {
   return request({
     url: '/system/site/inform',
     method: 'get',
@@ -13,9 +14,9 @@ export function getInformList (params) {
 }
 
 /**
- * 获取单条数据的详细信息
- * @param {*} params  id
- * @returns inform
+ * 根据id 获取详细信息
+ * @param {*} id 
+ * @returns 
  */
 export function getInform (id) {
   return request({
@@ -28,27 +29,24 @@ export function getInform (id) {
 }
 
 /**
- * 新建/修改 单条 数据
- * @param {*} params  params
- * @returns res
+ * 新建/修改 数据 一体接口
+ * @param {*} params 
+ * @returns 
  */
-export function saveInformApi (params) {
+export function saveInform (params) {
   return request({
     url: '/system/site/inform/save',
     method: 'post',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
     data: params
   })
 }
 
 /**
- * 删除 单条 数据
- * @param {*} params  公告id
- * @returns res
+ * 删除单条数据
+ * @param {*} id 
+ * @returns 
  */
-export function deleteInformApi (id) {
+export function deleteInform (id) {
   return request({
     url: '/system/site/inform/delete',
     method: 'delete',
@@ -59,11 +57,11 @@ export function deleteInformApi (id) {
 }
 
 /**
- * 批量删除 数据
- * @param {*} params  公告id
- * @returns res
+ * 批量删除数据
+ * @param {*} ids 
+ * @returns 
  */
-export function deleteInformsApi (ids) {
+export function deleteInforms (ids) {
   return request({
     url: '/system/site/inform/deletes',
     method: 'delete',

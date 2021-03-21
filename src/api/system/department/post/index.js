@@ -1,6 +1,11 @@
 import request from '@/utils/request/index'
 
-export function getPostList (params) {
+/**
+ * 获取页面数据
+ * @param {*} params 
+ * @returns 
+ */
+export function getData (params) {
   return request({
     url: '/system/department/post',
     method: 'get',
@@ -8,7 +13,12 @@ export function getPostList (params) {
   })
 }
 
-export function getPostById (id) {
+/**
+ * 根据id 获取详细信息
+ * @param {*} id 
+ * @returns 
+ */
+export function getPost (id) {
   return request({
     url: '/system/department/post/get',
     method: 'get',
@@ -18,6 +28,11 @@ export function getPostById (id) {
   })
 }
 
+/**
+ * 新建/修改 数据 一体接口
+ * @param {*} params 
+ * @returns 
+ */
 export function savePost (params) {
   return request({
     url: '/system/department/post/save',
@@ -26,7 +41,12 @@ export function savePost (params) {
   })
 }
 
-export function updatePostState (id) {
+/**
+ * 更新数据状态
+ * @param {*} id 
+ * @returns 
+ */
+export function updateState (id) {
   return request({
     url: '/system/department/post/state',
     method: 'post',
@@ -36,6 +56,11 @@ export function updatePostState (id) {
   })
 }
 
+/**
+ * 删除单条数据
+ * @param {*} id 
+ * @returns 
+ */
 export function deletePost (id) {
   return request({
     url: '/system/department/post/delete',
@@ -46,6 +71,11 @@ export function deletePost (id) {
   })
 }
 
+/**
+ * 批量删除数据
+ * @param {*} ids 
+ * @returns 
+ */
 export function deletePosts (ids) {
   return request({
     url: '/system/department/post/deletes',

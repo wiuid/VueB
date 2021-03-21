@@ -1,11 +1,11 @@
 import request from '@/utils/request/index'
 
 /**
- * 获取用户列表
- * @param {*} params 各种参数
- * @returns informList
+ * 获取页面数据
+ * @param {*} params 
+ * @returns 
  */
-export function getRoleList (params) {
+export function getData (params) {
   return request({
     url: '/system/user/role',
     method: 'get',
@@ -13,6 +13,11 @@ export function getRoleList (params) {
   })
 }
 
+/**
+ * 根据id 获取详细信息
+ * @param {*} id 
+ * @returns 
+ */
 export function getRole (id) {
   return request({
     url: '/system/user/role/get',
@@ -23,6 +28,10 @@ export function getRole (id) {
   })
 }
 
+/**
+ * 获取数据用于其他api调用
+ * @returns 
+ */
 export function getRoleTree () {
   return request({
     url: '/system/user/role/tree',
@@ -30,6 +39,10 @@ export function getRoleTree () {
   })
 }
 
+/**
+ * 获取数据用于其他api调用
+ * @returns 
+ */
 export function getAuthTree () {
   return request({
     url: '/system/user/auth/tree',
@@ -37,6 +50,11 @@ export function getAuthTree () {
   })
 }
 
+/**
+ * 新建/修改 数据 一体接口
+ * @param {*} params 
+ * @returns 
+ */
 export function saveRole (params) {
   return request({
     url: '/system/user/role/save',
@@ -45,7 +63,12 @@ export function saveRole (params) {
   })
 }
 
-export function updateSwitch (id) {
+/**
+ * 更新数据状态
+ * @param {*} id 
+ * @returns 
+ */
+export function updateState (id) {
   return request({
     url: '/system/user/role/state',
     method: 'post',
@@ -55,6 +78,11 @@ export function updateSwitch (id) {
   })
 }
 
+/**
+ * 删除单条数据
+ * @param {*} id 
+ * @returns 
+ */
 export function deleteRole (id) {
   return request({
     url: '/system/user/role/delete',
@@ -65,6 +93,11 @@ export function deleteRole (id) {
   })
 }
 
+/**
+ * 批量删除数据
+ * @param {*} ids 
+ * @returns 
+ */
 export function deleteRoles (ids) {
   return request({
     url: '/system/user/role/deletes',
