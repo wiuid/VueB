@@ -119,29 +119,6 @@ export default {
       dialogAddDepartmentTitle: '新增',
       dialogAddDepartment: false,
       formLabelWidth: '80px',
-      options: [ // 选择框下拉 树形组件 的数据
-        {
-          id: 'a',
-          label: 'a',
-          children: [
-            {
-              id: 'aa',
-              label: 'aa'
-            },
-            {
-              id: 'ab',
-              label: 'ab'
-            }]
-        },
-        {
-          id: 'b',
-          label: 'b'
-        },
-        {
-          id: 'c',
-          label: 'c'
-        }
-      ]
     }
   },
   mounted () {
