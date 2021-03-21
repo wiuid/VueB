@@ -1,62 +1,40 @@
 <template>
   <div>
-    <el-row>
-      <el-col :span="8" style="margin-bottom: 10px">
-        <el-input v-model="searchAuthOption.name" style="width: 300px;" placeholder="请输入权限名称" clearable></el-input>
-      </el-col>
-      <el-col :span="8" style="margin-bottom: 10px">
-        <el-input v-model="searchAuthOption.code" style="width: 300px;" placeholder="请输入权限字符" clearable></el-input>
-      </el-col>
-      <el-col :span="8" style="margin-bottom: 10px">
-        <el-select v-model="searchAuthOption.state" placeholder="请选择权限状态" style="width: 300px" clearable>
-          <el-option
-            v-for="item in stateSelect"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-col>
+    <el-row style="margin-bottom: 10px">
+      <el-input v-model="params.title" style="margin-right: 10px;width: 200px;" placeholder="请输入权限名称" clearable></el-input>
+      <el-input v-model="params.code" style="margin-right: 10px;width: 200px;" placeholder="请输入权限字符" clearable></el-input>
+      <el-select v-model="params.state" placeholder="请选择权限状态" style="margin-right: 10px;width: 200px" clearable>
+        <el-option v-for="item in stateSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
+      </el-select>
+      <el-date-picker style="margin-right: 10px" v-model="searchDate" type="daterange" clearable range-separator="-" start-placeholder="开始创建日期" end-placeholder="结束创建日期"></el-date-picker>
+      <el-button type="primary" plain icon="el-icon-search"  @click="searchRole">搜索</el-button>
+      <el-button type="primary" plain icon="el-icon-refresh"  @click="reSearchRoleOption">重置</el-button>
     </el-row>
     <el-row>
-      <el-col :span="8" style="margin-bottom: 10px">
-        <el-date-picker
-          style="width: 300px;"
-          v-model="searchAuthOption.date"
-          type="daterange"
-          clearable
-          range-separator="-"
-          start-placeholder="开始创建日期"
-          end-placeholder="结束创建日期">
-        </el-date-picker>
-      </el-col>
-      <el-col :span="8" style="margin-bottom: 10px">
-        <el-button type="primary" plain icon="el-icon-search"  @click="searchUser">搜索</el-button>
-        <el-button type="primary" plain icon="el-icon-refresh"  @click="reSearchUserOption">重置</el-button>
-      </el-col>
+      <el-button type="primary" plain icon="el-icon-plus"  @click="openAddDialog">新 增</el-button>
+      <el-button type="danger" plain icon="el-icon-delete"  @click="deleteRoles">删 除</el-button>
+      <!-- <el-button type="danger" plain icon="el-icon-circle-close"  @click="blackRoles">停 用</el-button> -->
+      <el-button type="success" plain icon="el-icon-download"  @click="exportRoles">导 出</el-button>
     </el-row>
     <el-row>
-      <el-button type="primary" plain icon="el-icon-plus"  @click="openDialogAddPost">新 增</el-button>
-      <el-button type="danger" plain icon="el-icon-delete"  @click="deletePosts">删 除</el-button>
-      <el-button type="danger" plain icon="el-icon-circle-close"  @click="deletePosts">停 用</el-button>
-      <el-button type="success" plain icon="el-icon-download"  @click="deletePosts">导 出</el-button>
-    </el-row>
-    <el-row>
-      <el-table v-loading="loading" :data="tableData" stripe style="width: 100%" ref="informTable"  @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="id" label="序号" width="55"></el-table-column>
-        <el-table-column prop="name" label="名称"></el-table-column>
-        <el-table-column prop="code" label="字符"></el-table-column>
-        <el-table-column prop="state" label="状态">
+      <el-table v-loading="loading" :data="tableData" stripe style="width: 100%" @selection-change="handleSelectionChange" :header-cell-style="{'text-align':'center'}">
+        <el-table-column type="selection" width="55" align="center"></el-table-column>
+        <el-table-column type="index" label="序号" width="55" align="center"></el-table-column>
+        <el-table-column prop="id" v-if="false"></el-table-column>
+        <el-table-column prop="title" label="名称" align="center"></el-table-column>
+        <el-table-column prop="code" label="字符" align="center"></el-table-column>
+        <el-table-column prop="serial" label="排序" align="center"></el-table-column>
+        <el-table-column prop="state" label="状态" align="center">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.state"></el-switch>
+            <el-switch v-model="scope.row.state" :active-value="0" :inactive-value="1" @change="roleState(scope.row.id)"></el-switch>
           </template>
         </el-table-column>
-        <el-table-column prop="date" label="创建时间"></el-table-column>
-        <el-table-column label="操作">
+        <el-table-column prop="createDate" label="创建时间" :formatter="dateFormat" align="center">
+        </el-table-column>
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="editUser(scope.row.id)"><i class="el-icon-edit"></i>修改</el-link>
-            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="deleteUser(scope.row)"><i class="el-icon-delete"></i>删除</el-link>
+            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="openEditDialog(scope.row.id)"><i class="el-icon-edit"></i>修改</el-link>
+            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="deleteRole(scope.row)"><i class="el-icon-delete"></i>删除</el-link>
           </template>
         </el-table-column>
       </el-table>
@@ -64,37 +42,98 @@
     <el-row style="text-align: center">
       <pagination :total="20"></pagination>
     </el-row>
+
+    <el-dialog :title="dialogAddRoleTitle+'角色'" :visible.sync="dialogAddRole" :before-close="closeDialog">
+      <el-form :model="role" :rules="rules" ref="role">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="名称" :label-width="formLabelWidth" prop="title">
+              <el-input v-model="role.title" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="code" :label-width="formLabelWidth" prop="code">
+              <el-input v-model="role.code" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="排序" :label-width="formLabelWidth" prop="serial">
+              <el-input-number v-model="role.serial" :min="0" :max="99"></el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="状态" :label-width="formLabelWidth" prop="state">
+               <el-radio-group v-model="role.state">
+                <el-radio :label="0">正常</el-radio>
+                <el-radio :label="1">停用</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-form-item label="权限" :label-width="formLabelWidth">
+            <div style="height: 150px">
+              <el-scrollbar style="height:100%">
+                <el-tree
+                  :data="authTree"
+                  show-checkbox
+                  :default-checked-keys="ids"
+                  node-key="id"
+                  ref="tree"
+                  highlight-current
+                  :props="defaultProps">
+                </el-tree>
+              </el-scrollbar>
+            </div>
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="备注" :label-width="formLabelWidth" prop="reark">
+            <el-input type="textarea" placeholder="备注内容" v-model="role.reark" show-word-limit rows="3"></el-input>
+          </el-form-item>
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="closeDialog">取 消</el-button>
+        <el-button type="primary" @click="saveRole('role')">确 定</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
+import { getRoleList, getRole, getAuthTree, saveRole, updateSwitch, deleteRole, deleteRoles } from '@/api/system/user/auth'
+import moment from 'moment'
 export default {
   name: 'Auth',
   data () {
     return {
-      loading: false,
-      tableData: [
-        {
-          id: '1',
-          name: '超级管理员',
-          code: 'admin',
-          state: true,
-          date: '2021/02/21'
-        },
-        {
-          id: '2',
-          name: '普通角色',
-          code: 'common',
-          state: false,
-          date: '2021/02/21'
-        }
-      ],
-      searchAuthOption: {
-        name: '',
-        code: '',
-        state: '',
-        date: ''
+      rules: {
+        title: [
+          { required: true, message: '请输入角色名称', trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '请输入角色字符', trigger: 'blur' }
+        ]
       },
+      loading: false,
+      tableData: [],
+      multipleSelection: [],
+      params: {
+        title: '',
+        code: '',
+        state: null,
+        createDateStart: '',
+        createDateEnd: '',
+        page: 1
+      },
+      searchDate: [],
+      total: '',
+      dialogAddRole: false,
+      dialogAddRoleTitle: '新增',
       stateSelect: [
         {
           label: '正常',
@@ -104,12 +143,216 @@ export default {
           label: '停用',
           value: '1'
         }
-      ]
+      ],
+      role: {
+        id: 0,
+        title: '',
+        code: '',
+        authIds: '',
+        serial: 0,
+        state: 0,
+        remark: ''
+      },
+      ids: [],
+      authTree: [],
+      defaultProps: {
+        label: 'title'
+      },
+      formLabelWidth: '80px'
+    }
+  },
+  mounted () {
+    this.searchRole()
+    this.getAuthTrees()
+  },
+  methods: {
+    getAuthTrees () {
+      var res = new Promise((resolve, reject) => {
+        getAuthTree().then((result) => { resolve(result) }).catch((err) => { reject(err) })
+      })
+      res.then((result) => {
+        if (result.status === 200) {
+          this.authTree = result.data.authTree
+        }
+      })
+    },
+    searchRole () {
+      this.loading = true
+      if (this.searchDate.length !== 0) {
+        this.params.createDateStart = this.searchDate[0]
+        this.params.createDateEnd = this.searchDate[1]
+      }
+      var res = new Promise((resolve, reject) => {
+        getRoleList(this.params).then((result) => { resolve(result) }).catch((err) => { reject(err) })
+      })
+      res.then((result) => {
+        if (result.status === 200) {
+          this.tableData = result.data.roleList
+          this.total = result.data.total
+          this.loading = false
+        }
+      })
+    },
+    closeDialog () {
+      this.dialogAddRole = false
+      this.$refs.tree.setCheckedKeys([])
+      this.$refs.role.resetFields()
+      this.role.id = 0
+      this.role.title = ''
+      this.role.code = ''
+      this.role.serial = 0
+      this.role.state = 0
+      this.role.remark = ''
+    },
+    openAddDialog () {
+      this.dialogAddRoleTitle = '新增'
+      this.dialogAddRole = true
+    },
+    openEditDialog (id) {
+      this.dialogAddRoleTitle = '修改'
+      var res = new Promise((resolve, reject) => {
+        getRole(id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
+      })
+      res.then((result) => {
+        if (result.status === 200) {
+          this.role.id = result.data.role.id
+          this.role.title = result.data.role.title
+          this.role.code = result.data.role.code
+          this.role.serial = result.data.role.serial
+          this.role.state = result.data.role.state
+          this.role.remark = result.data.role.remark
+          this.$refs.tree.setCheckedKeys(result.data.role.authIds.split(','))
+        }
+      })
+      this.dialogAddRole = true
+    },
+    reSearchRoleOption () {
+      this.params.title = ''
+      this.params.code = ''
+      this.params.state = null
+      this.params.createDateStart = ''
+      this.params.createDateEnd = ''
+      this.params.parge = 1
+      this.searchRole()
+    },
+    saveRole (role) {
+      this.$refs[role].validate((valid) => {
+        if (valid) {
+          this.$confirm('是否确认' + this.dialogAddRoleTitle + '名称为"' + this.role.title + '"的角色?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.role.authIds = this.$refs.tree.getCheckedKeys().toString()
+            var res = new Promise((resolve, reject) => {
+              saveRole(this.role).then((result) => { resolve(result) }).catch((err) => { reject(err) })
+            })
+            res.then((result) => {
+              if (result.status === 200) {
+                this.$message.success(result.msg)
+                this.searchRole()
+                this.closeDialog()
+              } else {
+                this.$message.error(result.msg)
+              }
+            })
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    roleState (id) {
+      var res = new Promise((resolve, reject) => {
+        updateSwitch(id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
+      })
+      res.then((result) => {
+        if (result.status === 200) {
+          this.$message.success(result.msg)
+        } else {
+          this.$message.error(result.msg)
+          this.searchRole()
+        }
+      })
+    },
+    deleteRole (row) {
+      this.$confirm('是否确认删除名称为"' + row.title + '"的角色?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        const res = new Promise((resolve, reject) => {
+          deleteRole(row.id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
+        })
+        res.then((result) => {
+          if (result.status === 200) {
+            this.$message.success(result.msg)
+            this.searchRole()
+          } else {
+            this.$message.error(result.msg)
+          }
+        })
+      })
+    },
+    deleteRoles () {
+      const roleList = this.multipleSelection
+      const idList = []
+      const titleList = []
+      if (roleList.length !== 0) {
+        for (const index in roleList) {
+          idList.push(roleList[index].id)
+          titleList.push(roleList[index].title)
+        }
+        this.$confirm('是否确认删除名称为"' + titleList.toString() + '"的岗位?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          const res = new Promise((resolve, reject) => {
+            deleteRoles(idList.toString()).then((result) => { resolve(result) }).catch((err) => { reject(err) })
+          })
+          res.then((result) => {
+            if (result.status === 200) {
+              this.$message.success(result.msg)
+              this.searchRole()
+            }
+          })
+        })
+      } else {
+        this.$message.warning('你应该至少选中一个！')
+      }
+    },
+    dateFormat (row, column) {
+      var date = row[column.property]
+      if (date === undefined) {
+        return ''
+      }
+      return moment(date).format('YYYY-MM-DD HH:mm:ss')
+    },
+    /**
+     * 获取当前选中了表格中的哪些数据
+     * @param val
+     */
+    handleSelectionChange (val) {
+      this.multipleSelection = val
     }
   }
 }
 </script>
 
-<style scoped>
-
+<style>
+.el-tree {
+  background: #f4f4f4 !important;
+}
+.el-scrollbar__wrap {
+  /* 必要的 */
+  overflow: scroll;
+  /* 隐藏侧边默认滚动条 （达不到效果可以自己试着微调） 如解决不了可尝试用 `margin-right -60px` */
+  width: 110%;
+  /* 隐藏侧边默认滚动条 （达不到效果可以自己试着微调） 如解决不了可尝试用 `margin-right -60px` */
+  height: 100%;
+}
+.el-scrollbar__wrap    {
+  overflow-x: hidden!important;
+}
 </style>
