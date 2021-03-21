@@ -37,12 +37,12 @@
       </el-col>
       <el-col :lg="8" :md="12" :sm="24" style="margin-bottom: 10px">
         <el-button type="primary" plain icon="el-icon-refresh"  @click="reSearchUserOption">重置</el-button>
-        <el-button type="primary" plain icon="el-icon-search"  @click="searchUser">搜索</el-button>
+        <el-button type="primary" plain icon="el-icon-search"  @click="getTableData">搜索</el-button>
       </el-col>
     </el-row>
     <el-row>
-      <el-button type="primary" plain icon="el-icon-plus"  @click="openDialogAddUser">新 增</el-button>
-      <el-button type="danger" plain icon="el-icon-delete"  @click="deleteUsers">删 除</el-button>
+      <el-button type="primary" plain icon="el-icon-plus"  @click="openAddDialog">新 增</el-button>
+      <el-button type="danger" plain icon="el-icon-delete"  @click="deleteDatas">删 除</el-button>
     </el-row>
     <el-row>
       <el-table
@@ -60,12 +60,12 @@
         <el-table-column prop="nickname" label="昵称" align="center"></el-table-column>
         <el-table-column prop="departmentTitle" label="部门" align="center">
           <template slot-scope="scope">
-            {{scope.row.departmentTitle | nullReturn()}}
+            {{scope.row.departmentTitle | formatNull()}}
           </template>
         </el-table-column>
         <el-table-column prop="phone" label="手机" align="center">
           <template slot-scope="scope">
-            {{scope.row.phone | nullReturn()}}
+            {{scope.row.phone | formatNull()}}
           </template>
         </el-table-column>
         <el-table-column prop="state" label="状态" align="center">
@@ -80,8 +80,8 @@
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="editUser(scope.row.id)"><i class="el-icon-edit"></i>修改</el-link>
-            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="deleteUser(scope.row)"><i class="el-icon-delete"></i>删除</el-link>
+            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="openEditDialog(scope.row.id)"><i class="el-icon-edit"></i>修改</el-link>
+            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="deleteData(scope.row)"><i class="el-icon-delete"></i>删除</el-link>
           </template>
         </el-table-column>
       </el-table>
@@ -171,8 +171,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">取 消</el-button>
-        <el-button @click="clearUser" type="warning" plain style="float:left;">清 空</el-button>
-        <el-button type="primary" @click="saveUser('user')">确 定</el-button>
+        <el-button type="primary" @click="saveData('user')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -192,7 +191,22 @@ export default {
   data () {
     return {
       tableData: [],
+      total: '',
+      multipleSelection: [],
+      searchDate: [],
+      loading: false,
+      params: {
+        departmentId: null,
+        username: '',
+        phone: '',
+        state: '',
+        createDateStart: '',
+        createDateEnd: '',
+        page: 1
+      },
+
       role: [],
+
       user: {
         id: '0',
         username: '',
@@ -239,27 +253,16 @@ export default {
           value: '1'
         }
       ],
-      multipleSelection: [],
+
       dialogAddUser: false,
       dialogAddUserTitle: '新增',
-      formLabelWidth: '80px',
-      params: {
-        departmentId: null,
-        username: '',
-        phone: '',
-        state: '',
-        createDateStart: '',
-        createDateEnd: '',
-        page: 1
-      },
-      searchDate: [],
-      loading: false,
-      total: ''
+      formLabelWidth: '80px'
+
     }
   },
   mounted () {
-    this.getRoleList()
-    this.searchUser()
+    this.getDataRole()
+    this.getTableData()
   },
   filters: {
     formatData (time) {
@@ -272,7 +275,7 @@ export default {
       var m = data.getMinutes()
       return y + '-' + M + '-' + d + ' ' + h + ':' + m
     },
-    nullReturn (param) {
+    formatNull (param) {
       if (param === null) {
         return '暂无'
       } else {
@@ -281,20 +284,8 @@ export default {
     }
   },
   methods: {
-    getRoleList () {
-      const res = new Promise((resolve, reject) => {
-        getRoleTree().then((result) => {
-          resolve(result)
-        }).catch((err) => { reject(err) })
-      })
-      res.then((result) => {
-        if (result.status === 200) {
-          this.role = result.data.roleList
-        }
-      })
-    },
     // 请求数据
-    searchUser () {
+    getTableData () {
       this.loading = true
       // 时间处理
       if (this.searchDate.length !== 0) {
@@ -320,13 +311,26 @@ export default {
         this.loading = false
       })
     },
+    // 角色信息
+    getDataRole () {
+      const res = new Promise((resolve, reject) => {
+        getRoleTree().then((result) => {
+          resolve(result)
+        }).catch((err) => { reject(err) })
+      })
+      res.then((result) => {
+        if (result.status === 200) {
+          this.role = result.data.roleList
+        }
+      })
+    },
     // 打开新增对话框
-    openDialogAddUser () {
+    openAddDialog () {
       this.dialogAddUserTitle = '新增'
       this.dialogAddUser = true
     },
     // 打开编辑对话框
-    editUser (id) {
+    openEditDialog (id) {
       this.dialogAddUserTitle = '编辑'
       const res = new Promise((resolve, reject) => {
         getUser(id).then((result) => {
@@ -345,19 +349,19 @@ export default {
     },
     // 关闭对话框
     closeDialog () {
-      this.clearUser()
+      this.reDialogForm()
       this.dialogAddUser = false
     },
     // 清除新增/编辑 对话框中的表单
-    clearUser () {
+    reDialogForm () {
       this.$refs.user.resetFields()
     },
     // 清除搜索参数的表单
-    clearSearchUser () {
+    reSearchParams () {
       this.$refs.user.resetFields()
     },
     // 新增/编辑 api
-    saveUser (user) {
+    saveData (user) {
       this.$refs[user].validate((valid) => {
         if (valid) {
           this.$confirm('是否确认' + this.dialogAddUserTitle + '名称为"' + this.user.username + '"的用户?', '提示', {
@@ -374,7 +378,7 @@ export default {
       })
     },
     // 删除单个用户
-    deleteUser (row) {
+    deleteData (row) {
       this.$confirm('是否确认删除账户为"' + row.username + '"的用户?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -385,7 +389,7 @@ export default {
       })
     },
     // 删除多个用户
-    deleteUsers () {
+    deleteDatas () {
       const postList = this.multipleSelection
       const idList = []
       if (postList.length !== 0) {

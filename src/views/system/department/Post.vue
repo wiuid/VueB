@@ -5,13 +5,13 @@
       <el-select  v-model="params.state" placeholder="请选择状态" style="margin-right: 10px;" clearable>
         <el-option v-for="item in stateSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
-      <el-button type="primary" plain icon="el-icon-refresh" @click="clearSearchPost">重置</el-button>
-      <el-button type="primary" plain icon="el-icon-search" @click="searchPost">搜索</el-button>
+      <el-button type="primary" plain icon="el-icon-refresh" @click="reSearchParams">重置</el-button>
+      <el-button type="primary" plain icon="el-icon-search" @click="getTableData">搜索</el-button>
     </el-row>
     <el-row>
-      <el-button type="primary" plain icon="el-icon-plus"  @click="openDialogAddPost">新 增</el-button>
-      <el-button type="danger" plain icon="el-icon-delete"  @click="deletePosts">删 除</el-button>
-      <el-button type="success" plain icon="el-icon-download"  @click="deletePosts">导 出</el-button>
+      <el-button type="primary" plain icon="el-icon-plus"  @click="openAddDialog">新 增</el-button>
+      <el-button type="danger" plain icon="el-icon-delete"  @click="deleteDatas">删 除</el-button>
+      <el-button type="success" plain icon="el-icon-download"  @click="exportData">导 出</el-button>
     </el-row>
     <el-row>
       <el-table v-loading="loading" :data="tableData" stripe style="width: 100%" ref="informTable"  @selection-change="handleSelectionChange" :header-cell-style="{'text-align':'center'}">
@@ -26,7 +26,7 @@
             v-model="scope.row.state"
             :active-value="0"
             :inactive-value="1"
-            @change="editSwitch(scope.row.id)">
+            @change="dataStateSwitch(scope.row.id)">
             </el-switch>
           </template>
         </el-table-column>
@@ -37,8 +37,8 @@
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="editPost(scope.row.id)"><i class="el-icon-edit"></i>修改</el-link>
-            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="deletePost(scope.row)"><i class="el-icon-delete"></i>删除</el-link>
+            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="openEditDialog(scope.row.id)"><i class="el-icon-edit"></i>修改</el-link>
+            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="deleteData(scope.row)"><i class="el-icon-delete"></i>删除</el-link>
           </template>
         </el-table-column>
       </el-table>
@@ -87,8 +87,8 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">取 消</el-button>
-        <el-button @click="clearPost" type="warning" plain style="float:left;">清 空</el-button>
-        <el-button type="primary" @click="savePost('post')">确 定</el-button>
+        <!-- <el-button @click="reDialogForm" type="warning" plain style="float:left;">清 空</el-button> -->
+        <el-button type="primary" @click="saveData('post')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -103,6 +103,17 @@ export default {
   data () {
     return {
       tableData: [],
+      multipleSelection: [],
+      loading: false,
+      // 搜索条件
+      params: {
+        title: '',
+        state: '',
+        page: 1
+      },
+      total: 0,
+
+      // 对话框表单
       post: {
         id: 0,
         title: '',
@@ -110,22 +121,16 @@ export default {
         state: 0,
         remark: ''
       },
-      multipleSelection: [],
-      loading: false,
-      formLabelWidth: '80px',
-      dialogAddPost: false,
-      dialogAddPostTitle: '新增',
       rules: {
         title: [
           { required: true, message: '请输入岗位名称', trigger: 'blur' }
         ]
       },
-      params: {
-        title: '',
-        state: '',
-        page: 1
-      },
-      total: 0,
+
+      formLabelWidth: '80px',
+      dialogAddPost: false,
+      dialogAddPostTitle: '新增',
+
       stateSelect: [
         {
           label: '正常',
@@ -139,9 +144,10 @@ export default {
     }
   },
   mounted () {
-    this.searchPost()
+    this.getTableData()
   },
   filters: {
+    // 时间格式化处理
     formatData (time) {
       var data = new Date(time)
       var y = data.getFullYear()
@@ -155,16 +161,36 @@ export default {
   },
   methods: {
     /**
+     * 搜索岗位
+     */
+    getTableData () {
+      this.loading = true
+      const res = new Promise((resolve, reject) => {
+        getData(this.params).then((result) => { resolve(result) }).catch((err) => { reject(err) })
+      })
+      res.then((result) => {
+        this.tableData = result.data.postList
+        this.total = result.data.total
+        this.loading = false
+      })
+    },
+    // 页码跳转
+    pageJump (page) {
+      this.params.page = page
+      this.getTableData()
+    },
+
+    /**
      * 打开新增对话框
      */
-    openDialogAddPost () {
+    openAddDialog () {
       this.dialogAddPostTitle = '新增'
       this.dialogAddPost = true
     },
     /**
      * 打开编辑对话框
      */
-    editPost (id) {
+    openEditDialog (id) {
       this.dialogAddPostTitle = '修改'
       const res = new Promise((resolve, reject) => {
         getPost(id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
@@ -188,12 +214,12 @@ export default {
      */
     closeDialog () {
       this.dialogAddPost = false
-      this.clearPost()
+      this.reDialogForm()
     },
     /**
      * 清除对话框表单规则
      */
-    clearPost () {
+    reDialogForm () {
       this.$refs.post.resetFields()
       this.post.id = 0
       this.post.title = ''
@@ -201,10 +227,17 @@ export default {
       this.post.state = 0
       this.post.remark = ''
     },
+    // 重置搜索条件
+    reSearchParams () {
+      this.params.title = ''
+      this.params.state = null
+      this.params.page = 1
+      this.getTableData()
+    },
     /**
      * 保存 新增/修改 的岗位信息
      */
-    savePost (post) {
+    saveData (post) {
       this.$refs[post].validate((valid) => {
         if (valid) {
           this.$confirm('是否确认' + this.dialogAddPostTitle + '名称为"' + this.post.title + '"的岗位?', '提示', {
@@ -218,7 +251,7 @@ export default {
             res.then((result) => {
               if (result.status === 200) {
                 this.$message.success(result.msg)
-                this.searchPost()
+                this.getTableData()
                 this.closeDialog()
               }
             })
@@ -228,45 +261,22 @@ export default {
         }
       })
     },
-    editSwitch (id) {
+    // 修改单条数据状态
+    dataStateSwitch (id) {
       const res = new Promise((resolve, reject) => {
         updateState(id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
       })
       res.then((result) => {
         if (result.status === 200) {
           this.$message.success(result.msg)
-          this.searchPost()
+          this.getTableData()
         }
       })
     },
     /**
-     * 搜索岗位
-     */
-    searchPost () {
-      this.loading = true
-      const res = new Promise((resolve, reject) => {
-        getData(this.params).then((result) => { resolve(result) }).catch((err) => { reject(err) })
-      })
-      res.then((result) => {
-        this.tableData = result.data.postList
-        this.total = result.data.total
-        this.loading = false
-      })
-    },
-    pageJump (page) {
-      this.params.page = page
-      this.searchPost()
-    },
-    clearSearchPost () {
-      this.params.title = ''
-      this.params.state = null
-      this.params.page = 1
-      this.searchPost()
-    },
-    /**
      * 删除单个岗位
      */
-    deletePost (row) {
+    deleteData (row) {
       this.$confirm('是否确认删除名称为"' + row.title + '"的岗位?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -279,7 +289,7 @@ export default {
           if (result.status === 200) {
             this.closeDialog()
             this.$message.success(result.msg)
-            this.searchPost()
+            this.getTableData()
           }
         })
       })
@@ -287,7 +297,7 @@ export default {
     /**
      * 批量删除岗位
      */
-    deletePosts () {
+    deleteDatas () {
       const postList = this.multipleSelection
       const idList = []
       const titleList = []
@@ -308,7 +318,7 @@ export default {
             if (result.status === 200) {
               this.closeDialog()
               this.$message.success(result.msg)
-              this.searchPost()
+              this.getTableData()
             }
           })
         })

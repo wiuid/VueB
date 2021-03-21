@@ -7,13 +7,12 @@
         <el-option v-for="item in stateSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
       <el-date-picker style="margin-right: 10px" v-model="searchDate" type="daterange" clearable range-separator="-" start-placeholder="开始创建日期" end-placeholder="结束创建日期"></el-date-picker>
-      <el-button type="primary" plain icon="el-icon-search"  @click="searchRole">搜索</el-button>
-      <el-button type="primary" plain icon="el-icon-refresh"  @click="reSearchRoleOption">重置</el-button>
+      <el-button type="primary" plain icon="el-icon-search"  @click="getTableData">搜索</el-button>
+      <el-button type="primary" plain icon="el-icon-refresh"  @click="reSearchParams">重置</el-button>
     </el-row>
     <el-row>
       <el-button type="primary" plain icon="el-icon-plus"  @click="openAddDialog">新 增</el-button>
-      <el-button type="danger" plain icon="el-icon-delete"  @click="deleteRoles">删 除</el-button>
-      <!-- <el-button type="danger" plain icon="el-icon-circle-close"  @click="blackRoles">停 用</el-button> -->
+      <el-button type="danger" plain icon="el-icon-delete"  @click="deleteDatas">删 除</el-button>
       <el-button type="success" plain icon="el-icon-download"  @click="exportRoles">导 出</el-button>
     </el-row>
     <el-row>
@@ -26,15 +25,18 @@
         <el-table-column prop="serial" label="排序" align="center"></el-table-column>
         <el-table-column prop="state" label="状态" align="center">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.state" :active-value="0" :inactive-value="1" @change="roleState(scope.row.id)"></el-switch>
+            <el-switch v-model="scope.row.state" :active-value="0" :inactive-value="1" @change="dataStateSwitch(scope.row.id)"></el-switch>
           </template>
         </el-table-column>
-        <el-table-column prop="createDate" label="创建时间" :formatter="dateFormat" align="center">
+        <el-table-column prop="createDate" label="创建时间" align="center">
+          <template slot-scope="scope">
+            {{scope.row.createDate | formatData()}}
+          </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="openEditDialog(scope.row.id)"><i class="el-icon-edit"></i>修改</el-link>
-            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="deleteRole(scope.row)"><i class="el-icon-delete"></i>删除</el-link>
+            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="deleteData(scope.row)"><i class="el-icon-delete"></i>删除</el-link>
           </template>
         </el-table-column>
       </el-table>
@@ -97,7 +99,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">取 消</el-button>
-        <el-button type="primary" @click="saveRole('role')">确 定</el-button>
+        <el-button type="primary" @click="saveData('role')">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -106,22 +108,15 @@
 
 <script>
 import { getData, getRole, getAuthTree, saveRole, updateState, deleteRole, deleteRoles } from '@/api/system/user/auth'
-import moment from 'moment'
 export default {
   name: 'Auth',
   data () {
     return {
-      rules: {
-        title: [
-          { required: true, message: '请输入角色名称', trigger: 'blur' }
-        ],
-        code: [
-          { required: true, message: '请输入角色字符', trigger: 'blur' }
-        ]
-      },
       loading: false,
       tableData: [],
       multipleSelection: [],
+      searchDate: [],
+      total: '',
       params: {
         title: '',
         code: '',
@@ -130,20 +125,12 @@ export default {
         createDateEnd: '',
         page: 1
       },
-      searchDate: [],
-      total: '',
+
       dialogAddRole: false,
       dialogAddRoleTitle: '新增',
-      stateSelect: [
-        {
-          label: '正常',
-          value: '0'
-        },
-        {
-          label: '停用',
-          value: '1'
-        }
-      ],
+      formLabelWidth: '80px',
+
+      // 对话框表单
       role: {
         id: 0,
         title: '',
@@ -154,29 +141,52 @@ export default {
         remark: ''
       },
       ids: [],
+      rules: {
+        title: [
+          { required: true, message: '请输入角色名称', trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '请输入角色字符', trigger: 'blur' }
+        ]
+      },
+      
+      // 权限树
       authTree: [],
+      // 指定权限树中需要显示的字段
       defaultProps: {
         label: 'title'
       },
-      formLabelWidth: '80px'
+      stateSelect: [
+        {
+          label: '正常',
+          value: '0'
+        },
+        {
+          label: '停用',
+          value: '1'
+        }
+      ]
     }
   },
   mounted () {
-    this.searchRole()
-    this.getAuthTrees()
+    this.getTableData()
+    this.getDataAuth()
+  },
+  filters: {
+    formatData (time) {
+      var data = new Date(time)
+      var y = data.getFullYear()
+      var M = data.getMonth() + 1
+      var d = data.getDate()
+
+      var h = data.getHours()
+      var m = data.getMinutes()
+      return y + '-' + M + '-' + d + ' ' + h + ':' + m
+    }
   },
   methods: {
-    getAuthTrees () {
-      var res = new Promise((resolve, reject) => {
-        getAuthTree().then((result) => { resolve(result) }).catch((err) => { reject(err) })
-      })
-      res.then((result) => {
-        if (result.status === 200) {
-          this.authTree = result.data.authTree
-        }
-      })
-    },
-    searchRole () {
+    // 搜索角色数据
+    getTableData () {
       this.loading = true
       if (this.searchDate.length !== 0) {
         this.params.createDateStart = this.searchDate[0]
@@ -193,21 +203,23 @@ export default {
         }
       })
     },
-    closeDialog () {
-      this.dialogAddRole = false
-      this.$refs.tree.setCheckedKeys([])
-      this.$refs.role.resetFields()
-      this.role.id = 0
-      this.role.title = ''
-      this.role.code = ''
-      this.role.serial = 0
-      this.role.state = 0
-      this.role.remark = ''
+    // 获取权限数据
+    getDataAuth () {
+      var res = new Promise((resolve, reject) => {
+        getAuthTree().then((result) => { resolve(result) }).catch((err) => { reject(err) })
+      })
+      res.then((result) => {
+        if (result.status === 200) {
+          this.authTree = result.data.authTree
+        }
+      })
     },
+    // 打开新增对话框
     openAddDialog () {
       this.dialogAddRoleTitle = '新增'
       this.dialogAddRole = true
     },
+    // 打开编辑对话框
     openEditDialog (id) {
       this.dialogAddRoleTitle = '修改'
       var res = new Promise((resolve, reject) => {
@@ -226,16 +238,30 @@ export default {
       })
       this.dialogAddRole = true
     },
-    reSearchRoleOption () {
+    // 离开对话框的操作
+    closeDialog () {
+      this.dialogAddRole = false
+      this.$refs.tree.setCheckedKeys([])
+      this.$refs.role.resetFields()
+      this.role.id = 0
+      this.role.title = ''
+      this.role.code = ''
+      this.role.serial = 0
+      this.role.state = 0
+      this.role.remark = ''
+    },
+    // 重置搜索条件
+    reSearchParams () {
       this.params.title = ''
       this.params.code = ''
       this.params.state = null
       this.params.createDateStart = ''
       this.params.createDateEnd = ''
       this.params.parge = 1
-      this.searchRole()
+      this.getTableData()
     },
-    saveRole (role) {
+    // 新建/修改 接口对接
+    saveData (role) {
       this.$refs[role].validate((valid) => {
         if (valid) {
           this.$confirm('是否确认' + this.dialogAddRoleTitle + '名称为"' + this.role.title + '"的角色?', '提示', {
@@ -250,7 +276,7 @@ export default {
             res.then((result) => {
               if (result.status === 200) {
                 this.$message.success(result.msg)
-                this.searchRole()
+                this.getTableData()
                 this.closeDialog()
               } else {
                 this.$message.error(result.msg)
@@ -262,7 +288,8 @@ export default {
         }
       })
     },
-    roleState (id) {
+    // 修改单数据状态
+    dataStateSwitch (id) {
       var res = new Promise((resolve, reject) => {
         updateState(id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
       })
@@ -271,11 +298,12 @@ export default {
           this.$message.success(result.msg)
         } else {
           this.$message.error(result.msg)
-          this.searchRole()
+          this.getTableData()
         }
       })
     },
-    deleteRole (row) {
+    // 删除单条数据
+    deleteData (row) {
       this.$confirm('是否确认删除名称为"' + row.title + '"的角色?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -287,14 +315,15 @@ export default {
         res.then((result) => {
           if (result.status === 200) {
             this.$message.success(result.msg)
-            this.searchRole()
+            this.getTableData()
           } else {
             this.$message.error(result.msg)
           }
         })
       })
     },
-    deleteRoles () {
+    // 批量删除数据
+    deleteDatas () {
       const roleList = this.multipleSelection
       const idList = []
       const titleList = []
@@ -314,20 +343,13 @@ export default {
           res.then((result) => {
             if (result.status === 200) {
               this.$message.success(result.msg)
-              this.searchRole()
+              this.getTableData()
             }
           })
         })
       } else {
         this.$message.warning('你应该至少选中一个！')
       }
-    },
-    dateFormat (row, column) {
-      var date = row[column.property]
-      if (date === undefined) {
-        return ''
-      }
-      return moment(date).format('YYYY-MM-DD HH:mm:ss')
     },
     /**
      * 获取当前选中了表格中的哪些数据

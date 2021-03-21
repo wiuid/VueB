@@ -2,7 +2,6 @@
   <div class="bg" :height="fullHeight" :width="fullWidth">
     <div class="img_box">
       <!-- 背景图片：动态绑定宽高 -->
-      <!-- <img src="../../assets/img/bg01.png" :width="fullWidth" /> -->
       <img src="@/assets/images/backimg.png" :width="fullWidth" />
       <el-container>
         <el-row style="display: flex;margin: auto;text-align: center">
@@ -35,6 +34,7 @@ export default {
   name: 'Login',
   data () {
     return {
+      // 登录规范验证
       rules: {
         username: [
           { required: true, message: '请输入账号', trigger: 'blur' },
@@ -45,6 +45,7 @@ export default {
           { min: 6, message: '密码最短六位' }
         ]
       },
+      // 账号密码表单
       form: {
         username: 'admin',
         password: '123qwe'
@@ -55,6 +56,7 @@ export default {
     }
   },
   created () {
+    // 登录token检测
     const token = sessionStorage.getItem('token')
     if (token !== null) {
       this.$router.replace('/system')
@@ -69,6 +71,7 @@ export default {
   mounted () {
   },
   methods: {
+    // 登录方法
     login () {
       if (this.form.username.length > 4) {
         if (this.form.password.length > 5) {
@@ -91,14 +94,9 @@ export default {
         this.$message.info('账号最短五位')
       }
     },
+    // 跳转方法
     toSystem () {
       this.$router.push({ path: '/system' })
-      // router.replace({
-      //   path: '/system',
-      //   query: {
-      //     redirect: router.currentRoute.fullPath
-      //   }
-      // })
     }
   }
 }

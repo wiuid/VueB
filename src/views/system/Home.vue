@@ -59,7 +59,7 @@
       <!--管理公告！-->
       <el-col :md="9" :sm="24" :xs="24"><el-card style="height: 220px;margin: 10px;flex-grow:1;" shadow="hover" >
         <el-row><span>网站公示板</span>
-          <el-link :underline="false" type="primary" title="更多公告" @click="searchInform">
+          <el-link :underline="false" type="primary" title="更多公告" @click="getTableData">
             <i class="el-icon-more-outline" style="padding: 0 10px"></i>
           </el-link>
         </el-row>
@@ -75,7 +75,7 @@
             -->
             <el-col :span="12">
               <el-link
-              :underline="false" @click="viewInform($event)"
+              :underline="false" @click="getData($event)"
               style="white-space: nowrap;display: inline-block; width: 100%; overflow: hidden;text-overflow: ellipsis;">
                 <span name="id" style="display:none">{{item.id}}</span>
                 <span>{{item.title}}</span>
@@ -116,7 +116,7 @@
       </el-card>
     </el-row>
 
-    <el-dialog center :title="dialogInformText.title" :visible.sync="dialogInformInfo">
+    <el-dialog center :title="dialogInformText.title" :visible.sync="dialog">
       <el-row style="text-align: center;margin-bottom: 20px">
         <i class="el-icon-date">{{dialogInformText.createDate | formatDate}}</i>
         <span style="padding: 0 10px">发布人：{{dialogInformText.userNickname}}</span>
@@ -137,8 +137,8 @@
           <el-date-picker v-model="searchDate" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"  :default-time="['00:00:00', '23:59:59']" style="margin-left: 10px"></el-date-picker>
         </el-row>
         <el-row>
-          <el-button type="primary" plain icon="el-icon-refresh" @click="clearSearchInform" style="margin-left: 10px">重置</el-button>
-          <el-button type="primary" plain icon="el-icon-search" @click="searchInform">搜索</el-button>
+          <el-button type="primary" plain icon="el-icon-refresh" @click="reSearchParams" style="margin-left: 10px">重置</el-button>
+          <el-button type="primary" plain icon="el-icon-search" @click="getTableData">搜索</el-button>
         </el-row>
       </el-row>
       <el-row style="margin: 20px 20px"
@@ -147,7 +147,7 @@
         <el-col :span="12">
           <el-link type="primary"
             :underline="false"
-            @click="viewInform($event)"
+            @click="getData($event)"
             style="white-space: nowrap;display: inline-block; width: 100%; overflow: hidden;text-overflow: ellipsis;">
             <span name="id" style="display:none">{{item.id}}</span>
             <span>{{item.title}}</span>
@@ -179,38 +179,50 @@ export default {
   // }
   data () {
     return {
+      // 最新的状态为正常的6条公告
       newTableData: [],
+      // 全部状态为正常的公告（10条）
       allTableData: [],
-      dialogInformInfo: false,
+      // 对话框状态--显示公告具体信息的
+      dialog: false,
+      // 对话框中信息载体
       dialogInformText: {
         title: '',
         createDate: '',
         userNickname: '',
         text: ''
       },
+      // 抽屉状态--显示全部公告
       drawer: false,
+      // 抽屉中的公告筛选条件
       params: {
         title: '',
         page: 1,
         createDateStart: '',
         createDateEnd: ''
       },
+      // 抽屉中数据的总数据数
       total: '',
+      // 页面初始化6条数据获取的条件（不是后端定义的）
       newParams: {
         state: 0,
         page: 1,
         pageSize: 6
       },
+      // 抽屉中时间的载体
       searchDate: []
     }
   },
   mounted () {
+    // 三个图表
     this.drawLine1()
     this.drawLine2()
     this.drawLine3()
-    this.getNewTableData()
+    // 6条最新公告的获取
+    this.getTableData()
   },
   filters: {
+    // 时间格式过滤
     formatDate (time) {
       const date = new Date(time)
       var years = date.getFullYear()
@@ -220,7 +232,8 @@ export default {
     }
   },
   methods: {
-    getNewTableData () {
+    // 获取6条公告方法
+    getNewData () {
       getData(this.newParams).then((result) => {
         if (result.status === 200) {
           this.newTableData = result.data.informList
@@ -229,7 +242,8 @@ export default {
         }
       }).catch((err) => { console.log(err) })
     },
-    searchInform () {
+    // 搜索全部公告方法
+    getTableData () {
       if (this.searchDate.length !== 0) {
         this.params.createDateStart = this.searchDate[0]
         this.params.createDateEnd = this.searchDate[1]
@@ -252,30 +266,33 @@ export default {
         this.tableData = []
         this.$message.info('暂无数据')
       })
-
       this.drawer = true
     },
-    viewInform (event) {
+    // 查看公告内容
+    getData (event) {
       var informId = event.currentTarget.firstElementChild.firstElementChild.innerHTML
       getInform(informId).then((res) => {
         if (res.status === 200) {
           this.dialogInformText = res.data.inform
-          this.dialogInformInfo = true
+          this.dialog = true
         }
       }).catch((err) => { console.log(err) })
     },
-    clearSearchInform () {
+    // 页面跳转
+    pageJump (page) {
+      this.params.page = page
+      this.getTableData()
+    },
+    // 重置搜索条件
+    reSearchParams () {
       this.params.title = ''
       this.params.page = 1
       this.params.createDateStart = ''
       this.params.createDateEnd = ''
       this.searchDate = []
-      this.searchInform()
+      this.getTableData()
     },
-    pageJump (page) {
-      this.params.page = page
-      this.searchInform()
-    },
+    // 下面都是图表
     drawLine1 () {
       // 基于准备好的dom，初始化echarts实例
       const myChart = this.$echarts.init(document.getElementById('myChart1'))

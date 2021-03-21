@@ -6,12 +6,12 @@
       <el-select  v-model="params.state" style="margin-right: 10px;" clearable placeholder="公告状态">
         <el-option v-for="item in stateSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
-      <el-button type="primary" plain icon="el-icon-refresh" @click="clearSearchInform">重置</el-button>
-      <el-button type="primary" plain icon="el-icon-search" @click="searchInform">搜索</el-button>
+      <el-button type="primary" plain icon="el-icon-refresh" @click="reSearchParams">重置</el-button>
+      <el-button type="primary" plain icon="el-icon-search" @click="getTableData">搜索</el-button>
     </el-row>
     <el-row>
-      <el-button type="primary" plain icon="el-icon-plus"  @click="openDialogAddInform">新 增</el-button>
-      <el-button type="danger" plain icon="el-icon-delete"  @click="deleteInforms">删 除</el-button>
+      <el-button type="primary" plain icon="el-icon-plus"  @click="openAddDialog">新 增</el-button>
+      <el-button type="danger" plain icon="el-icon-delete"  @click="deleteDatas">删 除</el-button>
     </el-row>
     <el-row>
       <el-table v-loading="loading"
@@ -24,17 +24,21 @@
         <el-table-column type="index" label="序号" width="55" align="center"></el-table-column>
         <el-table-column prop="id" v-if="flase" width="0"></el-table-column>
         <el-table-column prop="title" label="公告标题" align="center"></el-table-column>
-        <el-table-column prop="createDate" :formatter="dateFormat" label="时间" align="center"></el-table-column>
+        <el-table-column prop="userNickname" label="发布人" align="center"></el-table-column>
         <el-table-column prop="state" label="状态" align="center">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.state" :active-value="0" :inactive-value="1" @change="informState(scope.row)"></el-switch>
+            <el-switch v-model="scope.row.state" :active-value="0" :inactive-value="1" @change="dataStateSwitch(scope.row)"></el-switch>
           </template>
         </el-table-column>
-        <el-table-column prop="userNickname" label="发布人" align="center"></el-table-column>
+        <el-table-column prop="createDate" label="时间" align="center">
+          <template slot-scope="scope">
+            {{scope.row.createDate | formatData()}}
+          </template>
+        </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="editInform(scope.row.id)"><i class="el-icon-edit"></i>修改</el-link>
-            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="deleteInform(scope.row)"><i class="el-icon-delete"></i>删除</el-link>
+            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="openEditDialog(scope.row.id)"><i class="el-icon-edit"></i>修改</el-link>
+            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="deleteData(scope.row)"><i class="el-icon-delete"></i>删除</el-link>
           </template>
         </el-table-column>
       </el-table>
@@ -53,14 +57,9 @@
           </el-form-item>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="状态" :label-width="formLabelWidth" prop="status">
               <el-switch v-model="inform.state" :active-value="0" :inactive-value="1"></el-switch>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="发布时间" :label-width="formLabelWidth" prop="clearable">
-              <span>{{inform.createDate}}</span>
             </el-form-item>
           </el-col>
         </el-row>
@@ -71,8 +70,8 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="clearInform;dialogAddInform = false">取 消</el-button>
-        <!-- <el-button @click="clearInform" type="warning" plain style="float:left;">清 空</el-button> -->
+        <el-button @click="reDialogForm;dialogAddInform = false">取 消</el-button>
+        <!-- <el-button @click="reDialogForm" type="warning" plain style="float:left;">清 空</el-button> -->
         <el-button type="primary" @click="saveInform('inform')">确 定</el-button>
       </div>
     </el-dialog>
@@ -82,12 +81,35 @@
 <script>
 import { getData, getInform, saveInform, deleteInform, deleteInforms } from '@/api/system/site/inform'
 import pagination from '@/components/Pagination'
-import moment from 'moment'
 export default {
   name: 'Inform',
   components: { pagination },
   data () {
     return {
+      // 列表数据相关
+      tableData: [],
+      // 总数据数
+      total: '',
+      loading: false,
+      // 多选
+      multipleSelection: [],
+      // 筛选条件
+      searchDate: [],
+      params: {
+        title: '',
+        state: '',
+        page: 1,
+        createDateStart: '',
+        createDateEnd: ''
+      },
+
+      // 对话框表单
+      inform: {
+        id: 0,
+        title: '',
+        state: 0,
+        text: ''
+      },
       rules: {
         title: [
           { required: true, message: '请输入公告标题', trigger: 'blur' }
@@ -96,28 +118,12 @@ export default {
           { required: true, message: '请输入公告正文内容', trigger: 'blur' }
         ]
       },
-      tableData: [],
-      inform: {
-        id: null,
-        title: '',
-        createDate: '',
-        updateDate: '',
-        state: 0,
-        text: ''
-      },
+
+      // 对话框相关
       dialogAddInform: false,
       dialogAddInformTitle: '',
       formLabelWidth: '80px',
-      multipleSelection: [],
-      loading: false,
-      params: {
-        title: '',
-        state: '',
-        page: 1,
-        createDateStart: '',
-        createDateEnd: ''
-      },
-      searchDate: [],
+
       stateSelect: [
         {
           value: 0,
@@ -127,15 +133,27 @@ export default {
           value: 1,
           label: '停用'
         }
-      ],
-      total: ''
+      ]
     }
   },
   mounted () {
-    this.searchInform()
+    this.getTableData()
+  },
+  filters: {
+    formatData (time) {
+      var data = new Date(time)
+      var y = data.getFullYear()
+      var M = data.getMonth() + 1
+      var d = data.getDate()
+
+      var h = data.getHours()
+      var m = data.getMinutes()
+      return y + '-' + M + '-' + d + ' ' + h + ':' + m
+    }
   },
   methods: {
-    searchInform () {
+    // 初始页面数据
+    getTableData () {
       this.loading = true
       // 时间处理
       if (this.searchDate.length !== 0) {
@@ -163,51 +181,27 @@ export default {
         this.loading = false
       })
     },
+    // 页码跳转
     pageJump (page) {
       this.params.page = page
-      this.searchInform()
-    },
-    clearSearchInform () {
-      this.params.title = ''
-      this.params.state = ''
-      this.params.page = 1
-      this.params.createDateStart = ''
-      this.params.createDateEnd = ''
-      this.searchDate = []
-      this.searchInform()
+      this.getTableData()
     },
     /**
      * 打开对话框  同时清空表单数据、标题改为新增公告
      */
-    openDialogAddInform () {
-      const date = moment().format('YYYY-MM-DD HH:mm:ss')
-      this.inform.createDate = date
-      this.inform.updateDate = date
+    openAddDialog () {
       this.dialogAddInformTitle = '新增'
       this.dialogAddInform = true
-    },
-    /**
-     * 清空表单数据
-     */
-    clearInform () {
-      this.$refs.inform.resetFields()
-      this.inform.id = null
-      this.inform.title = ''
-      this.inform.userNickname = ''
-      this.inform.state = 0
-      this.inform.text = ''
     },
     /**
      * 将获取的行数据赋值到对话框进行更新
      * @param id
      */
-    editInform (id) {
+    openEditDialog (id) {
       this.dialogAddInformTitle = '修改'
       getInform(id).then((result) => {
         if (result.status === 200) {
           this.inform = result.data.inform
-          this.inform.createDate = moment(this.inform.createDate).format('YYYY-MM-DD HH:mm:ss')
-          this.inform.updateDate = moment().format('YYYY-MM-DD HH:mm:ss')
         } else {
           this.$message.error('数据错误')
         }
@@ -220,13 +214,34 @@ export default {
      * 想要离开对话框时清空表单，并关闭对话框
      */
     closeDialog () {
-      this.clearInform()
+      this.reDialogForm()
       this.dialogAddInform = false
+    },
+    /**
+     * 清空表单数据
+     */
+    reDialogForm () {
+      this.$refs.inform.resetFields()
+      this.inform.id = null
+      this.inform.title = ''
+      this.inform.userNickname = ''
+      this.inform.state = 0
+      this.inform.text = ''
+    },
+    // 重置搜索条件
+    reSearchParams () {
+      this.params.title = ''
+      this.params.state = ''
+      this.params.page = 1
+      this.params.createDateStart = ''
+      this.params.createDateEnd = ''
+      this.searchDate = []
+      this.getTableData()
     },
     /**
      * 保存对话框中的数据到后台数据库（更新和新增同一接口）
      */
-    saveInform (inform) {
+    saveData (inform) {
       this.$refs[inform].validate((valid) => {
         if (valid) {
           this.$confirm('是否确认' + this.dialogAddInformTitle + '名称为"' + this.inform.title + '"的公告通知?', '提示', {
@@ -237,12 +252,12 @@ export default {
             saveInform(this.inform).then((result) => {
               if (result.status === 200) {
                 this.$message.success(result.msg)
-                this.searchInform()
+                this.getTableData()
               } else {
                 this.$message.success(result.msg)
               }
             }).catch((err) => { this.$message.error(err) })
-            this.clearInform()
+            this.reDialogForm()
             this.dialogAddInform = false
           })
         } else {
@@ -250,7 +265,7 @@ export default {
         }
       })
     },
-    informState (row) {
+    dataStateSwitch (row) {
       const inform = {
         id: row.id,
         state: row.state
@@ -258,18 +273,18 @@ export default {
       saveInform(inform).then((result) => {
         if (result.status === 200) {
           this.$message.success(result.msg)
-          this.searchInform()
+          this.getTableData()
         } else {
           this.$message.success(result.msg)
         }
       }).catch((err) => { this.$message.error(err) })
-      this.searchInform()
+      this.getTableData()
     },
     /**
      * 删除后台数据库中的该行数据
      * @param row
      */
-    deleteInform (row) {
+    deleteData (row) {
       this.$confirm('是否确认删除名称为"' + row.title + '"的公告通知?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -278,7 +293,7 @@ export default {
         deleteInform(row.id).then((res) => {
           if (res.status === 200) {
             this.$message.success(res.msg)
-            this.searchInform()
+            this.getTableData()
           } else {
             this.$message.error(res.msg)
           }
@@ -289,7 +304,7 @@ export default {
     /**
      * 批量删除通知公告
      */
-    deleteInforms () {
+    deleteDatas () {
       const informList = this.multipleSelection
       const idList = []
       const titleList = []
@@ -307,7 +322,7 @@ export default {
           deleteInforms(idList.toString()).then((res) => {
             if (res.status === 200) {
               this.$message.success(res.msg)
-              this.searchInform()
+              this.getTableData()
             } else {
               this.$message.error(res.msg)
             }
@@ -323,13 +338,6 @@ export default {
      */
     handleSelectionChange (val) {
       this.multipleSelection = val
-    },
-    dateFormat (row, column) {
-      var date = row[column.property]
-      if (date === undefined) {
-        return ''
-      }
-      return moment(date).format('YYYY-MM-DD HH:mm:ss')
     }
   }
 }
