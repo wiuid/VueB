@@ -2,8 +2,8 @@ import request from '@/utils/request/index'
 
 /**
  * 获取页面数据
- * @param {*} params 
- * @returns 
+ * @param {*} params
+ * @returns
  */
 export function getData (params) {
   return request({
@@ -15,8 +15,8 @@ export function getData (params) {
 
 /**
  * 根据id 获取详细信息
- * @param {*} id 
- * @returns 
+ * @param {*} id
+ * @returns
  */
 export function getUser (id) {
   return request({

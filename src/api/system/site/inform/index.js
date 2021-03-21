@@ -2,8 +2,8 @@ import request from '@/utils/request/index'
 
 /**
  * 获取页面数据
- * @param {*} params 
- * @returns 
+ * @param {*} params
+ * @returns
  */
 export function getData (params) {
   return request({
@@ -15,8 +15,8 @@ export function getData (params) {
 
 /**
  * 根据id 获取详细信息
- * @param {*} id 
- * @returns 
+ * @param {*} id
+ * @returns
  */
 export function getInform (id) {
   return request({
@@ -30,8 +30,8 @@ export function getInform (id) {
 
 /**
  * 新建/修改 数据 一体接口
- * @param {*} params 
- * @returns 
+ * @param {*} params
+ * @returns
  */
 export function saveInform (params) {
   return request({
@@ -43,8 +43,8 @@ export function saveInform (params) {
 
 /**
  * 删除单条数据
- * @param {*} id 
- * @returns 
+ * @param {*} id
+ * @returns
  */
 export function deleteInform (id) {
   return request({
@@ -58,8 +58,8 @@ export function deleteInform (id) {
 
 /**
  * 批量删除数据
- * @param {*} ids 
- * @returns 
+ * @param {*} ids
+ * @returns
  */
 export function deleteInforms (ids) {
   return request({

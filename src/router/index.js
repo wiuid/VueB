@@ -114,7 +114,7 @@ const routes = [
         }
       },
       {
-        path: '/system/*',
+        path: '/system/**',
         name: 'NotFount',
         component: () => import('@/views/system/NotFount'),
         meta: {
@@ -124,8 +124,12 @@ const routes = [
     ]
   },
   {
-    path: '*',
-    redirect: { name: 'Index' }
+    path: '/**',
+    name: 'NotFount',
+    component: () => import('@/views/NotFount'),
+    meta: {
+      title: '404-您输入的网页有误'
+    }
   }
   // ,
   // {

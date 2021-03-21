@@ -2,7 +2,7 @@ import request from '@/utils/request/index'
 
 /**
  * 获取页面数据
- * @returns 
+ * @returns
  */
 export function getData () {
   return request({
@@ -13,8 +13,8 @@ export function getData () {
 
 /**
  * 根据id 获取详细信息
- * @param {*} id 
- * @returns 
+ * @param {*} id
+ * @returns
  */
 export function getDepartment (id) {
   return request({
@@ -28,7 +28,7 @@ export function getDepartment (id) {
 
 /**
  * 获取数据用于其他api调用
- * @returns 
+ * @returns
  */
 export function getDepartmentTree () {
   return request({
@@ -39,8 +39,8 @@ export function getDepartmentTree () {
 
 /**
  * 新建/修改 数据 一体接口
- * @param {*} params 
- * @returns 
+ * @param {*} params
+ * @returns
  */
 export function saveDepartment (params) {
   return request({
@@ -52,8 +52,8 @@ export function saveDepartment (params) {
 
 /**
  * 更新数据状态
- * @param {*} id 
- * @returns 
+ * @param {*} id
+ * @returns
  */
 export function updateState (id) {
   return request({
@@ -67,8 +67,8 @@ export function updateState (id) {
 
 /**
  * 删除单条数据（包含下级）
- * @param {*} id 
- * @returns 
+ * @param {*} id
+ * @returns
  */
 export function delectDepartment (id) {
   return request({
