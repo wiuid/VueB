@@ -9,7 +9,7 @@ export function getDepartmentList () {
 
 export function getDepartmentById (id) {
   return request({
-    url: '/system/department/select/id',
+    url: '/system/department/get',
     method: 'get',
     params: {
       id: id
@@ -19,7 +19,7 @@ export function getDepartmentById (id) {
 
 export function getDepartmentSelect () {
   return request({
-    url: '/system/department/select/tree',
+    url: '/system/department/tree',
     method: 'get'
   })
 }
@@ -34,7 +34,7 @@ export function saveDepartment (params) {
 
 export function updateState (id) {
   return request({
-    url: '/system/department/update/state',
+    url: '/system/department/state',
     method: 'post',
     data: {
       id: id

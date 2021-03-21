@@ -10,7 +10,7 @@ export function getPostList (params) {
 
 export function getPostById (id) {
   return request({
-    url: '/system/department/post/select',
+    url: '/system/department/post/get',
     method: 'get',
     params: {
       id: id
