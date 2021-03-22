@@ -64,6 +64,7 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="openEditDialog(scope.row.id)"><i class="el-icon-edit"></i>修改</el-link>
+            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="openEditPasswordDialog(scope.row)"><i class="el-icon-edit"></i>密码</el-link>  
             <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="deleteData(scope.row)"><i class="el-icon-delete"></i>删除</el-link>
           </template>
         </el-table-column>
@@ -148,6 +149,23 @@
         <el-button type="primary" @click="saveData('user')">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog title="修改用户密码" :visible.sync="dialogUpdatePassword" width="30%" :before-close="closeUpdatePassword">
+      <el-form :model="userPassword" :rules="userPasswordRules" ref="userPassword">
+        <el-form-item label="您的密码" :label-width="formLabelWidth" prop="rootPassword">
+          <el-input type="password" v-model="userPassword.rootPassword"></el-input>
+        </el-form-item>
+        <el-form-item label="用户密码" :label-width="formLabelWidth" prop="userPassword">
+          <el-input type="password" v-model="userPassword.userPassword"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" :label-width="formLabelWidth" prop="confirmPassword" required>
+          <el-input type="password" v-model="userPassword.confirmPassword"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="closeUpdatePassword()">取 消</el-button>
+        <el-button type="primary" @click="updateUserPassword('userPassword')">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -156,7 +174,7 @@ import '@/assets/styles/defaultTreeselect.css'
 import treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import pagination from '@/components/Pagination'
-import { getData, getUser, saveUser, updateState, deleteUser, deleteUsers } from '@/api/system/user'
+import { getData, getUser, saveUser, updatePassword, updateState, deleteUser, deleteUsers } from '@/api/system/user'
 import { getRoleTree } from '@/api/system/user/auth'
 import { getDepartmentTree } from '@/api/system/department'
 import { getPostTree } from '@/api/system/department/post'
@@ -165,6 +183,15 @@ export default {
   name: 'User',
   components: { pagination, treeselect },
   data () {
+    const validateConfirmPassword = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入用户密码'))
+      } else if (value !== this.userPassword.userPassword) {
+        callback(new Error('两次输入的密码不一致'))
+      } else {
+        callback()
+      }
+    }
     return {
       tableData: [],
       total: '',
@@ -217,10 +244,30 @@ export default {
         }
       ],
 
+      userPassword: {
+        id: 0,
+        username: '',
+        rootPassword: '',
+        userPassword: '',
+        confirmPassword: ''
+      },
+      userPasswordRules: {
+        rootPassword: [
+          { required: true, message: '请输入您的密码', trigger: 'blur' },
+          { min: 6, message: '密码最短6位' }
+        ],
+        userPassword: [
+          { required: true, message: '请输入该用户的新密码', trigger: 'blur' },
+          { min: 6, message: '密码最短6位' }
+        ],
+        confirmPassword: [
+          { validator: validateConfirmPassword, trigger: 'blur' }
+        ]
+      },
       dialogAddUser: false,
       dialogAddUserTitle: '新增',
-      formLabelWidth: '80px'
-
+      formLabelWidth: '80px',
+      dialogUpdatePassword: false
     }
   },
   mounted () {
@@ -362,6 +409,40 @@ export default {
       this.user.roleId = ''
       this.user.remark = ''
     },
+
+    openEditPasswordDialog (row) {
+      this.userPassword.id = row.id
+      this.userPassword.username = row.username
+      this.dialogUpdatePassword = true
+    },
+    closeUpdatePassword () {
+      this.dialogUpdatePassword = false
+      this.$refs.userPassword.resetFields()
+    },
+    updateUserPassword (userPassword) {
+      this.$refs[userPassword].validate((valid) => {
+        if (valid) {
+          this.$confirm('是否确认修改名称为"' + this.userPassword.username + '"用户的密码?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            const res = new Promise((resolve, reject) => {
+              updatePassword(this.userPassword).then((result) => { resolve(result) })
+            })
+            res.then((result) => {
+              if (result.status === 200) {
+                this.$message.success(result.msg)
+                this.closeUpdatePassword()
+              }
+            })
+          })
+        } else {
+          return false
+        }
+      })
+    },
+
     // 清除搜索参数的表单
     reSearchParams () {
       this.params.departmentId = null
