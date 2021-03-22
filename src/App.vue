@@ -38,20 +38,20 @@ export default {
     }
     // 判断session 是否存有token   面对刷新当前页面的情况
     const sessionToken = sessionStorage.getItem('token')
-    if (sessionToken !== null) {
+    const localToken = localStorage.getItem('token')
+
+    if (sessionToken === null && localToken === null) {
+      const pathName = window.location.pathname
+      if (pathName !== '/' && pathName !== '/login') {
+        console.log('----------------------------------')
+        console.log('跳转提示')
+        console.log('----------------------------------')
+        // this.$router.replace('/login')
+      }
+    } else if (localStorage === null) {
       localStorage.setItem('token', sessionToken)
     } else {
-      // 面对标签页之间的登录信息交换
-      const localToken = localStorage.getItem('token')
-      if (localToken !== null) {
-        sessionStorage.setItem('token', localToken)
-      } else {
-        // 当没有登录信息，所在的页面又是登录之后的页面，需要跳转至登录页
-        const pathName = window.location.pathname
-        if (pathName !== '/' && pathName !== '/login') {
-          this.$router.replace('/login')
-        }
-      }
+      sessionStorage.setItem('token', sessionToken)
     }
   },
   activated () {
