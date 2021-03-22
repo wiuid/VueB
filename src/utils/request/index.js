@@ -72,6 +72,12 @@ instance.interceptors.response.use(
             /**
              * 权限不足，进行提示即可
              */
+          case 444:
+            sessionStorage.removeItem('token')
+            localStorage.removeItem('token')
+            Message.error('账户异常')
+            router.replace('/')
+            break
           case 300:
             Message.error('您权限不足，请联系管理员')
             break
