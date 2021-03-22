@@ -39,9 +39,22 @@ export function getUsertTree () {
  * @param {*} params
  * @returns
  */
- export function saveUser (params) {
+export function saveUser (params) {
   return request({
     url: '/system/user/save',
+    method: 'post',
+    data: params
+  })
+}
+
+/**
+ * 修改用户密码
+ * @param {*} params
+ * @returns
+ */
+export function updatePassword (params) {
+  return request({
+    url: '/system/user/password',
     method: 'post',
     data: params
   })
@@ -52,7 +65,7 @@ export function getUsertTree () {
  * @param {*} id
  * @returns
  */
- export function updateState (id) {
+export function updateState (id) {
   return request({
     url: '/system/user/state',
     method: 'post',
@@ -67,7 +80,7 @@ export function getUsertTree () {
  * @param {*} id
  * @returns
  */
- export function deleteUser (id) {
+export function deleteUser (id) {
   return request({
     url: '/system/user/delete',
     method: 'delete',
