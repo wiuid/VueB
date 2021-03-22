@@ -149,7 +149,7 @@ export default {
           { required: true, message: '请输入角色字符', trigger: 'blur' }
         ]
       },
-      
+
       // 权限树
       authTree: [],
       // 指定权限树中需要显示的字段
@@ -269,19 +269,25 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.role.authIds = this.$refs.tree.getCheckedKeys().toString()
-            var res = new Promise((resolve, reject) => {
-              saveRole(this.role).then((result) => { resolve(result) }).catch((err) => { reject(err) })
-            })
-            res.then((result) => {
-              if (result.status === 200) {
-                this.$message.success(result.msg)
-                this.getTableData()
-                this.closeDialog()
-              } else {
-                this.$message.error(result.msg)
-              }
-            })
+            var id = this.role.id
+            if (id === 1 || id === 2) {
+              this.$message.warning('提示：默认角色不可删除，不可修改！')
+              this.closeDialog()
+            } else {
+              this.role.authIds = this.$refs.tree.getCheckedKeys().toString()
+              var res = new Promise((resolve, reject) => {
+                saveRole(this.role).then((result) => { resolve(result) }).catch((err) => { reject(err) })
+              })
+              res.then((result) => {
+                if (result.status === 200) {
+                  this.$message.success(result.msg)
+                  this.getTableData()
+                  this.closeDialog()
+                } else {
+                  this.$message.error(result.msg)
+                }
+              })
+            }
           })
         } else {
           return false
@@ -290,6 +296,11 @@ export default {
     },
     // 修改单数据状态
     dataStateSwitch (id) {
+      if (id === 1 || id === 2) {
+        this.$message.warning('提示：默认角色不可删除，不可修改！')
+        this.getTableData()
+        return
+      }
       var res = new Promise((resolve, reject) => {
         updateState(id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
       })
@@ -309,6 +320,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        if (row.id === 1 || row.id === 2) {
+          this.$message.warning('提示：默认角色不可删除，不可修改！')
+          return
+        }
         const res = new Promise((resolve, reject) => {
           deleteRole(row.id).then((result) => { resolve(result) }).catch((err) => { reject(err) })
         })
@@ -331,6 +346,10 @@ export default {
         for (const index in roleList) {
           idList.push(roleList[index].id)
           titleList.push(roleList[index].title)
+        }
+        if (idList.includes(1) || idList.includes(2)) {
+          this.$message.warning('提示：默认角色不可删除，不可修改！')
+          return
         }
         this.$confirm('是否确认删除名称为"' + titleList.toString() + '"的岗位?', '提示', {
           confirmButtonText: '确定',

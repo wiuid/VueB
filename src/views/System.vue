@@ -2,7 +2,7 @@
   <div>
     <el-container style="height:100vh;">
       <!-- 侧边导航 -->
-      <el-aside :width="navigationBarAsideWidth" style="border-right: solid 1px #e6e6e6">
+      <el-aside :width="navigationBarAsideWidth"  style="border-right: solid 1px #e6e6e6;  transition: all .5s">
         <NavigationBarAside :collapse="collapse"></NavigationBarAside>
       </el-aside>
       <el-container>
@@ -35,9 +35,9 @@ export default {
   data () {
     return {
       // 控制侧栏的展开和收缩
-      navigationBarAsideWidth: '202px',
-      collapse: false,
-      nameHide: true
+      navigationBarAsideWidth: '64px',
+      collapse: true,
+      nameHide: false
     }
   },
   methods: {

@@ -1,4 +1,4 @@
-<template>
+<template style="transition: all .5s">
   <div>
     <el-row>
       <!--基础信息展示-->
@@ -219,7 +219,7 @@ export default {
     this.drawLine2()
     this.drawLine3()
     // 6条最新公告的获取
-    this.getTableData()
+    this.getNewData()
   },
   filters: {
     // 时间格式过滤

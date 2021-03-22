@@ -12,6 +12,7 @@
               <br/>
               本站是<b>免费开源</b>的，所以您可以通过Github来拉取代码，对该项目进行深度的自定义支持
               <h6>当前版本：0.1.0</h6>
+              <p>本页面是单页面，可以直接删除本页面文件，然后去除@/router/index.js 中对应的本站相关项即可</p>
             </span>
             <span style="font-size: 16px; color: #676a6c">传送门：</span>
             <a href="https://github.com/wiuid/VueA" target="_blank">

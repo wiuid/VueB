@@ -70,9 +70,8 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="reDialogForm;dialogAddInform = false">取 消</el-button>
-        <!-- <el-button @click="reDialogForm" type="warning" plain style="float:left;">清 空</el-button> -->
-        <el-button type="primary" @click="saveInform('inform')">确 定</el-button>
+        <el-button @click="closeDialog">取 消</el-button>
+        <el-button type="primary" @click="saveData('inform')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -160,26 +159,16 @@ export default {
         this.params.createDateStart = this.searchDate[0]
         this.params.createDateEnd = this.searchDate[1]
       }
-      // 数据请求
       const res = new Promise((resolve, reject) => {
-        getData(this.params).then((result) => {
-          if (result.status === 200) {
-            resolve(result.data)
-          } else {
-            reject(res.msg)
-          }
-        }).catch((err) => { reject(err) })
+        getData(this.params).then((result) => { resolve(result) })
       })
-      // 结果处理
-      res.then((res) => {
-        this.tableData = res.informList
-        this.total = res.total
-        this.loading = false
-      }).catch(() => {
-        this.tableData = []
-        this.$message.info('暂无数据')
-        this.loading = false
+      res.then((result) => {
+        if (result.status === 200) {
+          this.tableData = result.data.informList
+          this.total = result.data.total
+        }
       })
+      this.loading = false
     },
     // 页码跳转
     pageJump (page) {
@@ -199,30 +188,27 @@ export default {
      */
     openEditDialog (id) {
       this.dialogAddInformTitle = '修改'
-      getInform(id).then((result) => {
+      const res = new Promise((resolve, reject) => {
+        getInform(id).then((result) => { resolve(result) })
+      })
+
+      res.then((result) => {
         if (result.status === 200) {
-          this.inform = result.data.inform
-        } else {
-          this.$message.error('数据错误')
+          this.inform.id = result.data.inform.id
+          this.inform.title = result.data.inform.title
+          this.inform.state = result.data.inform.state
+          this.inform.text = result.data.inform.text
         }
-      }).catch((err) => {
-        this.$message.error(err)
       })
       this.dialogAddInform = true
     },
     /**
-     * 想要离开对话框时清空表单，并关闭对话框
+     * 关闭对话框并重置表单
      */
     closeDialog () {
-      this.reDialogForm()
       this.dialogAddInform = false
-    },
-    /**
-     * 清空表单数据
-     */
-    reDialogForm () {
       this.$refs.inform.resetFields()
-      this.inform.id = null
+      this.inform.id = 0
       this.inform.title = ''
       this.inform.userNickname = ''
       this.inform.state = 0
@@ -249,36 +235,40 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            saveInform(this.inform).then((result) => {
+            const res = new Promise((resolve, reject) => {
+              saveInform(this.inform).then((result) => { resolve(result) })
+            })
+            res.then((result) => {
               if (result.status === 200) {
                 this.$message.success(result.msg)
                 this.getTableData()
-              } else {
-                this.$message.success(result.msg)
               }
-            }).catch((err) => { this.$message.error(err) })
-            this.reDialogForm()
-            this.dialogAddInform = false
+            })
+            this.closeDialog()
           })
         } else {
           return false
         }
       })
     },
+
     dataStateSwitch (row) {
       const inform = {
         id: row.id,
         state: row.state
       }
-      saveInform(inform).then((result) => {
+
+      const res = new Promise((resolve, reject) => {
+        saveInform(inform).then((result) => { resolve(result) })
+      })
+
+      res.then((result) => {
         if (result.status === 200) {
           this.$message.success(result.msg)
-          this.getTableData()
         } else {
-          this.$message.success(result.msg)
+          this.getTableData()
         }
-      }).catch((err) => { this.$message.error(err) })
-      this.getTableData()
+      })
     },
     /**
      * 删除后台数据库中的该行数据
@@ -290,15 +280,16 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteInform(row.id).then((res) => {
-          if (res.status === 200) {
-            this.$message.success(res.msg)
+        const res = new Promise((resolve, reject) => {
+          deleteInform(row.id).then((result) => { resolve(result) })
+        })
+
+        res.then((result) => {
+          if (result.status === 200) {
+            this.$message.success(result.msg)
             this.getTableData()
-          } else {
-            this.$message.error(res.msg)
           }
-        }).catch((err) => { this.$message.error(err) })
-        this.dialogAddInform = false
+        })
       })
     },
     /**
@@ -313,20 +304,21 @@ export default {
           idList.push(informList[index].id)
           titleList.push(informList[index].title)
         }
-
         this.$confirm('是否确认删除标题为 "' + titleList.toString() + '" 的公告通知?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          deleteInforms(idList.toString()).then((res) => {
-            if (res.status === 200) {
-              this.$message.success(res.msg)
+          const res = new Promise((resolve, reject) => {
+            deleteInforms(idList.toString()).then((result) => { resolve(result) })
+          })
+
+          res.then((result) => {
+            if (result.status === 200) {
+              this.$message.success(result.msg)
               this.getTableData()
-            } else {
-              this.$message.error(res.msg)
             }
-          }).catch((err) => { this.$message.error(err) })
+          })
         })
       } else {
         this.$message.warning('你应该至少选中一个！')

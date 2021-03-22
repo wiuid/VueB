@@ -1,44 +1,27 @@
 <template>
   <div>
     <el-row>
-      <el-col :lg="8" :md="12" :sm="24" style="margin-bottom: 10px">
-        <treeselect v-model="params.departmentId" :options="option" placeholder="请选择用户所在部门" style="width: 300px">
-          <label slot="option-label" slot-scope="{ node, labelClassName }" :class="labelClassName">
-            {{ node.label }}
-          </label>
-        </treeselect>
-      </el-col>
-      <el-col :lg="8" :md="12" :sm="24" style="margin-bottom: 10px">
-        <el-input v-model="params.username" style="width: 300px;" placeholder="输入用户名称" clearable></el-input>
-      </el-col>
-      <el-col :lg="8" :md="12" :sm="24" style="margin-bottom: 10px">
-        <el-input v-model="params.phone" style="width: 300px;" placeholder="输入手机号码" clearable></el-input>
-      </el-col>
-      <el-col :lg="8" :md="12" :sm="24" style="margin-bottom: 10px">
-        <el-select v-model="params.state" placeholder="请选择用户状态" style="width: 300px" clearable>
-          <el-option
-            v-for="item in stateSelect"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-col>
-      <el-col :lg="8" :md="12" :sm="24" style="margin-bottom: 10px">
-        <el-date-picker
-          style="width: 300px;"
-          v-model="searchDate"
-          type="daterange"
-          clearable
-          range-separator="-"
-          start-placeholder="开始创建日期"
-          end-placeholder="结束创建日期">
-        </el-date-picker>
-      </el-col>
-      <el-col :lg="8" :md="12" :sm="24" style="margin-bottom: 10px">
-        <el-button type="primary" plain icon="el-icon-refresh"  @click="reSearchUserOption">重置</el-button>
-        <el-button type="primary" plain icon="el-icon-search"  @click="getTableData">搜索</el-button>
-      </el-col>
+      <treeselect :normalizer="normalizer" v-model="params.departmentId" :options="department" placeholder="请选择用户所在部门" style="width: 200px; margin-right: 10px"></treeselect>
+      <el-input v-model="params.username" style="width: 200px; margin-right: 10px" placeholder="输入用户名称" clearable></el-input>
+      <el-select v-model="params.state" placeholder="请选择用户状态" style="width: 200px; margin-right: 10px" clearable>
+        <el-option
+          v-for="item in stateSelect"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+      <el-date-picker
+        style="width: 300px; margin-right: 10px"
+        v-model="searchDate"
+        type="daterange"
+        clearable
+        range-separator="-"
+        start-placeholder="开始创建日期"
+        end-placeholder="结束创建日期">
+      </el-date-picker>
+      <el-button type="primary" plain icon="el-icon-refresh" @click="reSearchUserOption">重置</el-button>
+      <el-button type="primary" plain icon="el-icon-search" @click="getTableData">搜索</el-button>
     </el-row>
     <el-row>
       <el-button type="primary" plain icon="el-icon-plus"  @click="openAddDialog">新 增</el-button>
@@ -70,7 +53,7 @@
         </el-table-column>
         <el-table-column prop="state" label="状态" align="center">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.state" :active-value="0" :inactive-value="1"></el-switch>
+            <el-switch v-model="scope.row.state" :active-value="0" :inactive-value="1" @change="dataStateSwitch(scope.row.id)"></el-switch>
           </template>
         </el-table-column>
         <el-table-column prop="createDate" label="创建时间" align="center">
@@ -87,7 +70,9 @@
       </el-table>
     </el-row>
     <el-row style="text-align: center">
-      <pagination :total="20"></pagination>
+      <pagination :total="total"
+      :pager="params.page"
+      :current="pageJump"></pagination>
     </el-row>
 
     <el-dialog :title="dialogAddUserTitle+'用户'" :visible.sync="dialogAddUser" :before-close="closeDialog">
@@ -103,14 +88,26 @@
               <el-input v-model="user.nickname" autocomplete="off" placeholder="请输入用户昵称"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
+          <el-col :span="12">
+            <el-form-item label="角色" :label-width="formLabelWidth" prop="roleId">
+              <el-select v-model="user.roleId" placeholder="请选择角色" style="width: 100%">
+                <el-option
+                  v-for="item in role"
+                  :key="item.id"
+                  :label="item.title"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
+              <el-input type="password" v-model="user.password" autocomplete="off" placeholder="请输入用户密码"></el-input>
+            </el-form-item>
+          </el-col>
           <el-col :span="12">
             <el-form-item label="部门" :label-width="formLabelWidth" prop="departmentId">
-              <treeselect v-model="user.departmentId" :options="option" placeholder="请选择部门">
-                <label slot="option-label" slot-scope="{ node, labelClassName }" :class="labelClassName">
-                  {{ node.label }}
-                </label>
+              <treeselect :normalizer="normalizer" v-model="user.departmentId" :options="department" placeholder="请选择部门">
               </treeselect>
             </el-form-item>
           </el-col>
@@ -130,26 +127,12 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="手机" :label-width="formLabelWidth" prop="phone">
-              <el-input v-model="user.phone" autocomplete="off" placeholder="请输入手机号"></el-input>
+              <el-input type="number" v-model="user.phone" autocomplete="off" placeholder="请输入手机号"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="邮箱" :label-width="formLabelWidth" prop="email">
               <el-input v-model="user.email" autocomplete="off" placeholder="请输入邮箱"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="角色" :label-width="formLabelWidth" prop="roleId">
-              <el-select v-model="user.roleId" placeholder="请选择角色" style="width: 100%">
-                <el-option
-                  v-for="item in role"
-                  :key="item.id"
-                  :label="item.title"
-                  :value="item.id">
-                </el-option>
-              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -160,8 +143,6 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="24">
             <el-form-item label="备注" :label-width="formLabelWidth" prop="remark">
               <el-input type="textarea" placeholder="请输入备注" v-model="user.remark" show-word-limit rows="3"></el-input>
@@ -182,8 +163,10 @@ import '@/assets/styles/defaultTreeselect.css'
 import treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import pagination from '@/components/Pagination'
-import { getData, getUser } from '@/api/system/user'
+import { getData, getUser, saveUser, updateState, deleteUser, deleteUsers } from '@/api/system/user'
 import { getRoleTree } from '@/api/system/user/auth'
+import { getDepartmentTree } from '@/api/system/department'
+import { getPostTree } from '@/api/system/department/post'
 
 export default {
   name: 'User',
@@ -206,43 +189,35 @@ export default {
       },
 
       role: [],
-
+      department: [],
+      post: [],
       user: {
-        id: '0',
+        id: 0,
         username: '',
         nickname: '',
+        password: '',
         departmentId: null,
         phone: '',
         email: '',
         state: 0,
         postId: '',
         roleId: '',
-        marks: ''
+        remark: ''
       },
-      option: [
-        {
-          id: 'a',
-          label: 'a',
-          children: [
-            {
-              id: 'aa',
-              label: 'aa'
-            },
-            {
-              id: 'ab',
-              label: 'ab'
-            }
-          ]
-        },
-        {
-          id: 'b',
-          label: 'b'
-        },
-        {
-          id: 'c',
-          label: 'c'
-        }
-      ],
+      rules: {
+        username: [
+          { required: true, message: '请输入账户', trigger: 'blur' },
+          { min: 5, message: '账号最短五位' }
+        ],
+        nickname: [
+          { required: true, message: '请输入昵称', trigger: 'blur' },
+          { min: 2, message: '昵称最短两位' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, message: '密码最短六位' }
+        ]
+      },
       stateSelect: [
         {
           label: '正常',
@@ -261,8 +236,7 @@ export default {
     }
   },
   mounted () {
-    this.getDataRole()
-    this.getTableData()
+    Promise.all([this.getTableData(), this.getDataRole(), this.getDataDepartment(), this.getDataPost()])
   },
   filters: {
     formatData (time) {
@@ -311,6 +285,11 @@ export default {
         this.loading = false
       })
     },
+    // 页码跳转
+    pageJump (page) {
+      this.params.page = page
+      this.getTableData()
+    },
     // 角色信息
     getDataRole () {
       const res = new Promise((resolve, reject) => {
@@ -324,6 +303,33 @@ export default {
         }
       })
     },
+
+    getDataDepartment () {
+      const res = new Promise((resolve, reject) => {
+        getDepartmentTree().then((result) => {
+          resolve(result)
+        }).catch((err) => { reject(err) })
+      })
+      res.then((result) => {
+        if (result.status === 200) {
+          this.department = result.data.departmentList
+        }
+      })
+    },
+
+    getDataPost () {
+      const res = new Promise((resolve, reject) => {
+        getPostTree().then((result) => {
+          resolve(result)
+        }).catch((err) => { reject(err) })
+      })
+      res.then((result) => {
+        if (result.status === 200) {
+          this.post = result.data.postList
+        }
+      })
+    },
+
     // 打开新增对话框
     openAddDialog () {
       this.dialogAddUserTitle = '新增'
@@ -339,26 +345,47 @@ export default {
       })
       res.then((result) => {
         if (result.status === 200) {
-          this.user = result.data.user
+          this.user.id = result.data.user.id
+          this.user.username = result.data.user.username
+          this.user.nickname = result.data.user.nickname
+          this.user.password = result.data.user.password
+          this.user.departmentId = result.data.user.departmentId
+          this.user.phone = result.data.user.phone
+          this.user.email = result.data.user.email
+          this.user.state = result.data.user.state
+          this.user.postId = result.data.user.postId
+          this.user.roleId = result.data.user.roleId
+          this.user.remark = result.data.user.remark
           this.dialogAddUser = true
-        } else {
-          this.tableData = []
-          this.$methods.info(result.msg)
         }
       })
     },
     // 关闭对话框
     closeDialog () {
-      this.reDialogForm()
       this.dialogAddUser = false
-    },
-    // 清除新增/编辑 对话框中的表单
-    reDialogForm () {
       this.$refs.user.resetFields()
+      this.user.id = 0
+      this.user.username = ''
+      this.user.nickname = ''
+      this.user.password = ''
+      this.user.departmentId = null
+      this.user.phone = ''
+      this.user.email = ''
+      this.user.state = 0
+      this.user.postId = ''
+      this.user.roleId = ''
+      this.user.remark = ''
     },
     // 清除搜索参数的表单
     reSearchParams () {
-      this.$refs.user.resetFields()
+      this.params.departmentId = null
+      this.params.username = ''
+      this.params.phone = ''
+      this.params.state = ''
+      this.params.createDateStart = ''
+      this.params.createDateEnd = ''
+      this.params.page = 1
+      this.getTableData()
     },
     // 新增/编辑 api
     saveData (user) {
@@ -369,11 +396,31 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.$message.success(this.dialogAddUserTitle + '成功!')
-            this.dialogAddUser = false
+            const res = new Promise((resolve, reject) => {
+              saveUser(this.user).then((result) => { resolve(result) })
+            })
+            res.then((result) => {
+              if (result.status === 200) {
+                this.$message.success(result.msg)
+                this.getTableData()
+                this.closeDialog()
+              }
+            })
           })
         } else {
           return false
+        }
+      })
+    },
+    dataStateSwitch (id) {
+      const res = new Promise((resolve, reject) => {
+        updateState(id).then((result) => { resolve(result) })
+      })
+      res.then((result) => {
+        if (result.status === 200) {
+          this.$message.success(result.msg)
+        } else {
+          this.getTableData()
         }
       })
     },
@@ -384,24 +431,41 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.success('删除成功!')
-        this.dialogAddUser = false
+        const res = new Promise((resolve, reject) => {
+          deleteUser(row.id).then((result) => { resolve(result) })
+        })
+        res.then((result) => {
+          if (result.status === 200) {
+            this.$message.success(result.msg)
+            this.getTableData()
+          }
+        })
       })
     },
     // 删除多个用户
     deleteDatas () {
-      const postList = this.multipleSelection
+      const userList = this.multipleSelection
       const idList = []
-      if (postList.length !== 0) {
-        for (const index in postList) {
-          idList.push(postList[index].id)
+      const usernameList = []
+      if (userList.length !== 0) {
+        for (const index in userList) {
+          idList.push(userList[index].id)
+          usernameList.push(userList[index].username)
         }
-        this.$confirm('是否确认删除序号为"' + idList.toString() + '"的账户?', '提示', {
+        this.$confirm('是否确认删除序号为"' + usernameList.toString() + '"的账户?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message.success('删除成功!')
+          const res = new Promise((resolve, reject) => {
+            deleteUsers(idList.toString()).then((result) => { resolve(result) })
+          })
+          res.then((result) => {
+            if (result.status === 200) {
+              this.$message.success(result.msg)
+              this.getTableData()
+            }
+          })
         })
       } else {
         this.$message.warning('你应该至少选中一个！')
@@ -413,6 +477,14 @@ export default {
      */
     handleSelectionChange (val) {
       this.multipleSelection = val
+    },
+    // 属性列表选择框 属性定义
+    normalizer (node) {
+      return {
+        id: node.id,
+        label: node.title,
+        children: node.children
+      }
     }
   }
 }

@@ -55,12 +55,14 @@ export default {
       fullHeight: document.documentElement.clientHeight
     }
   },
-  created () {
+  beforeCreate () {
     // 登录token检测
     const token = sessionStorage.getItem('token')
     if (token !== null) {
       this.$router.replace('/system')
     }
+  },
+  created () {
     // 添加监听，监听设备宽高
     window.addEventListener('resize', this.handleResize)
   },

@@ -1,8 +1,6 @@
 <template>
   <div>
-    my name's activeUser
-    {{mes}}
-    <el-button @click="getApi">前后段数据交互</el-button>
+    该页面等后端加上Redis之后在进行改动
   </div>
 </template>
 

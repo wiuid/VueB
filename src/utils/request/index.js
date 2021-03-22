@@ -60,6 +60,9 @@ instance.interceptors.response.use(
             /**
              * token过期，清除本地token后跳转至登录页
              */
+          case 202:
+            Message.info(res.msg)
+            break
           case 403:
             sessionStorage.removeItem('token')
             localStorage.removeItem('token')
