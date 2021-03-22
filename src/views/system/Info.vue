@@ -45,7 +45,7 @@
             <el-divider class="costHr"></el-divider>
             <el-row>
               <el-col span="12"><i class="el-icon-date"></i>创建日期</el-col>
-              <el-col span="12">{{userInfo.createDate}}</el-col>
+              <el-col span="12">{{userInfo.createDate | formatDate()}}</el-col>
             </el-row>
             <el-divider class="costHr"></el-divider>
           </div>
@@ -207,6 +207,16 @@ export default {
     }
   },
   filters: {
+    formatDate (time) {
+      var data = new Date(time)
+      var y = data.getFullYear()
+      var M = data.getMonth() + 1
+      var d = data.getDate()
+
+      var h = data.getHours()
+      var m = data.getMinutes()
+      return y + '-' + M + '-' + d + ' ' + h + ':' + m
+    },
     formatNull (param) {
       if (param === null || param === '') {
         return '暂无'
