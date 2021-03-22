@@ -101,11 +101,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
-              <el-input type="password" v-model="user.password" autocomplete="off" placeholder="请输入用户密码"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
             <el-form-item label="部门" :label-width="formLabelWidth" prop="departmentId">
               <treeselect :normalizer="normalizer" v-model="user.departmentId" :options="department" placeholder="请选择部门">
               </treeselect>
@@ -123,8 +118,6 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="手机" :label-width="formLabelWidth" prop="phone">
               <el-input type="number" v-model="user.phone" autocomplete="off" placeholder="请输入手机号"></el-input>
@@ -195,7 +188,6 @@ export default {
         id: 0,
         username: '',
         nickname: '',
-        password: '',
         departmentId: null,
         phone: '',
         email: '',
@@ -212,10 +204,6 @@ export default {
         nickname: [
           { required: true, message: '请输入昵称', trigger: 'blur' },
           { min: 2, message: '昵称最短两位' }
-        ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, message: '密码最短六位' }
         ]
       },
       stateSelect: [
@@ -250,7 +238,7 @@ export default {
       return y + '-' + M + '-' + d + ' ' + h + ':' + m
     },
     formatNull (param) {
-      if (param === null) {
+      if (param === null || param === '') {
         return '暂无'
       } else {
         return param
@@ -348,7 +336,6 @@ export default {
           this.user.id = result.data.user.id
           this.user.username = result.data.user.username
           this.user.nickname = result.data.user.nickname
-          this.user.password = result.data.user.password
           this.user.departmentId = result.data.user.departmentId
           this.user.phone = result.data.user.phone
           this.user.email = result.data.user.email
@@ -367,7 +354,6 @@ export default {
       this.user.id = 0
       this.user.username = ''
       this.user.nickname = ''
-      this.user.password = ''
       this.user.departmentId = null
       this.user.phone = ''
       this.user.email = ''
