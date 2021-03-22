@@ -38,11 +38,11 @@ export default {
       rules: {
         username: [
           { required: true, message: '请输入账号', trigger: 'blur' },
-          { min: 5, message: '账号最短五位' }
+          { min: 5, message: '账号最短5位' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, message: '密码最短六位' }
+          { min: 6, message: '密码最短6位' }
         ]
       },
       // 账号密码表单
@@ -85,10 +85,10 @@ export default {
             }
           })
         } else {
-          this.$message.info('密码最短六位')
+          this.$message.info('密码最短6位')
         }
       } else {
-        this.$message.info('账号最短五位')
+        this.$message.info('账号最短5位')
       }
     },
     // 跳转方法
