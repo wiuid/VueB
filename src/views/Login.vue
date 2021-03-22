@@ -12,7 +12,7 @@
                 <el-input type="text" clearable v-model="form.username" prefix-icon="el-icon-user-solid" placeholder="账号" style="width: 100%;" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item prop="password" required>
-                <el-input type="password" clearable v-model="form.password" show-password prefix-icon="el-icon-s-help" placeholder="密码" style="width: 100%;" autocomplete="off"></el-input>
+                <el-input type="password" clearable v-model="form.password" prefix-icon="el-icon-s-help" placeholder="密码" style="width: 100%;" autocomplete="off"></el-input>
               </el-form-item>
               <el-button type="primary" style="width: 100%" @click="login()">登 录</el-button>
               <br style="margin: 5px"/>
@@ -57,8 +57,7 @@ export default {
   },
   beforeCreate () {
     // 登录token检测
-    const token = sessionStorage.getItem('token')
-    if (token !== null) {
+    if (sessionStorage.getItem('token') !== null) {
       this.$router.replace('/system')
     }
   },
@@ -79,15 +78,11 @@ export default {
         if (this.form.password.length > 5) {
           login(this.form).then((result) => {
             if (result.status === 200) {
-              // 登录成功，token存储到sessionStorage，该存储位置，随着浏览器关闭而自动清除
-              localStorage.setItem('token', result.data.token)
               sessionStorage.setItem('token', result.data.token)
               this.toSystem()
             } else {
               this.$message.error('账号或密码错误，请检查账号密码')
             }
-          }).catch((err) => {
-            console.log(err)
           })
         } else {
           this.$message.info('密码最短六位')
