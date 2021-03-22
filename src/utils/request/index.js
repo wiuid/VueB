@@ -66,7 +66,7 @@ instance.interceptors.response.use(
           case 403:
             sessionStorage.removeItem('token')
             localStorage.removeItem('token')
-            Message.info('登录过期，请重新登录')
+            Message.info(res.msg)
             router.replace('/login')
             break
             /**
