@@ -161,6 +161,7 @@ export default {
     }
   },
   mounted () {
+    // 获取数据
     getData().then((result) => {
       this.cpu = result.data.cpu
       this.disk = result.data.disk
