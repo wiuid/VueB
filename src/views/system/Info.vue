@@ -8,11 +8,8 @@
           </div>
           <div style="text-align: center">
             <el-link @click="dialogChangePortrait = true">
-              <div class="demo-basic--circle">
-                <div class="block"><el-avatar :size="100" :src="circleUrl"></el-avatar></div>
-                <div class="block" v-for="size in sizeList" :key="size">
-                  <el-avatar :size="size" :src="'../assets/touxiang.gif'"></el-avatar>
-                </div>
+              <div style="{'overflow': 'hidden', 'margin': '5px', 'border-radius': '20px'}">
+                <img :src="userInfo.avatar" width="100" height="100">
               </div>
             </el-link>
           </div>
@@ -100,29 +97,54 @@
       </el-col>
     </el-row>
 
-    <el-dialog title="修改头像" :visible.sync="dialogChangePortrait">
-      <!-- 这里采用先剪裁在上传的模式，剪裁需要使用组件：vue-cropper -->
-      <el-upload
-        class="avatar-uploader"
-        action="https://jsonplaceholder.typicode.com/posts/"
-        :show-file-list="false"
-        :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload">
-        <img v-if="imageUrl" :src="imageUrl" class="avatar">
-        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-      </el-upload>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogChangePortrait = false">取 消</el-button>
-        <el-button type="primary" @click="savePortrait()">确 定</el-button>
-      </div>
+    <el-dialog title="修改头像" :visible.sync="dialogChangePortrait" width="dialogWidth" style="transition: all .5s">
+      <el-row>
+        <el-col :xs="24" :md="12" :style="{height: '350px'}">
+          <el-row style="margin-bottom:10px">
+            <VueCropper style="height:300px"
+              :img="option.img"
+              ref="cropper"
+              :autoCrop="true"
+              :outputSize="option.size"
+              :autoCropWidth="200"
+              :autoCropHeight="200"
+              :fixedBox="true"
+              @realTime="realTime"></VueCropper>
+          </el-row>
+          <el-row>
+            <el-col :span="6">
+              <el-upload action="#"
+              :http-request="requestUpload"
+              :show-file-list="false"
+              :before-upload="beforeUpload">
+                <el-button icon="el-icon-upload2">选择</el-button>
+              </el-upload>
+            </el-col>
+            <el-button icon="el-icon-refresh" @click="refreshCrop">复位</el-button>
+            <el-button type="primary" icon="el-icon-upload" @click="uploadImg">提交</el-button>
+          </el-row>
+        </el-col>
+        <el-col :xs="24" :md="12" :style="{height: '350px'}">
+          <div style="padding-left: 60px"><span style="font-size: 16px; font-wight: 10">预览图</span></div>
+          <div class="sssssssssssssss">
+            <div  class="show-preview" :style="{'width': '200px', 'height': '200px',  'overflow': 'hidden', 'margin': '5px', 'border-radius': '20px','box-shadow': 'darkgrey 10px 10px 30px 1px'}">
+              <div :style="option.data.div">
+                <img :src="option.data.url" :style="option.data.img">
+              </div>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getData, updateInfo, updatePassword } from '@/api/system/user/info'
+import { getData, updateInfo, updatePassword, updateAvatar } from '@/api/system/user/info'
+import { VueCropper } from 'vue-cropper'
 export default {
   name: 'Info',
+  components: { VueCropper },
   data () {
     const validateName = (rule, value, callback) => {
       if (value === '') {
@@ -159,10 +181,16 @@ export default {
       }
     }
     return {
+      option: {
+        img: '',
+        size: '',
+        data: {}
+      },
       userInfo: {
         id: 0,
         portrait: '',
         username: '',
+        avatar: '',
         phone: '',
         email: '',
         department: '',
@@ -203,7 +231,8 @@ export default {
           { validator: validateConfirmPassword, trigger: 'blur' }
         ]
       },
-      dialogChangePortrait: false
+      dialogChangePortrait: false,
+      dialogWidth: '800px'
     }
   },
   filters: {
@@ -225,10 +254,68 @@ export default {
       }
     }
   },
+  created () {
+    // 初始修改头像对话框宽度数据
+    this.setDialogWidth()
+  },
   mounted () {
+    // 获取页面基础数据
     this.getTableData()
+    // 对话框宽度自适应
+    window.onresize = () => {
+      return (() => {
+        this.setDialogWidth()
+      })()
+    }
   },
   methods: {
+    requestUpload () {
+    },
+    setDialogWidth () {
+      // 头像修改对话框宽度自适应
+      var val = document.body.clientWidth
+      if (val < '800') {
+        this.dialogWidth = '400px'
+      } else {
+        this.dialogWidth = '800px'
+      }
+    },
+    // 上传预处理
+    beforeUpload (file) {
+      if (file.type.indexOf('image/') === -1) {
+        this.$message.error('文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。')
+      } else {
+        // 读取文件，以数据的形式进行处理
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => {
+          this.option.img = reader.result
+        }
+      }
+    },
+    // 实时预览
+    realTime (data) {
+      this.option.data = data
+    },
+    // 图片复位
+    refreshCrop () {
+      this.$refs.cropper.refresh()
+    },
+    // 图片上传
+    uploadImg () {
+      this.$refs.cropper.getCropData(data => {
+        var params = {
+          id: this.userInfo.id,
+          base64: data.replace('data:image/jpeg;base64,', '')
+        }
+        updateAvatar(params).then((result) => {
+          if (result.status === 200) {
+            this.$message.success(result.msg)
+          }
+        })
+      })
+    },
+    // 页面初始化基础数据
     getTableData () {
       const res = new Promise((resolve, reject) => {
         getData().then((result) => { resolve(result) })
@@ -245,11 +332,11 @@ export default {
         this.userInfo.department = result.data.departmentTitle
         this.userInfo.role = result.data.roleTitle
         this.userInfo.createDate = result.data.user.createDate
+        this.userInfo.avatar = '/api' + result.data.user.avatar
       })
     },
     /**
      * 保存基本资料
-     * @param rules
      */
     saveInfo (rules) {
       this.$refs[rules].validate((valid) => {
@@ -271,7 +358,6 @@ export default {
     },
     /**
      * 保存修改的密码
-     * @param rules
      */
     savePassword (rules) {
       this.$refs[rules].validate((valid) => {
@@ -294,15 +380,7 @@ export default {
         }
       })
     },
-    /**
-     * 保存头像
-     */
-    savePortrait () {
-      this.$message.info('正在保存头像')
-    },
-    handleAvatarSuccess (res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw)
-    },
+    // 图片预处理
     beforeAvatarUpload (file) {
       const isJPG = file.type === 'image/jpeg'
       const isLt2M = file.size / 1024 / 1024 < 2
@@ -320,30 +398,13 @@ export default {
 </script>
 
 <style scoped>
+  /* 配置信息的上下宽度 */
   .costHr {
     margin: 5px 0;
   }
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
+  /* 修改头像对话框预览图的位置及高度样式 */
+  .sssssssssssssss {
+    margin: 40px;
+    height: 300px;
   }
 </style>
