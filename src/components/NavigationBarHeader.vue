@@ -4,9 +4,10 @@
       <i v-if="close" class="el-icon-s-fold"></i>
       <i v-if="open" class="el-icon-s-unfold"></i>
     </el-menu-item>
+
     <el-submenu style="float: right" index="2">
       <template slot="title">
-        <img src="@/assets/images/touxiang.gif" style="width: 40px;height: 40px">
+        <img :src="avatar" style="width: 40px;height: 40px">
       </template>
       <el-menu-item index="/system/info">个人中心</el-menu-item>
       <el-menu-item @click="logout">退出登录</el-menu-item>
@@ -16,12 +17,21 @@
 
 <script>
 import { logout } from '@/api/login'
+import { getAvatar } from '@/api/system/user/info'
 export default {
   name: 'NavigationBarHeader',
   props: ['close', 'open', 'off'],
   data () {
     return {
+      avatar: ''
     }
+  },
+  mounted () {
+    getAvatar().then((result) => {
+      if (result.status === 200) {
+        this.avatar = '/api' + result.data.avatar
+      }
+    })
   },
   methods: {
     handleSelect (key, keyPath) {
