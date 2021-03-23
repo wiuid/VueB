@@ -40,17 +40,9 @@ export default {
     const sessionToken = sessionStorage.getItem('token')
     const localToken = localStorage.getItem('token')
 
-    if (sessionToken === null && localToken === null) {
-      const pathName = window.location.pathname
-      if (pathName !== '/' && pathName !== '/login') {
-        console.log('----------------------------------')
-        console.log('跳转提示')
-        console.log('----------------------------------')
-        // this.$router.replace('/login')
-      }
-    } else if (localStorage === null) {
+    if (sessionToken !== null) {
       localStorage.setItem('token', sessionToken)
-    } else {
+    } else if (localToken !== null) {
       sessionStorage.setItem('token', sessionToken)
     }
   },
