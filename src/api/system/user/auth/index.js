@@ -2,8 +2,8 @@ import request from '@/utils/request/index'
 
 /**
  * 获取页面数据
- * @param {*} params 
- * @returns 
+ * @param {*} params
+ * @returns
  */
 export function getData (params) {
   return request({
@@ -15,8 +15,8 @@ export function getData (params) {
 
 /**
  * 根据id 获取详细信息
- * @param {*} id 
- * @returns 
+ * @param {*} id
+ * @returns
  */
 export function getRole (id) {
   return request({
@@ -30,7 +30,7 @@ export function getRole (id) {
 
 /**
  * 获取数据用于其他api调用
- * @returns 
+ * @returns
  */
 export function getRoleTree () {
   return request({
@@ -41,7 +41,7 @@ export function getRoleTree () {
 
 /**
  * 获取数据用于其他api调用
- * @returns 
+ * @returns
  */
 export function getAuthTree () {
   return request({
@@ -52,8 +52,8 @@ export function getAuthTree () {
 
 /**
  * 新建/修改 数据 一体接口
- * @param {*} params 
- * @returns 
+ * @param {*} params
+ * @returns
  */
 export function saveRole (params) {
   return request({
@@ -65,8 +65,8 @@ export function saveRole (params) {
 
 /**
  * 更新数据状态
- * @param {*} id 
- * @returns 
+ * @param {*} id
+ * @returns
  */
 export function updateState (id) {
   return request({
@@ -80,8 +80,8 @@ export function updateState (id) {
 
 /**
  * 删除单条数据
- * @param {*} id 
- * @returns 
+ * @param {*} id
+ * @returns
  */
 export function deleteRole (id) {
   return request({
@@ -95,8 +95,8 @@ export function deleteRole (id) {
 
 /**
  * 批量删除数据
- * @param {*} ids 
- * @returns 
+ * @param {*} ids
+ * @returns
  */
 export function deleteRoles (ids) {
   return request({
