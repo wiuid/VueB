@@ -64,7 +64,7 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="openEditDialog(scope.row.id)"><i class="el-icon-edit"></i>修改</el-link>
-            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="openEditPasswordDialog(scope.row)"><i class="el-icon-edit"></i>密码</el-link>  
+            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="openEditPasswordDialog(scope.row)"><i class="el-icon-edit"></i>密码</el-link>
             <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="deleteData(scope.row)"><i class="el-icon-delete"></i>删除</el-link>
           </template>
         </el-table-column>
@@ -325,7 +325,7 @@ export default {
       this.params.page = page
       this.getTableData()
     },
-    // 角色信息
+    // 获取角色信息
     getDataRole () {
       const res = new Promise((resolve, reject) => {
         getRoleTree().then((result) => {
@@ -338,7 +338,7 @@ export default {
         }
       })
     },
-
+    // 获取部门数据
     getDataDepartment () {
       const res = new Promise((resolve, reject) => {
         getDepartmentTree().then((result) => {
@@ -351,7 +351,7 @@ export default {
         }
       })
     },
-
+    // 获取岗位数据
     getDataPost () {
       const res = new Promise((resolve, reject) => {
         getPostTree().then((result) => {

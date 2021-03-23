@@ -251,7 +251,7 @@ export default {
         }
       })
     },
-
+    // 更新公告状态
     dataStateSwitch (row) {
       const inform = {
         id: row.id,
