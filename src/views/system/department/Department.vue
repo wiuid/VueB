@@ -272,6 +272,7 @@ export default {
         })
       })
     },
+    // 更新部门状态
     dataStateSwitch (id) {
       this.$confirm('此操作将使本部门及下级部门一同更改状态属性, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -293,6 +294,7 @@ export default {
         this.getTableData()
       })
     },
+    // 提示
     stateHint () {
       this.$message.info('提示：修改状态并提交后，下级部门的状态将一并修改')
     },
