@@ -2,7 +2,7 @@
   <div>
     <el-container style="height:100vh;">
       <!-- 侧边导航 -->
-      <el-aside :width="navigationBarAsideWidth"  style="border-right: solid 1px #e6e6e6;  transition: all .5s">
+      <el-aside :width="navigationBarAsideWidth"  style="border-right: solid 1px #e6e6e6">
         <NavigationBarAside :collapse="collapse"></NavigationBarAside>
       </el-aside>
       <el-container>
