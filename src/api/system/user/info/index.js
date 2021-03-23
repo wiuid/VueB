@@ -22,3 +22,18 @@ export function updatePassword (params) {
     data: params
   })
 }
+
+export function updateAvatar (params) {
+  return request({
+    url: '/system/info/avatar',
+    method: 'post',
+    data: params
+  })
+}
+
+export function getAvatar () {
+  return request({
+    url: '/system/info/avatar',
+    method: 'get'
+  })
+}
