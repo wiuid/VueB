@@ -278,7 +278,7 @@ export default {
         }
       }).catch((err) => { console.log(err) })
     },
-    // 页面跳转
+    // 页码跳转
     pageJump (page) {
       this.params.page = page
       this.getTableData()
