@@ -79,6 +79,7 @@ export default {
           login(this.form).then((result) => {
             if (result.status === 200) {
               sessionStorage.setItem('token', result.data.token)
+              localStorage.setItem('token', result.data.token)
               this.toSystem()
             } else {
               this.$message.error('账号或密码错误，请检查账号密码')
