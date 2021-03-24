@@ -121,7 +121,7 @@
         <i class="el-icon-date">{{dialogInformText.createDate | formatDate}}</i>
         <span style="padding: 0 10px">发布人：{{dialogInformText.userNickname}}</span>
       </el-row>
-      <el-row>
+      <el-row style="min-height: 300px">
         <span>
           {{dialogInformText.text}}
         </span>
