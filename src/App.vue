@@ -30,7 +30,8 @@
 <script>
 export default {
   name: 'app',
-  mounted () {
+  beforeCreate () {
+    console.log('-------------------------beforeCreate')
     // 关闭浏览器删除localStorage中的token
     // 该方法在刷新时也会触发，所以需要刷新之后，通过下面的方法将sessionStorage中的token同步至localStorage中
     window.onbeforeunload = function (e) {
@@ -39,14 +40,20 @@ export default {
     // 判断session 是否存有token   面对刷新当前页面的情况
     const sessionToken = sessionStorage.getItem('token')
     const localToken = localStorage.getItem('token')
-
     if (sessionToken !== null) {
       localStorage.setItem('token', sessionToken)
     } else if (localToken !== null) {
-      sessionStorage.setItem('token', sessionToken)
+      sessionStorage.setItem('token', localToken)
     }
   },
+  mounted () {
+    console.log('-------------------------mounted')
+  },
   activated () {
+    console.log('-------------------------avtivated')
+  },
+  created () {
+    console.log('-------------------------created')
   }
 }
 </script>
