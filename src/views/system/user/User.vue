@@ -194,7 +194,7 @@ export default {
     }
     return {
       tableData: [],
-      total: '',
+      total: 0,
       multipleSelection: [],
       searchDate: [],
       loading: false,
@@ -347,7 +347,7 @@ export default {
       })
       res.then((result) => {
         if (result.status === 200) {
-          this.department = result.data.departmentList
+          this.department = JSON.parse(result.data.departmentList)
         }
       })
     },
@@ -444,7 +444,7 @@ export default {
     },
 
     // 清除搜索参数的表单
-    reSearchParams () {
+    reSearchUserOption () {
       this.params.departmentId = null
       this.params.username = ''
       this.params.phone = ''

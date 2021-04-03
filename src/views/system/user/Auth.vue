@@ -13,7 +13,7 @@
     <el-row>
       <el-button type="primary" plain icon="el-icon-plus"  @click="openAddDialog">新 增</el-button>
       <el-button type="danger" plain icon="el-icon-delete"  @click="deleteDatas">删 除</el-button>
-      <el-button type="success" plain icon="el-icon-download"  @click="exportRoles">导 出</el-button>
+      <el-button type="success" plain icon="el-icon-download">导 出</el-button>
     </el-row>
     <el-row>
       <el-table v-loading="loading" :data="tableData" stripe style="width: 100%" @selection-change="handleSelectionChange" :header-cell-style="{'text-align':'center'}">
@@ -41,8 +41,11 @@
         </el-table-column>
       </el-table>
     </el-row>
+
     <el-row style="text-align: center">
-      <pagination :total="20"></pagination>
+      <pagination :total="total"
+      :pager="params.page"
+      :current="pageJump"></pagination>
     </el-row>
 
     <el-dialog :title="dialogAddRoleTitle+'角色'" :visible.sync="dialogAddRole" :before-close="closeDialog">
@@ -107,16 +110,18 @@
 </template>
 
 <script>
+import pagination from '@/components/Pagination'
 import { getData, getRole, getAuthTree, saveRole, updateState, deleteRole, deleteRoles } from '@/api/system/user/auth'
 export default {
   name: 'Auth',
+  components: { pagination },
   data () {
     return {
       loading: false,
       tableData: [],
       multipleSelection: [],
       searchDate: [],
-      total: '',
+      total: 0,
       params: {
         title: '',
         code: '',
@@ -249,6 +254,11 @@ export default {
       this.role.serial = 0
       this.role.state = 0
       this.role.remark = ''
+    },
+    // 页码跳转
+    pageJump (page) {
+      this.params.page = page
+      this.getTableData()
     },
     // 重置搜索条件
     reSearchParams () {

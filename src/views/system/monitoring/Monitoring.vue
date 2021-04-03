@@ -9,23 +9,23 @@
             </div>
             <div class="fontSize14">
               <el-row>
-                <el-col span="12">核心</el-col>
-                <el-col span="12">{{cpu.kernel}}</el-col>
+                <el-col :span="12">核心</el-col>
+                <el-col :span="12">{{cpu.kernel}}</el-col>
               </el-row>
               <el-divider class="dividerHeight"></el-divider>
               <el-row>
-                <el-col span="12">逻辑处理器</el-col>
-                <el-col span="12">{{cpu.logicalProcessor}}</el-col>
+                <el-col :span="12">逻辑处理器</el-col>
+                <el-col :span="12">{{cpu.logicalProcessor}}</el-col>
               </el-row>
               <el-divider class="dividerHeight"></el-divider>
               <el-row>
-                <el-col span="12">使用率</el-col>
-                <el-col span="12">{{cpu.usageRate}}</el-col>
+                <el-col :span="12">使用率</el-col>
+                <el-col :span="12">{{cpu.usageRate}}</el-col>
               </el-row>
               <el-divider class="dividerHeight"></el-divider>
               <el-row>
-                <el-col span="12">空闲率</el-col>
-                <el-col span="12">{{cpu.vacancyRate}}</el-col>
+                <el-col :span="12">空闲率</el-col>
+                <el-col :span="12">{{cpu.vacancyRate}}</el-col>
               </el-row>
             </div>
           </el-card>
@@ -37,28 +37,28 @@
             </div>
             <div class="fontSize14">
               <el-row>
-                <el-col span="12">运行时长</el-col>
-                <el-col span="12">{{system.date}}</el-col>
+                <el-col :span="12">运行时长</el-col>
+                <el-col :span="12">{{system.date}}</el-col>
               </el-row>
               <el-divider class="dividerHeight"></el-divider>
               <el-row>
-                <el-col span="12">主机名</el-col>
-                <el-col span="12">{{system.hostname}}</el-col>
+                <el-col :span="12">主机名</el-col>
+                <el-col :span="12">{{system.hostname}}</el-col>
               </el-row>
               <el-divider class="dividerHeight"></el-divider>
               <el-row>
-                <el-col span="12">地址</el-col>
-                <el-col span="12">{{system.ip}}</el-col>
+                <el-col :span="12">地址</el-col>
+                <el-col :span="12">{{system.ip}}</el-col>
               </el-row>
               <el-divider class="dividerHeight"></el-divider>
               <el-row>
-                <el-col span="12">系统</el-col>
-                <el-col span="12">{{system.system}}</el-col>
+                <el-col :span="12">系统</el-col>
+                <el-col :span="12">{{system.system}}</el-col>
               </el-row>
               <el-divider class="dividerHeight"></el-divider>
               <el-row>
-                <el-col span="12">版本</el-col>
-                <el-col span="12">{{system.version}}</el-col>
+                <el-col :span="12">版本</el-col>
+                <el-col :span="12">{{system.version}}</el-col>
               </el-row>
             </div>
           </el-card>
@@ -70,23 +70,23 @@
             </div>
             <div class="fontSize14">
               <el-row>
-                <el-col span="12">版本</el-col>
-                <el-col span="12">{{jvm.version}}</el-col>
+                <el-col :span="12">版本</el-col>
+                <el-col :span="12">{{jvm.version}}</el-col>
               </el-row>
               <el-divider class="dividerHeight"></el-divider>
               <el-row>
-                <el-col span="12">运行时间</el-col>
-                <el-col span="12">{{jvm.date}}</el-col>
+                <el-col :span="12">运行时间</el-col>
+                <el-col :span="12">{{jvm.date}}</el-col>
               </el-row>
               <el-divider class="dividerHeight"></el-divider>
               <el-row>
-                <el-col span="12">堆初始大小</el-col>
-                <el-col span="12">{{jvm.memorySize}}M</el-col>
+                <el-col :span="12">堆初始大小</el-col>
+                <el-col :span="12">{{jvm.memorySize}}M</el-col>
               </el-row>
               <el-divider class="dividerHeight"></el-divider>
               <el-row>
-                <el-col span="12">堆最大</el-col>
-                <el-col span="12">{{jvm.memoryMax}}M</el-col>
+                <el-col :span="12">堆最大</el-col>
+                <el-col :span="12">{{jvm.memoryMax}}M</el-col>
               </el-row>
             </div>
           </el-card>
@@ -100,23 +100,23 @@
             </div>
             <div class="fontSize14">
               <el-row>
-                <el-col span="12">大小</el-col>
-                <el-col span="12">{{memory.total}}M</el-col>
+                <el-col :span="12">大小</el-col>
+                <el-col :span="12">{{memory.total}}M</el-col>
               </el-row>
               <el-divider class="dividerHeight"></el-divider>
               <el-row>
-                <el-col span="12">已用</el-col>
-                <el-col span="12">{{memory.current}}M</el-col>
+                <el-col :span="12">已用</el-col>
+                <el-col :span="12">{{memory.current}}M</el-col>
               </el-row>
               <el-divider class="dividerHeight"></el-divider>
               <el-row>
-                <el-col span="12">空闲</el-col>
-                <el-col span="12">{{memory.available}}M</el-col>
+                <el-col :span="12">空闲</el-col>
+                <el-col :span="12">{{memory.available}}M</el-col>
               </el-row>
               <el-divider class="dividerHeight"></el-divider>
               <el-row>
-                <el-col span="12">使用率</el-col>
-                <el-col span="12">{{memory.usageRate}}</el-col>
+                <el-col :span="12">使用率</el-col>
+                <el-col :span="12">{{memory.usageRate}}</el-col>
               </el-row>
             </div>
           </el-card>

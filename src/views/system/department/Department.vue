@@ -154,7 +154,7 @@ export default {
       })
       res.then((result) => {
         if (result.status === 200) {
-          this.tableData = result.data.departmentList
+          this.tableData = JSON.parse(result.data.departmentList)
           this.loading = false
         }
       })

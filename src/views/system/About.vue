@@ -43,7 +43,7 @@
             <div slot="header" class="clearfix">
               <span>技术选型</span>
             </div>
-            <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+            <el-tree :data="data"></el-tree>
           </el-card>
         </el-row>
       </el-col>
