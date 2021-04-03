@@ -3,7 +3,7 @@
     <el-pagination
       @current-change="handleSizeChange"
       layout="prev, pager, next"
-      :hide-on-single-page="1"
+      :hide-on-single-page="true"
       :total="total"
       :current-page="pager">
     </el-pagination>
