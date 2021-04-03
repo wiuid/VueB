@@ -2,7 +2,7 @@
   <div>
     <el-container>
       <el-header>
-        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <el-menu class="el-menu-demo" mode="horizontal">
           <el-menu-item index="0">LOGO</el-menu-item>
           <el-menu-item index="1">交流社群</el-menu-item>
           <el-menu-item index="2">文档教程</el-menu-item>
