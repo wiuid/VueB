@@ -8,9 +8,7 @@
           </div>
           <div style="text-align: center">
             <el-link @click="dialogChangePortrait = true">
-              <div style="{'overflow': 'hidden', 'margin': '5px', 'border-radius': '20px'}">
-                <img :src="userInfo.avatar" width="100" height="100">
-              </div>
+              <img :src="userInfo.avatar" style="height:100px;border-radius:10px">
             </el-link>
           </div>
           <div style="font-size: 15px">
