@@ -80,6 +80,8 @@ export default {
             if (result.status === 200) {
               sessionStorage.setItem('token', result.data.token)
               localStorage.setItem('token', result.data.token)
+              localStorage.setItem('dynamicRouter', JSON.stringify(result.data.routes))
+              console.log(status.data)
               this.toSystem()
             } else {
               this.$message.error('账号或密码错误，请检查账号密码')
@@ -94,7 +96,10 @@ export default {
     },
     // 跳转方法
     toSystem () {
-      this.$router.push({ path: '/system' })
+      // 该方法将刷新整个页面，路由表将重置，判断localStrage中的dynamicRouter 来对默认路由进行添加
+      location.href = '/system'
+      // 下面方法不会刷新路由
+      // this.$router.push({ path: '/system' })
     }
   }
 }
