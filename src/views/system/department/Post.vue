@@ -55,7 +55,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="岗位名称" :label-width="formLabelWidth" prop="title">
-              <el-input v-model="post.title" autocomplete="off"></el-input>
+              <el-input v-model="post.title"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -96,7 +96,7 @@
 
 <script>
 import pagination from '@/components/Pagination'
-import { getData, getPost, savePost, deletePost, deletePosts, updateState } from '@/api/system/department/post'
+import { getData, getPost, savePost, deletePost, deletePosts, updateState, exportPost } from '@/api/system/department/post'
 export default {
   name: 'Post',
   components: { pagination },
@@ -325,6 +325,24 @@ export default {
       } else {
         this.$message.warning('你应该至少选中一个！')
       }
+    },
+
+    exportData () {
+      // window.location.href='/api/system/department/post/export';
+      const res = new Promise((resolve, reject) => {
+        exportPost().then((result) => { resolve(result) }).catch((err) => { reject(err) })
+      })
+      res.then(result => {
+        console.log('岗位信息下载中………………………………………………')
+        // const url = window.URL.createObjectURL(new Blob([result]))
+        // const link = document.createElement('a')
+        // link.style.display = 'none'
+        // link.href = url
+        // link.setAttribute('download', '岗位信息.xls')
+
+        // document.body.appendChild(link)
+        // link.click()
+      })
     },
 
     /**
