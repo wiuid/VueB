@@ -333,15 +333,17 @@ export default {
         exportPost().then((result) => { resolve(result) }).catch((err) => { reject(err) })
       })
       res.then(result => {
-        console.log('岗位信息下载中………………………………………………')
-        // const url = window.URL.createObjectURL(new Blob([result]))
-        // const link = document.createElement('a')
-        // link.style.display = 'none'
-        // link.href = url
-        // link.setAttribute('download', '岗位信息.xls')
+        console.log('执行了我！！！！！！！！！！！')
+        const url = window.URL.createObjectURL(new Blob([result]))
+        const link = document.createElement('a')
+        link.style.display = 'none'
+        link.href = url
+        link.setAttribute('download', '岗位信息.xls')
 
-        // document.body.appendChild(link)
-        // link.click()
+        document.body.appendChild(link)
+        link.click()
+      }).catch(err => {
+        console.log('errrrrrrrrrrrrrrrrrrrrrrr' + err)
       })
     },
 
