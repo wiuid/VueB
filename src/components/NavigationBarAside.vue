@@ -3,8 +3,9 @@
     <el-menu
       :collapse="collapse"
       router
-      default-active="2"
+      default-active="/system"
       class="el-menu-vertical-demo"
+      unique-opened
       @open="handleOpen"
       @close="handleClose">
       <router-link to="/system">
@@ -13,46 +14,24 @@
           <span v-if="!collapse" class="spanJuZhongPan">Webra</span>
         </div>
       </router-link>
-      <el-menu-item index="/system">
-        <i class="el-icon-s-home"></i>
-        <span slot="title">首页</span>
-      </el-menu-item>
-      <el-submenu index="/system/site">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>站点管理</span>
-        </template>
-        <el-menu-item index="/system/site/inform">通知公告</el-menu-item>
-        <el-menu-item index="/system/site/log">日志详情</el-menu-item>
-      </el-submenu>
-      <el-submenu index="/system/department">
-        <template slot="title">
-          <i class="el-icon-s-management"></i>
-          <span>部门管理</span>
-        </template>
-        <el-menu-item index="/system/department">部门管理</el-menu-item>
-        <el-menu-item index="/system/department/post">岗位管理</el-menu-item>
-      </el-submenu>
-      <el-submenu index="/system/user">
-        <template slot="title">
-          <i class="el-icon-user-solid"></i>
-          <span>用户管理</span>
-        </template>
-        <el-menu-item index="/system/user">用户管理</el-menu-item>
-        <el-menu-item index="/system/user/auth">权限管理</el-menu-item>
-      </el-submenu>
-      <el-submenu index="/system/monitoring">
-        <template slot="title">
-          <i class="el-icon-s-platform"></i>
-          <span>系统监控</span>
-        </template>
-        <el-menu-item index="/system/monitoring">系统状态</el-menu-item>
-        <el-menu-item index="/system/monitoring/user">在线用户</el-menu-item>
-      </el-submenu>
-      <el-menu-item index="/system/about">
-        <i class="el-icon-s-flag"></i>
-        <span slot="title">本站相关</span>
-      </el-menu-item>
+      <template v-for="item in aside">
+        <el-submenu v-if="item.children" :index="item.path" :key="item.path">
+          <template slot="title">
+            <i :class="item.icon"></i>
+            <span slot="title">{{item.title}}</span>
+          </template>
+          <el-menu-item
+            v-for="(items, key) in item.children"
+            :key="key"
+            :index="items.path">
+            {{ items.title }}
+          </el-menu-item>
+        </el-submenu>
+        <el-menu-item v-else :index="item.path" :key="item.path">
+          <i :class="item.icon"></i>
+          <span span slot="title">{{item.title}}</span>
+        </el-menu-item>
+      </template>
     </el-menu>
   </el-col>
 </template>
@@ -63,8 +42,15 @@ export default {
   props: ['collapse'],
   data () {
     return {
-      isCollapse: true
+      isCollapse: true,
+      aside: []
     }
+  },
+  created () {
+    this.aside = JSON.parse(localStorage.getItem('dynamicRouter'))
+    console.log('侧栏对象----------------------')
+    console.log(this.aside)
+    console.log('侧栏对象----------------------')
   },
   methods: {
     handleOpen (key, keyPath) {
