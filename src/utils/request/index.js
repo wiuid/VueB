@@ -42,6 +42,9 @@ instance.interceptors.response.use(
     const res = response.data
     if (res.status === 200) {
       return Promise.resolve(res)
+    } else if (response.headers['content-type'] === 'application/vnd.ms-excel;charset=utf-8') {
+      console.log('执行了 request.index.js 的 headers=== application/vnd.ms-excel 的判断结果')
+      return Promise.resolve(res)
     } else {
       if (res.status) {
         switch (res.status) {
