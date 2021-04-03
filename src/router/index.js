@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+const _import = require('./_import_production.js')
 
 Vue.use(VueRouter)
-
+console.log('-------------------------vue-router-index.js')
+// 默认路由
 const routes = [
   {
     path: '/',
@@ -24,104 +26,7 @@ const routes = [
     path: '/system',
     name: 'System',
     component: () => import('@/views/System'),
-    children: [
-      {
-        path: '/system',
-        name: 'Home',
-        component: () => import('@/views/system/Home'),
-        meta: {
-          title: '首页'
-        }
-      },
-      {
-        path: '/system/site/inform',
-        name: 'Inform',
-        component: () => import('@/views/system/site/Inform'),
-        meta: {
-          title: '通知公告'
-        }
-      },
-      {
-        path: '/system/site/log',
-        name: 'Log',
-        component: () => import('@/views/system/site/Log'),
-        meta: {
-          title: '日志详情'
-        }
-      },
-      {
-        path: '/system/department',
-        name: 'department',
-        component: () => import('@/views/system/department/Department'),
-        meta: {
-          title: '部门管理'
-        }
-      },
-      {
-        path: '/system/department/post',
-        name: 'Post',
-        component: () => import('@/views/system/department/Post'),
-        meta: {
-          title: '岗位管理'
-        }
-      },
-      {
-        path: '/system/user',
-        name: 'User',
-        component: () => import('@/views/system/user/User'),
-        meta: {
-          title: '用户管理'
-        }
-      },
-      {
-        path: '/system/user/auth',
-        name: 'Auth',
-        component: () => import('@/views/system/user/Auth'),
-        meta: {
-          title: '权限管理'
-        }
-      },
-      {
-        path: '/system/info',
-        name: 'Info',
-        component: () => import('@/views/system/Info'),
-        meta: {
-          title: '个人信息'
-        }
-      },
-      {
-        path: '/system/monitoring',
-        name: 'Monitoring',
-        component: () => import('@/views/system/monitoring/Monitoring'),
-        meta: {
-          title: '系统监控'
-        }
-      },
-      {
-        path: '/system/monitoring/user',
-        name: 'ActiveUser',
-        component: () => import('@/views/system/monitoring/ActiveUser'),
-        meta: {
-          title: '在线用户'
-        }
-      },
-      {
-        path: '/system/about',
-        name: 'About',
-        component: () => import('@/views/system/About'),
-        meta: {
-          title: '本站相关'
-        }
-      },
-      {
-        path: '/system/**',
-        name: 'NotFount',
-        component: () => import('@/views/system/NotFount'),
-        meta: {
-          title: '404-您输入的网页有误'
-        }
-      }
-    ]
+    children: undefined
   },
   {
     path: '/**',
@@ -131,22 +36,54 @@ const routes = [
       title: '404-您输入的网页有误'
     }
   }
-  // ,
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/system/About.vue')
-  // }
 ]
+
+// 动态路由
+
+// 判断当前时候存在动态路由，如果存在 合并默认路由，并对动态路由部分进行格式化
+var dynamicRouter = JSON.parse(localStorage.getItem('dynamicRouter'))
+console.log(dynamicRouter)
+if (dynamicRouter) {
+  // 定义一个列表用于存储动态路由
+  var list = []
+  var defaultLoginRoutes = [
+    {
+      path: '/system/info',
+      name: 'Info',
+      component: 'system/Info',
+      title: '个人信息'
+    },
+    {
+      path: '/system/**',
+      name: 'NotFount',
+      component: 'system/NotFount',
+      title: '404-您输入的网页有误'
+    }
+  ]
+  dynamicRouter.filter(route => {
+    if (route.children) {
+      route.children.filter(route1 => {
+        list.unshift(route1)
+      })
+    } else {
+      list.unshift(route)
+    }
+  })
+  // 添加个人信息和404页
+  list.push(defaultLoginRoutes[0])
+  list.push(defaultLoginRoutes[1])
+  routes[2].children = list
+  filterAsyncRouter(routes[2].children)
+}
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
 })
+
+// router.addRoutes(dynamicRouter)
+
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title
@@ -155,3 +92,23 @@ router.beforeEach((to, from, next) => {
 })
 
 export default router
+
+function filterAsyncRouter (asyncRouterMap) { // 遍历后台传来的路由字符串，转换为组件对象
+  const accessedRouters = asyncRouterMap.filter(route => {
+    if (route.component) {
+      // 赋予属性以json数据
+      eval("route.meta={title: '" + route.title + "'}")
+      // 原数据清空
+      route.title = undefined
+      // 字符串路径化
+      route.component = _import(route.component)
+    }
+    // 套娃
+    if (route.children && route.children.length) {
+      route.children = filterAsyncRouter(route.children)
+    }
+    return true
+  })
+
+  return accessedRouters
+}
