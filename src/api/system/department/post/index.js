@@ -92,3 +92,14 @@ export function deletePosts (ids) {
     }
   })
 }
+
+/**
+ * 导出岗位数据
+ */
+export function exportPost () {
+  return request({
+    url: '/system/department/post/export',
+    method: 'get',
+    responseType: 'blob'
+  })
+}
