@@ -107,3 +107,14 @@ export function deleteRoles (ids) {
     }
   })
 }
+
+/**
+ * 导出角色数据
+ */
+export function exportRole () {
+  return request({
+    url: '/system/user/role/export',
+    method: 'get',
+    responseType: 'blob'
+  })
+}
