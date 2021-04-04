@@ -13,7 +13,7 @@
     <el-row>
       <el-button type="primary" plain icon="el-icon-plus"  @click="openAddDialog">新 增</el-button>
       <el-button type="danger" plain icon="el-icon-delete"  @click="deleteDatas">删 除</el-button>
-      <el-button type="success" plain icon="el-icon-download">导 出</el-button>
+      <el-button type="success" plain icon="el-icon-download" @click="exportData">导 出</el-button>
     </el-row>
     <el-row>
       <el-table v-loading="loading" :data="tableData" stripe style="width: 100%" @selection-change="handleSelectionChange" :header-cell-style="{'text-align':'center'}">
@@ -79,7 +79,7 @@
         </el-row>
         <el-row>
           <el-form-item label="权限" :label-width="formLabelWidth">
-            <div style="height: 150px">
+            <div style="height: 150px; margin-bottom: 10px">
               <el-scrollbar style="height:100%">
                 <el-tree
                   :data="authTree"
@@ -88,15 +88,24 @@
                   node-key="id"
                   ref="tree"
                   highlight-current
+                  check-strictly
                   :props="defaultProps">
                 </el-tree>
+                <div v-if="authTreeIf">
+                    <el-button plain>请点击我</el-button>
+                </div>
               </el-scrollbar>
             </div>
+            <el-button plain @click="setAllSelect">全选</el-button>
+            <el-button plain @click="setInvertSelect">反选</el-button>
+            <el-button plain @click="setCancelSelect">取消</el-button>
+            <el-button plain @click="viewSelect">查看选中</el-button>
+
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="备注" :label-width="formLabelWidth" prop="reark">
-            <el-input type="textarea" placeholder="备注内容" v-model="role.reark" show-word-limit rows="3"></el-input>
+          <el-form-item label="备注" :label-width="formLabelWidth" prop="remark">
+            <el-input type="textarea" placeholder="备注内容" v-model="role.remark" show-word-limit rows="3"></el-input>
           </el-form-item>
         </el-row>
       </el-form>
@@ -111,7 +120,7 @@
 
 <script>
 import pagination from '@/components/Pagination'
-import { getData, getRole, getAuthTree, saveRole, updateState, deleteRole, deleteRoles } from '@/api/system/user/auth'
+import { getData, getRole, getAuthTree, saveRole, updateState, deleteRole, deleteRoles, exportRole } from '@/api/system/user/auth'
 export default {
   name: 'Auth',
   components: { pagination },
@@ -157,6 +166,7 @@ export default {
 
       // 权限树
       authTree: [],
+      authTreeIf: false,
       // 指定权限树中需要显示的字段
       defaultProps: {
         label: 'title'
@@ -176,6 +186,9 @@ export default {
   mounted () {
     this.getTableData()
     this.getDataAuth()
+    if (this.authTree === []) {
+      this.authTreeIf = true
+    }
   },
   filters: {
     formatData (time) {
@@ -379,6 +392,49 @@ export default {
       } else {
         this.$message.warning('你应该至少选中一个！')
       }
+    },
+    exportData () {
+      const res = new Promise((resolve, reject) => {
+        exportRole().then((result) => { resolve(result) }).catch((err) => { reject(err) })
+      })
+      res.then(result => {
+        this.$notify.success({
+          title: '下载提示',
+          message: '正在进行下载，下载完成请查看浏览器下载位置！',
+          position: 'bottom-left'
+        })
+        const url = window.URL.createObjectURL(new Blob([result]))
+        const link = document.createElement('a')
+        link.style.display = 'none'
+        link.href = url
+        link.setAttribute('download', '角色信息.xls')
+
+        document.body.appendChild(link)
+        link.click()
+      })
+    },
+    // 全选
+    setAllSelect () {
+      this.$refs.tree.setCheckedKeys([0, 1, 2, 3, 4, 5, 6])
+    },
+    // 反选
+    setInvertSelect () {
+      var keys = this.$refs.tree.getCheckedKeys()
+      var keyList = []
+      for (let index = 1; index < 19; index++) {
+        if (keys.indexOf(index) === -1) {
+          keyList.push(index)
+        }
+      }
+      this.$refs.tree.setCheckedKeys(keyList)
+    },
+    // 取消选中
+    setCancelSelect () {
+      this.$refs.tree.setCheckedKeys([])
+    },
+    viewSelect () {
+      var keys = this.$refs.tree.getCheckedKeys()
+      this.$message.info(keys.toString())
     },
     /**
      * 获取当前选中了表格中的哪些数据
