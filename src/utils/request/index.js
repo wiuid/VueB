@@ -93,7 +93,10 @@ instance.interceptors.response.use(
     }
   },
   err => {
-    Message.error(err)
+    var e = err.toString()
+    if (e.indexOf('403') !== -1) {
+      Message.error('权限不足！！')
+    }
     return Promise.reject(err)
   }
 )
