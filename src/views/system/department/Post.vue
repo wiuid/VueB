@@ -328,12 +328,15 @@ export default {
     },
 
     exportData () {
-      // window.location.href='/api/system/department/post/export';
       const res = new Promise((resolve, reject) => {
         exportPost().then((result) => { resolve(result) }).catch((err) => { reject(err) })
       })
       res.then(result => {
-        console.log('执行了我！！！！！！！！！！！')
+        this.$notify.success({
+          title: '下载提示',
+          message: '正在进行下载，下载完成请查看浏览器下载位置！',
+          position: 'bottom-left'
+        })
         const url = window.URL.createObjectURL(new Blob([result]))
         const link = document.createElement('a')
         link.style.display = 'none'
