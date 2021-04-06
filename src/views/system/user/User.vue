@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-row>
-      <treeselect :normalizer="normalizer" v-model="params.departmentId" :options="department" placeholder="请选择用户所在部门" style="width: 200px; margin-right: 10px"></treeselect>
+    <el-row style="margin-bottom: 10px">
+      <treeselect :normalizer="normalizer" v-model="params.departmentId" :options="department" placeholder="请选择用户所在部门" style="width: 200px"></treeselect>
       <el-input v-model="params.username" style="width: 200px; margin-right: 10px" placeholder="输入用户名称" clearable></el-input>
       <el-select v-model="params.state" placeholder="请选择用户状态" style="width: 200px; margin-right: 10px" clearable>
         <el-option
@@ -301,21 +301,14 @@ export default {
         this.params.createDateStart = this.searchDate[0]
         this.params.createDateEnd = this.searchDate[1]
       }
-
       // 数据请求
       const res = new Promise((resolve, reject) => {
-        getData(this.params).then((result) => {
-          resolve(result)
-        }).catch((err) => { reject(err) })
+        getData(this.params).then((result) => { resolve(result) })
       })
-
       res.then((result) => {
         if (result.status === 200) {
           this.tableData = result.data.userList
           this.total = result.data.total
-        } else {
-          this.tableData = []
-          this.$methods.info(result.msg)
         }
         this.loading = false
       })
