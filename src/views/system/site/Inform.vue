@@ -22,7 +22,7 @@
         :header-cell-style="{'text-align':'center'}">
         <el-table-column type="selection" width="55" align="center"></el-table-column>
         <el-table-column type="index" label="序号" width="55" align="center"></el-table-column>
-        <el-table-column prop="id" :v-if="vFalse" width="0"></el-table-column>
+        <el-table-column prop="id" v-if="false"></el-table-column>
         <el-table-column prop="title" label="公告标题" align="center"></el-table-column>
         <el-table-column prop="userNickname" label="发布人" align="center"></el-table-column>
         <el-table-column prop="state" label="状态" align="center">
@@ -85,7 +85,6 @@ export default {
   components: { pagination },
   data () {
     return {
-      vFalse: false,
       // 列表数据相关
       tableData: [],
       // 总数据数
