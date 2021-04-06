@@ -50,20 +50,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="负责人" :label-width="formLabelWidth" prop="principal">
-              <el-input v-model="department.userId" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="电话" :label-width="formLabelWidth" prop="phone">
-              <el-input v-model="department.phone" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="邮箱" :label-width="formLabelWidth" prop="email">
-              <el-input v-model="department.email" autocomplete="off"></el-input>
+            <el-form-item label="负责人" :label-width="formLabelWidth" prop="userId">
+              <el-select v-model="department.userId" filterable clearable placeholder="请选择负责人">
+                <el-option
+                  v-for="item in userTree"
+                  :key="item.id"
+                  :label="item.nickname"
+                  :value="item.id">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -88,6 +83,7 @@
 import treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { getData, getDepartment, saveDepartment, updateState, delectDepartment } from '@/api/system/department'
+import { getUserTree } from '@/api/system/user'
 export default {
   name: 'Department',
   components: { treeselect },
@@ -102,9 +98,7 @@ export default {
         id: 0,
         title: '',
         superId: null,
-        nickname: '',
-        email: '',
-        phone: '',
+        userId: null,
         state: 0
       },
       rules: {
@@ -113,8 +107,7 @@ export default {
         ]
       },
 
-      restaurants: [], // 搜索的用户返回的结果显示
-      timeout: null, // 搜索用户
+      userTree: [], // 搜索的用户返回的结果显示
 
       dialogAddDepartmentTitle: '新增',
       dialogAddDepartment: false,
@@ -123,6 +116,7 @@ export default {
   },
   mounted () {
     this.getTableData()
+    this.getUserData()
   },
   filters: {
     // 时间格式化处理
@@ -154,8 +148,22 @@ export default {
       })
       res.then((result) => {
         if (result.status === 200) {
-          this.tableData = JSON.parse(result.data.departmentList)
+          if (result.data === null) {
+            this.tableData = []
+          } else {
+            this.tableData = JSON.parse(result.data.departmentList)
+          }
           this.loading = false
+        }
+      })
+    },
+    getUserData () {
+      const res = new Promise((resolve, reject) => {
+        getUserTree().then((result) => { resolve(result) }).catch((err) => { reject(err) })
+      })
+      res.then((result) => {
+        if (result.status === 200) {
+          this.userTree = JSON.parse(result.data.userList)
         }
       })
     },
@@ -188,9 +196,7 @@ export default {
           this.department.id = result.data.department.id
           this.department.title = result.data.department.title
           this.department.superId = result.data.department.superId
-          this.department.nickname = result.data.department.nickname
-          this.department.email = result.data.department.email
-          this.department.phone = result.data.department.phone
+          this.department.userId = result.data.department.userId
           this.department.state = result.data.department.state
           this.dialogAddDepartmentTitle = '修改'
           this.dialogAddDepartment = true
