@@ -63,19 +63,27 @@ instance.interceptors.response.use(
             /**
              * token过期，清除本地token后跳转至登录页
              */
+          case 201:
+            // 警告消息
+            Message.warning(res.msg)
+            break
           case 202:
+            // 一般消息
             Message.info(res.msg)
             break
+          case 203:
+            // 错误消息
+            Message.error(res.msg)
+            break
           case 403:
+            // token 过期
             sessionStorage.removeItem('token')
             localStorage.removeItem('token')
             Message.info(res.msg)
             router.replace('/login')
             break
-            /**
-             * 权限不足，进行提示即可
-             */
           case 444:
+            // 账户异常
             sessionStorage.removeItem('token')
             localStorage.removeItem('token')
             Message.error('账户异常')
