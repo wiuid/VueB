@@ -210,13 +210,6 @@ export default {
      * 离开对话框并清除校验规则
      */
     closeDialog () {
-      this.reDialogForm()
-      this.dialogAddDepartment = false
-    },
-    /**
-     * 清除检验规则
-     */
-    reDialogForm () {
       this.$refs.department.resetFields()
       this.department.id = 0
       this.department.title = ''
@@ -225,7 +218,11 @@ export default {
       this.department.email = ''
       this.department.phone = ''
       this.department.state = 0
+      this.dialogAddDepartment = false
     },
+    /**
+     * 清除检验规则
+     */
     /**
      * 保存  新增/修改 的部门信息
      * @param department
@@ -245,7 +242,7 @@ export default {
               if (result.status === 200) {
                 this.$message.success(this.dialogAddDepartmentTitle + '部门成功!')
                 this.dialogAddDepartment = false
-                this.reDialogForm()
+                this.closeDialog()
                 this.getTableData()
               }
             })

@@ -330,7 +330,7 @@ export default {
         this.userInfo.department = result.data.departmentTitle
         this.userInfo.role = result.data.roleTitle
         this.userInfo.createDate = result.data.user.createDate
-        this.userInfo.avatar = '/api' + result.data.user.avatar
+        this.userInfo.avatar = result.data.user.avatar
       })
     },
     /**

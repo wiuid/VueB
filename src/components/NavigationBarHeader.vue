@@ -29,7 +29,7 @@ export default {
   mounted () {
     getAvatar().then((result) => {
       if (result.status === 200) {
-        this.avatar = '/api' + result.data.avatar
+        this.avatar = result.data.avatar
       }
     })
   },
