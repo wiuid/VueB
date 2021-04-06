@@ -27,7 +27,7 @@ export function getUser (id) {
     }
   })
 }
-export function getUsertTree () {
+export function getUserTree () {
   return request({
     url: '/system/user/tree',
     method: 'get'
