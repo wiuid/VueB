@@ -3,7 +3,6 @@
     <el-menu
       :collapse="collapse"
       router
-      default-active="/system"
       class="el-menu-vertical-demo"
       unique-opened
       @open="handleOpen"

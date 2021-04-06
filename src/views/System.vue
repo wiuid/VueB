@@ -12,7 +12,7 @@
         </el-header>
         <!-- 内容显示区 -->
         <el-main style="height:0;flex-grow:1;">
-          <router-view/>
+          <router-view :key="key"></router-view>
           <!-- 底栏 -->
           <el-footer style="padding: 0">
             <NavigationBarFooter></NavigationBarFooter>
@@ -37,7 +37,8 @@ export default {
       // 控制侧栏的展开和收缩
       navigationBarAsideWidth: '64px',
       collapse: true,
-      nameHide: false
+      nameHide: false,
+      key: this.$route.path + Math.random()
     }
   },
   methods: {
