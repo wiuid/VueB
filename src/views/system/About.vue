@@ -130,6 +130,12 @@ export default {
           label: '状态监控：Oshi'
         }, {
           label: 'Token：Jjwt'
+        }, {
+          label: 'RestfulAPI：Swagger及UI'
+        }, {
+          label: 'Json: Fastjson'
+        }, {
+          label: 'Excel: ApachePoi'
         }
         ]
       }]
