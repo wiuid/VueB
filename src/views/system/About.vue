@@ -107,6 +107,8 @@ export default {
               label: '图标：Element+Iconfont+官网Favicon'
             }, {
               label: '树形选择：TreeSelect'
+            }, {
+              label: '图片剪裁：VueCropper'
             }
             ]
           }
