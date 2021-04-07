@@ -15,8 +15,8 @@ export default {
     }
   },
   mounted () {
-    var data = new Date()
-    this.footerCopyright = '2021-' +  data.getFullYear() + ' webra.top'
+    const data = new Date()
+    this.footerCopyright = '2021-' + data.getFullYear() + ' webra.top'
   }
 }
 </script>

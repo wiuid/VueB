@@ -1,24 +1,27 @@
-# vuea
+### 项目介绍
 
-## Project setup/vue初始化
-```
-npm install
-```
+本项目是前端
 
-### Compiles and hot-reloads for development/运行vue服务
-```
-npm run dev
-```
+项目名：webraVueA
 
-### Compiles and minifies for production/构建vue项目
-```
-npm run build
-```
+前端：Vue+ElementUI+其他各类组件、图表
 
-### Lints and fixes files/检查错误并自动修复
-```
-npm run lint
-```
+后端：SpringBoot+SpringSecurity+JWT+其他各类组件
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+后端地址：https://github.com/wiuid/webraAdminA
+
+### 详细文档：
+
+
+
+### 功能
+
+- 支持动态生成菜单
+- 操作、登录、错误日志记录
+- 用户管理
+- 部门管理
+- 权限（角色）管理
+- 服务监控
+- 岗位管理
+- 公告管理
+- 等等

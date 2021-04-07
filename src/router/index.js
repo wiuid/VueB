@@ -28,12 +28,6 @@ const routes = [
     name: 'System',
     component: () => import('@/views/System'),
     children: [
-      {
-        path: '/system',
-        name: 'Home',
-        component: 'system/Home',
-        title: '首页'
-      }
     ]
   },
   {
@@ -80,6 +74,19 @@ if (dynamicRouter) {
   routes[2].children.push(defaultLoginRoutes[1])
   filterAsyncRouter(routes[2].children)
 }
+
+routes[2].children.unshift(
+  {
+    path: '/system',
+    name: 'Home',
+    component: () => import('@/views/system/Home'),
+    // component: 'system/Home',
+    // title: '首页'
+    meta: {
+      title: '首页'
+    }
+  }
+)
 
 const router = new VueRouter({
   mode: 'history',
