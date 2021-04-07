@@ -9,7 +9,8 @@ const routes = [
   {
     path: '/',
     name: 'Index',
-    component: () => import('@/views/Index'),
+    redirect: '/login',
+    // component: () => import('@/views/Index'),
     meta: {
       title: 'webraAdmin'
     }
@@ -26,7 +27,16 @@ const routes = [
     path: '/system',
     name: 'System',
     component: () => import('@/views/System'),
-    children: undefined
+    children: [
+      {
+        path: '/system',
+        name: 'Home',
+        component: 'system/Home',
+        meta: {
+          title: '首页'
+        }
+      }
+    ]
   },
   {
     path: '/**',
@@ -42,10 +52,8 @@ const routes = [
 
 // 判断当前时候存在动态路由，如果存在 合并默认路由，并对动态路由部分进行格式化
 var dynamicRouter = JSON.parse(localStorage.getItem('dynamicRouter'))
-console.log(dynamicRouter)
 if (dynamicRouter) {
   // 定义一个列表用于存储动态路由
-  var list = []
   var defaultLoginRoutes = [
     {
       path: '/system/info',
@@ -63,16 +71,15 @@ if (dynamicRouter) {
   dynamicRouter.filter(route => {
     if (route.children) {
       route.children.filter(route1 => {
-        list.unshift(route1)
+        routes[2].children.push(route1)
       })
     } else {
-      list.unshift(route)
+      routes[2].children.push(route)
     }
   })
   // 添加个人信息和404页
-  list.push(defaultLoginRoutes[0])
-  list.push(defaultLoginRoutes[1])
-  routes[2].children = list
+  routes[2].children.push(defaultLoginRoutes[0])
+  routes[2].children.push(defaultLoginRoutes[1])
   filterAsyncRouter(routes[2].children)
 }
 

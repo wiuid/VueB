@@ -13,6 +13,10 @@
           <span v-if="!collapse" class="spanJuZhongPan">Webra</span>
         </div>
       </router-link>
+      <el-menu-item index="/system">
+        <i class="el-icon-s-home"></i>
+        <span slot="title">首页</span>
+      </el-menu-item>
       <template v-for="item in aside">
         <el-submenu v-if="item.children" :index="item.path" :key="item.path">
           <template slot="title">
