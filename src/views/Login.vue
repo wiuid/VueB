@@ -7,17 +7,25 @@
         <el-row style="display: flex;margin: auto;text-align: center">
           <div style="margin-top: 150px;">
             <el-form ref="form" :model="form" :rules="rules">
-              <h3>管 理 后 台 登 陆</h3>
+              <h3>webraAdminA 后 台</h3>
               <el-form-item prop="username" require>
-                <el-input type="text" clearable v-model="form.username" prefix-icon="el-icon-user-solid" placeholder="账号" style="width: 100%;" autocomplete="off"></el-input>
+                <el-input type="text"
+                clearable v-model="form.username"
+                prefix-icon="el-icon-user-solid"
+                placeholder="账号"
+                style="width: 100%;"
+                @keyup.enter.native="login()">
+                </el-input>
               </el-form-item>
               <el-form-item prop="password" required>
-                <el-input type="password" clearable v-model="form.password" prefix-icon="el-icon-s-help" placeholder="密码" style="width: 100%;" autocomplete="off"></el-input>
+                <el-input type="password"
+                clearable v-model="form.password"
+                prefix-icon="el-icon-s-help"
+                placeholder="密码"
+                style="width: 100%;"
+                @keyup.enter.native="login()"></el-input>
               </el-form-item>
               <el-button type="primary" style="width: 100%" @click="login()">登 录</el-button>
-              <br style="margin: 5px"/>
-              <br style="margin: 5px"/>
-              <el-button type="primary" style="width: 100%" @click="toSystem()">免 登 录 按 钮</el-button>
             </el-form>
           </div>
         </el-row>
