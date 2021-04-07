@@ -32,9 +32,7 @@ const routes = [
         path: '/system',
         name: 'Home',
         component: 'system/Home',
-        meta: {
-          title: '首页'
-        }
+        title: '首页'
       }
     ]
   },
@@ -104,7 +102,8 @@ function filterAsyncRouter (asyncRouterMap) { // 遍历后台传来的路由字�
   const accessedRouters = asyncRouterMap.filter(route => {
     if (route.component) {
       // 赋予属性以json数据
-      eval("route.meta={title: '" + route.title + "'}")
+      // eval("route.meta={title: '" + route.title + "'}")
+      route.meta = JSON.parse('{"title": "' + route.title + '"}')
       // 原数据清空
       route.title = undefined
       // 字符串路径化
