@@ -287,7 +287,6 @@ export default {
         })
         res.then((result) => {
           if (result.status === 200) {
-            this.closeDialog()
             this.$message.success(result.msg)
             this.getTableData()
           }
@@ -345,8 +344,6 @@ export default {
 
         document.body.appendChild(link)
         link.click()
-      }).catch(err => {
-        console.log('errrrrrrrrrrrrrrrrrrrrrrr' + err)
       })
     },
 

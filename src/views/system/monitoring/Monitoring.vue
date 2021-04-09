@@ -63,34 +63,6 @@
             </div>
           </el-card>
         </el-row>
-        <el-row>
-          <el-card class="marginB10px">
-            <div slot="header" class="clearfix">
-              <span>Java虚拟机信息</span>
-            </div>
-            <div class="fontSize14">
-              <el-row>
-                <el-col :span="12">版本</el-col>
-                <el-col :span="12">{{jvm.version}}</el-col>
-              </el-row>
-              <el-divider class="dividerHeight"></el-divider>
-              <el-row>
-                <el-col :span="12">运行时间</el-col>
-                <el-col :span="12">{{jvm.date}}</el-col>
-              </el-row>
-              <el-divider class="dividerHeight"></el-divider>
-              <el-row>
-                <el-col :span="12">堆初始大小</el-col>
-                <el-col :span="12">{{jvm.memorySize}}M</el-col>
-              </el-row>
-              <el-divider class="dividerHeight"></el-divider>
-              <el-row>
-                <el-col :span="12">堆最大</el-col>
-                <el-col :span="12">{{jvm.memoryMax}}M</el-col>
-              </el-row>
-            </div>
-          </el-card>
-        </el-row>
       </el-col>
       <el-col :span="12">
         <el-row>
@@ -124,25 +96,72 @@
         <el-row>
           <el-card class="marginB10px">
             <div slot="header" class="clearfix">
-              <span>磁盘状态</span>
+              <span>Java虚拟机信息</span>
             </div>
             <div class="fontSize14">
-              <!-- <el-divider class="dividerHeight"></el-divider> -->
-              {{disk.partitions}}
-            </div>
-          </el-card>
-        </el-row>
-        <el-row>
-          <el-card class="marginB10px">
-            <div class="fontSize14">
-              <p>本页面的数据是通过后台接入的插件而实现的，该插件名为·oshi·</p>
-              <p>github传送门：<a href="https://github.com/oshi/oshi" target="_blank">
-              <img src="@/assets/icon/ic-github.svg" height="30px"/></a></p>
-              <p>Jvm的数据是通过Java自带的ManagementFactory查询获得的</p>
+              <el-row>
+                <el-col :span="12">版本</el-col>
+                <el-col :span="12">{{jvm.version}}</el-col>
+              </el-row>
+              <el-divider class="dividerHeight"></el-divider>
+              <el-row>
+                <el-col :span="12">运行时间</el-col>
+                <el-col :span="12">{{jvm.date}}</el-col>
+              </el-row>
+              <el-divider class="dividerHeight"></el-divider>
+              <el-row>
+                <el-col :span="12">堆初始大小</el-col>
+                <el-col :span="12">{{jvm.memorySize}}M</el-col>
+              </el-row>
+              <el-divider class="dividerHeight"></el-divider>
+              <el-row>
+                <el-col :span="12">堆最大</el-col>
+                <el-col :span="12">{{jvm.memoryMax}}M</el-col>
+              </el-row>
             </div>
           </el-card>
         </el-row>
       </el-col>
+    </el-row>
+    <el-row>
+      <el-card class="marginB10px">
+        <div slot="header" class="clearfix">
+          <span>磁盘状态</span>
+        </div>
+
+        <div class="fontSize14">
+          <el-table
+          :data="disk"
+          stripe
+          style="width: 100%"
+          ref="logTable"
+          size="mini"
+          :header-cell-style="{'text-align':'center'}">
+            <el-table-column type="expand">
+              <template slot-scope="props">
+                <el-table :data="props.row.partitions">
+                  <el-table-column prop="mountPoint" label="逻辑磁盘位置" width="150" align="center"></el-table-column>
+                  <el-table-column prop="size" label="容量" align="center"></el-table-column>
+                  <el-table-column prop="type" label="类型" align="center"></el-table-column>
+                </el-table>
+              </template>
+            </el-table-column>
+            <el-table-column prop="name" label="磁盘名"  align="center"></el-table-column>
+            <el-table-column prop="size" label="容量" align="center"></el-table-column>
+            <el-table-column prop="model" label="模式" align="center"></el-table-column>
+          </el-table>
+        </div>
+      </el-card>
+    </el-row>
+    <el-row>
+      <el-card class="marginB10px">
+        <div class="fontSize14">
+          <p>本页面的数据是通过后台接入的插件而实现的，该插件名为·oshi·</p>
+          <p>github传送门：<a href="https://github.com/oshi/oshi" target="_blank">
+          <img src="@/assets/icon/ic-github.svg" height="30px"/></a></p>
+          <p>Jvm的数据是通过Java自带的ManagementFactory查询获得的</p>
+        </div>
+      </el-card>
     </el-row>
   </div>
 </template>
@@ -164,7 +183,7 @@ export default {
     // 获取数据
     getData().then((result) => {
       this.cpu = result.data.cpu
-      this.disk = result.data.disk
+      this.disk = JSON.parse(result.data.disk.partitions)
       this.memory = result.data.memory
       this.system = result.data.system
       this.jvm = result.data.jvm
