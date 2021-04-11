@@ -84,7 +84,10 @@ export default {
     login () {
       if (this.form.username.length > 4) {
         if (this.form.password.length > 5) {
-          login(this.form).then((result) => {
+          var res = new Promise((resolve, reject) => {
+            login(this.form).then(result => { resolve(result) }).catch(err => { reject(err) })
+          })
+          res.then(result => {
             if (result.status === 200) {
               sessionStorage.setItem('token', result.data.token)
               localStorage.setItem('token', result.data.token)

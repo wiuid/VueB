@@ -1,34 +1,17 @@
-E:\Code\webraAdmin\webraAdminVueA\vuea
-├─.editorconfig
-├─.gitignore
-├─.prettierrc
-├─babel.config.js
-├─package-lock.json
-├─package.json
-├─README.md
-├─vue.config.js
-├─src
-|  ├─App.vue
-|  ├─main.js
-|  ├─views
-|  |   ├─About.vue
-|  |   └Home.vue
-|  ├─utils
-|  |   ├─http.js
-|  |   └request.js
-|  ├─store
-|  |   └index.js
-|  ├─router
-|  |   └index.js
-|  ├─components
-|  |     ├─HelloWorld.vue
-|  |     ├─NavigationBarAside.vue
-|  |     ├─NavigationBarFooter.vue
-|  |     └NavigationBarHeader.vue
-|  ├─assets
-|  |   └logo.png
-|  ├─api
-|  |  └api.js
-├─public
-|   ├─favicon.ico
-|   └index.html
+.
+|-- README.md
+|-- babel.config.js
+|-- package-lock.json
+|-- package.json
+|-- public
+|-- src
+|   |-- App.vue
+|   |-- api
+|   |-- assets
+|   |-- components
+|   |-- main.js
+|   |-- router
+|   |-- store
+|   |-- utils
+|   `-- views
+`-- vue.config.js
