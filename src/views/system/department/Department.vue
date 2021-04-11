@@ -72,7 +72,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="closeDialog;dialogAddDepartment = false">取 消</el-button>
+        <el-button @click="closeDialog">取 消</el-button>
         <el-button type="primary" @click="saveData('department')">确 定</el-button>
       </div>
     </el-dialog>
