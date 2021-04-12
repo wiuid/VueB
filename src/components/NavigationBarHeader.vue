@@ -33,6 +33,11 @@
         <img src="@/assets/icon/ic-github.svg" title="前端地址" height="20px">
       </a>
     </el-menu-item>
+    <el-menu-item style="float: right">
+      <a href="https://www.yuque.com/webra/admina" target="_blank">
+        <img src="@/assets/icon/ic-document.svg" title="文档地址" height="20px">
+      </a>
+    </el-menu-item>
   </el-menu>
 </template>
 
