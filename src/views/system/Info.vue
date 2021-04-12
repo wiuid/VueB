@@ -112,7 +112,6 @@
           <el-row>
             <el-col :span="6">
               <el-upload action="#"
-              :http-request="requestUpload"
               :show-file-list="false"
               :before-upload="beforeUpload">
                 <el-button icon="el-icon-upload2">选择</el-button>
@@ -267,8 +266,6 @@ export default {
     }
   },
   methods: {
-    requestUpload () {
-    },
     setDialogWidth () {
       // 头像修改对话框宽度自适应
       var val = document.body.clientWidth
