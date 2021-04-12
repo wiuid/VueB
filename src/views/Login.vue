@@ -1,36 +1,31 @@
 <template>
-  <div class="bg" :height="fullHeight" :width="fullWidth">
-    <div class="img_box">
-      <!-- 背景图片：动态绑定宽高 -->
-      <img src="@/assets/images/backimg.png" :width="fullWidth" />
-      <el-container>
-        <el-row style="display: flex;margin: auto;text-align: center">
-          <div style="margin-top: 150px;">
-            <el-form ref="form" :model="form" :rules="rules">
-              <h3>webraAdminA 后 台</h3>
-              <el-form-item prop="username" require>
-                <el-input type="text"
-                clearable v-model="form.username"
-                prefix-icon="el-icon-user-solid"
-                placeholder="账号"
-                style="width: 100%;"
-                @keyup.enter.native="login()">
-                </el-input>
-              </el-form-item>
-              <el-form-item prop="password" required>
-                <el-input type="password"
-                clearable v-model="form.password"
-                prefix-icon="el-icon-s-help"
-                placeholder="密码"
-                style="width: 100%;"
-                @keyup.enter.native="login()"></el-input>
-              </el-form-item>
-              <el-button type="primary" style="width: 100%" @click="login()">登 录</el-button>
-            </el-form>
-          </div>
-        </el-row>
-      </el-container>
-    </div>
+  <div class="header-background">
+    <el-container class="login">
+      <el-row style="display: flex;margin: auto;text-align: center">
+          <el-form ref="form" :model="form" :rules="rules">
+            <h3>webraAdminA 后 台</h3>
+            <el-form-item prop="username" require>
+              <el-input type="text"
+              clearable v-model="form.username"
+              prefix-icon="el-icon-user-solid"
+              placeholder="账号"
+              style="width: 100%;"
+              @keyup.enter.native="login()">
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="password" required>
+              <el-input type="password"
+              clearable v-model="form.password"
+              prefix-icon="el-icon-s-help"
+              placeholder="密码"
+              style="width: 100%;"
+              @keyup.enter.native="login()"></el-input>
+            </el-form-item>
+            <el-button type="primary" style="width: 100%" @click="login()">登 录</el-button>
+          </el-form>
+      </el-row>
+    </el-container>
+    <img src="@/assets/images/backimg.png" width="100%" height="100%" />
   </div>
 </template>
 
@@ -68,16 +63,6 @@ export default {
     if (sessionStorage.getItem('token') !== null) {
       this.$router.replace('/system')
     }
-  },
-  created () {
-    // 添加监听，监听设备宽高
-    window.addEventListener('resize', this.handleResize)
-  },
-  beforeDestroy: function () {
-    // 销毁监听
-    window.removeEventListener('resize', this.handleResize)
-  },
-  mounted () {
   },
   methods: {
     // 登录方法
@@ -117,14 +102,14 @@ export default {
 </script>
 
 <style scoped>
-.bg{
-  padding: 0;
-  margin: 0;
-}
-.bg .img_box{
-  width: 100%;height: 100%;
-}
-.bg .img_box img{
-  position: fixed; /* 固定图片位置 */
-}
+  .header-background {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+  }
+  .login {
+    position: fixed;
+    width: 100%;
+    height: 80%;
+  }
 </style>
