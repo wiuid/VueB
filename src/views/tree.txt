@@ -1,0 +1,28 @@
+.
+|-- Index.vue
+|-- Login.vue
+|-- NotFount.vue
+|-- System.vue
+|-- system
+|   |-- About.vue
+|   |-- Home.vue
+|   |-- Info.vue
+|   |-- NotFount.vue
+|   |-- department
+|   |   |-- Department.vue
+|   |   `-- Post.vue
+|   |-- error
+|   |   `-- index.html
+|   |-- monitoring
+|   |   |-- ActiveUser.vue
+|   |   |-- Monitoring.vue
+|   |   `-- Swagger.vue
+|   |-- site
+|   |   |-- Inform.vue
+|   |   `-- Log.vue
+|   `-- user
+|       |-- Auth.vue
+|       `-- User.vue
+`-- tree.txt
+
+6 directories, 19 files
