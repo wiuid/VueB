@@ -8,7 +8,7 @@
       <el-container>
         <!-- 顶部导航 -->
         <el-header style="padding: 0">
-          <NavigationBarHeader :close="nameHide" :open="collapse" :off="switchOff"></NavigationBarHeader>
+          <NavigationBarHeader :close="!collapse" :open="collapse" :off="switchOff"></NavigationBarHeader>
         </el-header>
         <!-- 内容显示区 -->
         <el-main style="height:0;flex-grow:1;">
@@ -37,7 +37,6 @@ export default {
       // 控制侧栏的展开和收缩
       navigationBarAsideWidth: '64px',
       collapse: true,
-      nameHide: false,
       key: this.$route.path + Math.random()
     }
   },
@@ -45,7 +44,6 @@ export default {
     // 侧栏的展开收缩控制方法
     switchOff () {
       this.collapse = !this.collapse
-      this.nameHide = !this.nameHide
       this.navigationBarAsideWidth = this.navigationBarAsideWidth === '64px' ? '202px' : '64px'
     }
   }
