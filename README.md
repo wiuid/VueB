@@ -10,7 +10,7 @@
 
 后端地址：https://github.com/wiuid/webraAdminA
 
-### 详细文档：
+### 详细文档：https://www.yuque.com/webra/admina
 
 
 
