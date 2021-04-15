@@ -35,7 +35,7 @@
             <el-divider class="costHr"></el-divider>
             <el-row>
               <el-col span="12"><i class="el-icon-finished"></i>所属角色</el-col>
-              <el-col span="12">{{userInfo.role}}</el-col>
+              <el-col span="12">{{userInfo.roleTitle}}</el-col>
             </el-row>
             <el-divider class="costHr"></el-divider>
             <el-row>
@@ -316,18 +316,21 @@ export default {
         getData().then((result) => { resolve(result) })
       })
       res.then((result) => {
-        this.userInfo.id = result.data.user.id
-        this.userInfo.username = result.data.user.username
-        this.info.nickname = result.data.user.nickname
-        this.userInfo.phone = result.data.user.phone
-        this.info.phone = result.data.user.phone
-        this.userInfo.email = result.data.user.email
-        this.info.email = result.data.user.email
-        this.userInfo.phone = result.data.user.phone
-        this.userInfo.department = result.data.departmentTitle
-        this.userInfo.role = result.data.roleTitle
-        this.userInfo.createDate = result.data.user.createDate
-        this.userInfo.avatar = result.data.user.avatar
+        this.userInfo = result.data.userInfo
+        this.info = result.data.info
+
+        // this.userInfo.id = result.data.user.id
+        // this.userInfo.username = result.data.user.username
+        // this.info.nickname = result.data.user.nickname
+        // this.userInfo.phone = result.data.user.phone
+        // this.info.phone = result.data.user.phone
+        // this.userInfo.email = result.data.user.email
+        // this.info.email = result.data.user.email
+        // this.userInfo.phone = result.data.user.phone
+        // this.userInfo.department = result.data.departmentTitle
+        // this.userInfo.role = result.data.roleTitle
+        // this.userInfo.createDate = result.data.user.createDate
+        // this.userInfo.avatar = result.data.user.avatar
       })
     },
     /**

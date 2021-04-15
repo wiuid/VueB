@@ -245,12 +245,7 @@ export default {
       })
       res.then((result) => {
         if (result.status === 200) {
-          this.role.id = result.data.role.id
-          this.role.title = result.data.role.title
-          this.role.code = result.data.role.code
-          this.role.serial = result.data.role.serial
-          this.role.state = result.data.role.state
-          this.role.remark = result.data.role.remark
+          this.role = result.data.role
           this.$refs.tree.setCheckedKeys(result.data.role.authIds.split(','))
         }
       })
