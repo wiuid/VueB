@@ -4,13 +4,15 @@
 
 项目名：webraVueA
 
+演示地址：https://admina.webra.top/
+
 前端：Vue+ElementUI+其他各类组件、图表
 
 后端：SpringBoot+SpringSecurity+JWT+其他各类组件
 
 后端地址：https://github.com/wiuid/webraAdminA
 
-### 详细文档：
+### 详细文档：https://www.yuque.com/webra/admina
 
 
 
