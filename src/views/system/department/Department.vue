@@ -151,7 +151,7 @@ export default {
           if (result.data === null) {
             this.tableData = []
           } else {
-            this.tableData = JSON.parse(result.data.departmentList)
+            this.tableData = result.data.departmentList
           }
           this.loading = false
         }
