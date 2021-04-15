@@ -193,11 +193,7 @@ export default {
       })
       res.then((result) => {
         if (result.status === 200) {
-          this.department.id = result.data.department.id
-          this.department.title = result.data.department.title
-          this.department.superId = result.data.department.superId
-          this.department.userId = result.data.department.userId
-          this.department.state = result.data.department.state
+          this.department = result.data.department
           this.dialogAddDepartmentTitle = '修改'
           this.dialogAddDepartment = true
         }

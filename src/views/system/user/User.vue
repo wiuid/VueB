@@ -373,16 +373,7 @@ export default {
       })
       res.then((result) => {
         if (result.status === 200) {
-          this.user.id = result.data.user.id
-          this.user.username = result.data.user.username
-          this.user.nickname = result.data.user.nickname
-          this.user.departmentId = result.data.user.departmentId
-          this.user.phone = result.data.user.phone
-          this.user.email = result.data.user.email
-          this.user.state = result.data.user.state
-          this.user.postId = result.data.user.postId
-          this.user.roleId = result.data.user.roleId
-          this.user.remark = result.data.user.remark
+          this.user = result.data.user
           this.dialogAddUser = true
         }
       })

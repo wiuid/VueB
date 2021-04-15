@@ -194,10 +194,7 @@ export default {
 
       res.then((result) => {
         if (result.status === 200) {
-          this.inform.id = result.data.inform.id
-          this.inform.title = result.data.inform.title
-          this.inform.state = result.data.inform.state
-          this.inform.text = result.data.inform.text
+          this.inform = result.data.inform
         }
       })
       this.dialogAddInform = true
