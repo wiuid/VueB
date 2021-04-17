@@ -233,6 +233,7 @@ export default {
             type: 'warning'
           }).then(() => {
             const res = new Promise((resolve, reject) => {
+              this.inform.text = this.inform.text.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;')
               saveInform(this.inform).then((result) => { resolve(result) })
             })
             res.then((result) => {
