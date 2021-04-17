@@ -1,9 +1,11 @@
 <template>
-  <el-menu router  class="el-menu-demo" mode="horizontal" @select="handleSelect">
-    <el-menu-item @click="off">
-      <i v-if="close" class="el-icon-s-fold"></i>
-      <i v-if="open" class="el-icon-s-unfold"></i>
+  <el-menu router  class="el-menu-demo" mode="horizontal" @select="handleSelect" style="height: 60px">
+    <el-menu-item class="" @click="off">
+      <i class="el-icon-s-fold hidden-xs-only" v-if="close"></i>
+      <i class="el-icon-s-unfold hidden-xs-only" v-if="open"></i>
+      <i class="el-icon-s-unfold hidden-sm-and-up"></i>
     </el-menu-item>
+
     <el-menu-item>
         <el-breadcrumb separator="/" style="margin-top:20px">
           <el-breadcrumb-item :to="{ path: '/system' }">首页</el-breadcrumb-item>
@@ -23,21 +25,44 @@
       <img v-if="fullIf" src="@/assets/icon/ic-enlarge.svg" title="全屏" height="20px">
       <img v-if="!fullIf" src="@/assets/icon/ic-narrow.svg" title="缩小" height="20px">
     </el-menu-item>
-    <el-menu-item style="float: right">
+    <el-menu-item class="hidden-xs-only" style="float: right">
       <a href="https://github.com/wiuid/webraAdminA" target="_blank">
         <img src="@/assets/icon/ic-github.svg" title="后端地址" height="20px">
       </a>
     </el-menu-item>
-    <el-menu-item style="float: right">
+    <el-menu-item class="hidden-xs-only" style="float: right">
       <a href="https://github.com/wiuid/VueA" target="_blank">
         <img src="@/assets/icon/ic-github.svg" title="前端地址" height="20px">
       </a>
     </el-menu-item>
-    <el-menu-item style="float: right">
+    <el-menu-item class="hidden-xs-only" style="float: right">
       <a href="https://www.yuque.com/webra/admina" target="_blank">
         <img src="@/assets/icon/ic-document.svg" title="文档地址" height="20px">
       </a>
     </el-menu-item>
+    <el-submenu class="hidden-sm-and-up" style="float: right" index="3">
+      <template slot="title">
+        <i class="el-icon-more-outline"></i>
+      </template>
+      <el-menu-item>
+        <a href="https://www.yuque.com/webra/admina" target="_blank" style="text-decoration: none; color: #909399">
+          <img src="@/assets/icon/ic-document.svg" title="文档地址" height="20px">
+          <span style="padding-left: 15px">文档地址</span>
+        </a>
+      </el-menu-item>
+      <el-menu-item>
+        <a href="https://github.com/wiuid/VueA" target="_blank" style="text-decoration: none; color: #909399">
+          <img src="@/assets/icon/ic-github.svg" title="前端地址" height="20px">
+          <span style="padding-left: 15px">前端地址</span>
+        </a>
+      </el-menu-item>
+      <el-menu-item>
+        <a href="https://github.com/wiuid/webraAdminA" target="_blank" style="text-decoration: none; color: #909399">
+          <img src="@/assets/icon/ic-github.svg" title="后端地址" height="20px">
+          <span style="padding-left: 15px">后端地址</span>
+        </a>
+      </el-menu-item>
+    </el-submenu>
   </el-menu>
 </template>
 
