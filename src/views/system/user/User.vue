@@ -340,7 +340,7 @@ export default {
       })
       res.then((result) => {
         if (result.status === 200) {
-          this.department = JSON.parse(result.data.departmentList)
+          this.department = result.data.departmentList
         }
       })
     },
