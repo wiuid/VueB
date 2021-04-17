@@ -14,33 +14,33 @@
           <div style="font-size: 15px">
             <el-divider class="costHr"></el-divider>
             <el-row>
-              <el-col span="12"><i class="el-icon-user"></i>用户账号</el-col>
-              <el-col span="12">{{userInfo.username}}</el-col>
+              <el-col :span="12"><i class="el-icon-user"></i>用户账号</el-col>
+              <el-col :span="12">{{userInfo.username}}</el-col>
             </el-row>
             <el-divider class="costHr"></el-divider>
             <el-row>
-              <el-col span="12"><i class="el-icon-mobile-phone"></i>手机号码</el-col>
-              <el-col span="12">{{userInfo.phone | formatNull()}}</el-col>
+              <el-col :span="12"><i class="el-icon-mobile-phone"></i>手机号码</el-col>
+              <el-col :span="12">{{userInfo.phone | formatNull()}}</el-col>
             </el-row>
             <el-divider class="costHr"></el-divider>
             <el-row>
-              <el-col span="12"><i class="el-icon-message"></i>用户邮箱</el-col>
-              <el-col span="12">{{userInfo.email | formatNull()}}</el-col>
+              <el-col :span="12"><i class="el-icon-message"></i>用户邮箱</el-col>
+              <el-col :span="12">{{userInfo.email | formatNull()}}</el-col>
             </el-row>
             <el-divider class="costHr"></el-divider>
             <el-row>
-              <el-col span="12"><i class="el-icon-office-building"></i>所属部门</el-col>
-              <el-col span="12">{{userInfo.department | formatNull()}}</el-col>
+              <el-col :span="12"><i class="el-icon-office-building"></i>所属部门</el-col>
+              <el-col :span="12">{{userInfo.department | formatNull()}}</el-col>
             </el-row>
             <el-divider class="costHr"></el-divider>
             <el-row>
-              <el-col span="12"><i class="el-icon-finished"></i>所属角色</el-col>
-              <el-col span="12">{{userInfo.roleTitle}}</el-col>
+              <el-col :span="12"><i class="el-icon-finished"></i>所属角色</el-col>
+              <el-col :span="12">{{userInfo.roleTitle}}</el-col>
             </el-row>
             <el-divider class="costHr"></el-divider>
             <el-row>
-              <el-col span="12"><i class="el-icon-date"></i>创建日期</el-col>
-              <el-col span="12">{{userInfo.createDate | formatDate()}}</el-col>
+              <el-col :span="12"><i class="el-icon-date"></i>创建日期</el-col>
+              <el-col :span="12">{{userInfo.createDate | formatDate()}}</el-col>
             </el-row>
             <el-divider class="costHr"></el-divider>
           </div>
@@ -184,15 +184,6 @@ export default {
         data: {}
       },
       userInfo: {
-        id: 0,
-        portrait: '',
-        username: '',
-        avatar: '',
-        phone: '',
-        email: '',
-        department: '',
-        role: '',
-        createDate: ''
       },
       info: {
         nickname: '',
