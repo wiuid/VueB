@@ -7,13 +7,10 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
 
-import * as echarts from 'echarts'
 
 Vue.use(ElementUI, {
   size: 'small'
 })
-
-Vue.prototype.$echarts = echarts
 
 Vue.config.productionTip = false
 

@@ -170,6 +170,22 @@
 import pagination from '@/components/Pagination'
 import { getData, getInform } from '@/api/system/site/inform'
 
+ // 加载echarts，注意引入文件的路径
+let echarts = require('echarts/lib/echarts')
+ 
+// 引入图类型
+require('echarts/lib/chart/line')
+require('echarts/lib/chart/pie')
+require('echarts/lib/chart/radar')
+
+// 引入提示框和title组件，图例
+require('echarts/lib/component/tooltip')
+require('echarts/lib/component/legend')
+require('echarts/lib/component/grid')
+require('echarts/lib/component/toolbox')
+require('echarts/lib/component/radar')
+//图例翻译滚动
+
 export default {
   name: 'Home',
   components: { pagination },
@@ -294,7 +310,7 @@ export default {
     // 下面都是图表
     drawLine1 () {
       // 基于准备好的dom，初始化echarts实例
-      const myChart = this.$echarts.init(document.getElementById('myChart1'))
+      const myChart = echarts.init(document.getElementById('myChart1'))
       // 绘制图表
       myChart.setOption({
         tooltip: {
@@ -401,39 +417,65 @@ export default {
     },
     drawLine2 () {
       // 基于准备好的dom，初始化echarts实例
-      const myChart = this.$echarts.init(document.getElementById('myChart2'))
+      const myChart = echarts.init(document.getElementById('myChart2'))
+      // var colors = ['#FDD100', '#08CED0', '#7351E3', '#FF4873', '#01BE6E']
+      // 颜色下标，每次渲染饼图一个扇区加一操作
+      // var i = 0
       myChart.setOption({
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
-        },
-        legend: {
-          top: '5%'
+          showContent: true
         },
         toolbox: {
-          show: true,
           feature: {
-            saveAsImage: { show: true }
+            saveAsImage: {}
           }
         },
-        series: [
-          {
-            name: 'webra',
-            type: 'pie',
-            radius: [10, 200],
-            center: ['50%', '50%'],
-            roseType: 'area',
-            itemStyle: {
-              borderRadius: 8
+        legend: {
+          data: ['预算分配（webra）', '实际开销（webra）', '售后（webra）', '开发（webra）']
+        },
+        radar: {
+          // shape: 'circle',
+          name: {
+            textStyle: {
+              color: '#333',
+              backgroundColor: '#fff',
+              borderRadius: 3,
+              padding: [3, 5]
+            }
+          },
+          indicator: [
+            { name: '销售（webras）', max: 6500 },
+            { name: '管理（webra）', max: 16000 },
+            { name: '信息技术（webra）', max: 30000 },
+            { name: '客服（webra）', max: 38000 },
+            { name: '研发（webra）', max: 52000 },
+            { name: '市场（webra）', max: 25000 }
+          ]
+        },
+        series: [{
+          name: '预算 vs 开销（Budget vs spending）',
+          type: 'radar',
+          areaStyle: { normal: {} },
+          data: [
+            {
+              value: [4300, 10000, 28000, 35000, 50000, 19000],
+              name: '预算分配（webra）'
             },
-            data: [
-              { value: 40, name: 'webra 1' },
-              { value: 38, name: 'webra 2' },
-              { value: 32, name: 'webra 3' },
-              { value: 30, name: 'webra 4' }
-            ]
-          }
-        ]
+            {
+              value: [5000, 14000, 28000, 31000, 42000, 21000],
+              name: '实际开销（webra）'
+            },
+            {
+              value: [3200, 8000, 18000, 21000, 32000, 11000],
+              name: '售后（webra）'
+            },
+            {
+              value: [4000, 10000, 20000, 20000, 35000, 15000],
+              name: '开发（webra）'
+            }
+          ]
+        }]
       })
       window.addEventListener('resize', function () {
         myChart.resize()
@@ -441,7 +483,7 @@ export default {
     },
     drawLine3 () {
       // 基于准备好的dom，初始化echarts实例
-      const myChart = this.$echarts.init(document.getElementById('myChart3'))
+      const myChart = echarts.init(document.getElementById('myChart3'))
       myChart.setOption({
         tooltip: {
           trigger: 'item'
