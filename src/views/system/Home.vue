@@ -89,19 +89,19 @@
       </el-card></el-col>
     </el-row>
     <el-row>
-      <el-card style="margin: 10px;" shadow="hover">
-        <div id="myChart1" style="height: 500px;width: 100%;"></div>
+      <el-card style="margin: 10px; height: auto" shadow="hover" >
+        <div id="myChart1" style="height: 300px; width: 100%;"></div>
       </el-card>
     </el-row>
     <el-row>
       <el-col :span="12" :xs="24">
-        <el-card class="card-home" shadow="hover" style="height: 600px;">
-          <div id="myChart2" style="height: 500px;width: 100%;"></div>
+        <el-card class="card-home" shadow="hover" style="height: auto">
+          <div id="myChart2" style="height: 400px;width: 100%;"></div>
         </el-card>
       </el-col>
       <el-col :span="12" :xs="24">
-        <el-card class="card-home" shadow="hover" style="height: 600px;">
-          <div id="myChart3" style="height: 500px;width: 100%;"></div>
+        <el-card class="card-home" shadow="hover" style="height: auto">
+          <div id="myChart3" style="height: 400px;width: 100%;"></div>
         </el-card>
       </el-col>
     </el-row>
@@ -433,13 +433,13 @@ export default {
           data: ['预算分配（webra）', '实际开销（webra）', '售后（webra）', '开发（webra）']
         },
         radar: {
-          // shape: 'circle',
+          shape: 'circle',
           name: {
             textStyle: {
               color: '#333',
-              backgroundColor: '#fff',
+              // backgroundColor: '#fff',
               borderRadius: 3,
-              padding: [3, 5]
+              padding: [1, 1]
             }
           },
           indicator: [
