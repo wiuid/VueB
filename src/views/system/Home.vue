@@ -127,7 +127,7 @@
       </el-row>
     </el-dialog>
 
-    <el-drawer title="所有公告" :visible.sync="drawer" :with-header="true">
+    <el-drawer title="所有公告" :visible.sync="drawer" size="200" :with-header="true">
       <el-row style="padding: 0 20px 40px 20px">
         <el-row>
           <el-input v-model="params.title"  style="margin-left: 10px;width: 200px;" placeholder="标题" clearable></el-input>
@@ -158,9 +158,7 @@
       <el-row style="text-align: center">
         <pagination :total="total" :pager="params.page" :current="pageJump"></pagination>
       </el-row>
-
     </el-drawer>
-
   </div>
 </template>
 

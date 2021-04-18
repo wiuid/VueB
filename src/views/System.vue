@@ -23,6 +23,7 @@
     </el-container>
     <!-- 窄屏适配导航栏 -->
     <el-drawer
+      id="drawerBar"
       :visible.sync="draw"
       size="200"
       :show-close="false"
@@ -74,8 +75,8 @@ export default {
 .el-aside, .el-header {
     box-shadow: 1px 3px 5px 0 rgb(0 0 0 / 10%) !important;
 }
-
-.el-drawer__header {
+/* 不影响全局其他的drawer 组件 */
+#drawerBar .el-drawer__header {
     margin-bottom: 0 !important;
     padding: 0 !important;
 }
