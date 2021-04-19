@@ -1,12 +1,12 @@
 <template>
   <div>
     <el-row style="margin-bottom: 10px">
-      <el-input v-model="params.title"  style="margin-right: 10px;width: 200px;" placeholder="输入岗位名称部分字段" clearable></el-input>
-      <el-select  v-model="params.state" placeholder="请选择状态" style="margin-right: 10px;" clearable>
+      <el-input v-model="params.title"  style="margin: 0 10px 10px 0;width: 200px;" placeholder="输入岗位名称部分字段" clearable></el-input>
+      <el-select  v-model="params.state" placeholder="请选择状态" style="margin: 0 10px 10px 0;" clearable>
         <el-option v-for="item in stateSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
-      <el-button type="primary" plain icon="el-icon-refresh" @click="reSearchParams">重置</el-button>
-      <el-button type="primary" plain icon="el-icon-search" @click="getTableData">搜索</el-button>
+      <el-button type="primary" plain icon="el-icon-refresh" @click="reSearchParams" style="margin: 0 10px 10px 0">重置</el-button>
+      <el-button type="primary" plain icon="el-icon-search" @click="getTableData" style=" margin: 0 10px 10px 0">搜索</el-button>
     </el-row>
     <el-row>
       <el-button type="primary" plain icon="el-icon-plus"  @click="openAddDialog">新 增</el-button>

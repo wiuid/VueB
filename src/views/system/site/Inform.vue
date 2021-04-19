@@ -1,9 +1,14 @@
 <template>
   <div>
     <el-row style="margin-bottom: 10px">
-      <el-input v-model="params.title"  style="margin-right: 10px;width: 200px;" placeholder="输入公告标题部分字段"></el-input>
-      <el-date-picker v-model="searchDate" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"  :default-time="['00:00:00', '23:59:59']" style="margin-right: 10px"></el-date-picker>
-      <el-select  v-model="params.state" style="margin-right: 10px;" clearable placeholder="公告状态">
+      <el-input v-model="params.title"  style="margin: 0 10px 10px 0;width: 200px;" placeholder="输入公告标题部分字段"></el-input>
+      <el-date-picker v-model="searchDate"
+        type="daterange"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        :default-time="['00:00:00', '23:59:59']"
+        style="margin: 0 10px 10px 0"></el-date-picker>
+      <el-select  v-model="params.state" style="margin: 0 10px 10px 0;" clearable placeholder="公告状态">
         <el-option v-for="item in stateSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
       <el-button type="primary" plain icon="el-icon-refresh" @click="reSearchParams">重置</el-button>

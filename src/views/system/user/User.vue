@@ -1,9 +1,9 @@
 <template>
   <div>
     <el-row style="margin-bottom: 10px">
-      <treeselect :normalizer="normalizer" v-model="params.departmentId" :options="department" placeholder="请选择用户所在部门" style="width: 200px"></treeselect>
-      <el-input v-model="params.username" style="width: 200px; margin-right: 10px" placeholder="输入用户名称" clearable></el-input>
-      <el-select v-model="params.state" placeholder="请选择用户状态" style="width: 200px; margin-right: 10px" clearable>
+      <treeselect :normalizer="normalizer" v-model="params.departmentId" :options="department" placeholder="请选择用户所在部门" style="width: 200px; margin: 0 10px 10px 0"></treeselect>
+      <el-input v-model="params.username" style="width: 200px; margin: 0 10px 10px 0" placeholder="输入用户名称" clearable></el-input>
+      <el-select v-model="params.state" placeholder="请选择用户状态" style="width: 200px; margin: 0 10px 10px 0" clearable>
         <el-option
           v-for="item in stateSelect"
           :key="item.value"
@@ -12,7 +12,7 @@
         </el-option>
       </el-select>
       <el-date-picker
-        style="width: 300px; margin-right: 10px"
+        style="width: 300px; margin: 0 10px 10px 0"
         v-model="searchDate"
         type="daterange"
         clearable
@@ -20,8 +20,8 @@
         start-placeholder="开始创建日期"
         end-placeholder="结束创建日期">
       </el-date-picker>
-      <el-button type="primary" plain icon="el-icon-refresh" @click="reSearchUserOption">重置</el-button>
-      <el-button type="primary" plain icon="el-icon-search" @click="getTableData">搜索</el-button>
+      <el-button type="primary" plain icon="el-icon-refresh" @click="reSearchUserOption" style="margin: 0 10px 10px 0">重置</el-button>
+      <el-button type="primary" plain icon="el-icon-search" @click="getTableData" style="margin: 0 10px 10px 0">搜索</el-button>
     </el-row>
     <el-row>
       <el-button type="primary" plain icon="el-icon-plus"  @click="openAddDialog">新 增</el-button>

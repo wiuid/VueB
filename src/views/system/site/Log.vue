@@ -1,13 +1,19 @@
 <template>
   <div>
     <el-row style="margin-bottom: 10px">
-      <el-input v-model="params.title"  style="margin-right: 10px;width: 200px;" placeholder="输入日志标题部分字段"></el-input>
-      <el-date-picker v-model="searchDate" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"  :default-time="['00:00:00', '23:59:59']" style="margin-right: 10px"></el-date-picker>
+      <el-input v-model="params.title"  style="margin: 0 10px 10px 0;width: 200px;" placeholder="输入日志标题部分字段"></el-input>
+      <el-date-picker
+        v-model="searchDate"
+        type="daterange"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        :default-time="['00:00:00', '23:59:59']"
+        style="margin: 0 10px 10px 0"></el-date-picker>
       <!-- <el-select  v-model="searchLogOption.mark" placeholder="日志分类" style="margin-right: 10px;" clearable>
         <el-option v-for="item in markSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select> -->
-      <el-button type="primary" plain icon="el-icon-refresh" @click="reSearchParams">重置</el-button>
-      <el-button type="primary" plain icon="el-icon-search" @click="getTableData">搜索</el-button>
+      <el-button type="primary" plain icon="el-icon-refresh" @click="reSearchParams" style="margin-right: 10px">重置</el-button>
+      <el-button type="primary" plain icon="el-icon-search" @click="getTableData" style="margin: 0">搜索</el-button>
     </el-row>
     <el-row>
       <el-button type="danger" plain icon="el-icon-delete"  @click="deleteDatas">删 除</el-button>

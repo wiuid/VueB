@@ -1,14 +1,14 @@
 <template>
   <div>
     <el-row style="margin-bottom: 10px">
-      <el-input v-model="params.title" style="margin-right: 10px;width: 200px;" placeholder="请输入权限名称" clearable></el-input>
-      <el-input v-model="params.code" style="margin-right: 10px;width: 200px;" placeholder="请输入权限字符" clearable></el-input>
-      <el-select v-model="params.state" placeholder="请选择权限状态" style="margin-right: 10px;width: 200px" clearable>
+      <el-input v-model="params.title" style="margin: 0 10px 10px 0;width: 200px;" placeholder="请输入权限名称" clearable></el-input>
+      <el-input v-model="params.code" style="margin: 0 10px 10px 0;width: 200px;" placeholder="请输入权限字符" clearable></el-input>
+      <el-select v-model="params.state" placeholder="请选择权限状态" style="margin: 0 10px 10px 0;width: 200px" clearable>
         <el-option v-for="item in stateSelect" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
-      <el-date-picker style="margin-right: 10px" v-model="searchDate" type="daterange" clearable range-separator="-" start-placeholder="开始创建日期" end-placeholder="结束创建日期"></el-date-picker>
-      <el-button type="primary" plain icon="el-icon-search"  @click="getTableData">搜索</el-button>
-      <el-button type="primary" plain icon="el-icon-refresh"  @click="reSearchParams">重置</el-button>
+      <el-date-picker style="margin: 0 10px 10px 0" v-model="searchDate" type="daterange" clearable range-separator="-" start-placeholder="开始创建日期" end-placeholder="结束创建日期"></el-date-picker>
+      <el-button type="primary" plain icon="el-icon-search"  @click="getTableData" style="margin: 0 10px 10px 0">搜索</el-button>
+      <el-button type="primary" plain icon="el-icon-refresh"  @click="reSearchParams" style="margin: 0 10px 10px 0">重置</el-button>
     </el-row>
     <el-row>
       <el-button type="primary" plain icon="el-icon-plus"  @click="openAddDialog">新 增</el-button>

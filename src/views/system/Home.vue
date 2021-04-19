@@ -128,19 +128,19 @@
     </el-dialog>
 
     <el-drawer title="所有公告" :visible.sync="drawer" size="200" :with-header="true">
-      <el-row style="padding: 0 20px 40px 20px">
-        <el-row>
+      <el-row style="padding: 0 20px 10px 20px">
+        <el-row style="margin-bottom: 10px">
           <el-input v-model="params.title"  style="margin-left: 10px;width: 200px;" placeholder="标题" clearable></el-input>
         </el-row>
-        <el-row>
+        <el-row style="margin-bottom: 10px">
           <el-date-picker v-model="searchDate" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"  :default-time="['00:00:00', '23:59:59']" style="margin-left: 10px"></el-date-picker>
         </el-row>
-        <el-row>
+        <el-row style="margin-bottom: 10px">
           <el-button type="primary" plain icon="el-icon-refresh" @click="reSearchParams" style="margin-left: 10px">重置</el-button>
           <el-button type="primary" plain icon="el-icon-search" @click="getTableData">搜索</el-button>
         </el-row>
       </el-row>
-      <el-row style="margin: 20px 20px"
+      <el-row style="margin: 0 20px 20px 20px"
         v-for="item in allTableData"
         :key="item.id">
         <el-col :span="12">
