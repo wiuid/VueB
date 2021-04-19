@@ -166,7 +166,7 @@
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue'
 import pagination from '@/components/Pagination'
-import { getData, getInform } from '@/api/system/site/inform'
+import { getData, getInformByHome } from '@/api/system/site/inform'
 
 // 加载echarts，注意引入文件的路径
 const echarts = require('echarts/lib/echarts')
@@ -282,7 +282,7 @@ export default {
     // 查看公告内容
     getData (event) {
       var informId = event.currentTarget.firstElementChild.firstElementChild.innerHTML
-      getInform(informId).then((res) => {
+      getInformByHome(informId).then((res) => {
         if (res.status === 200) {
           this.dialogInformText = res.data.inform
           this.dialog = true

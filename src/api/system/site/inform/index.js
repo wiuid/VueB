@@ -29,6 +29,21 @@ export function getInform (id) {
 }
 
 /**
+ * 根据id 获取详细信息， 首页接口
+ * @param {*} id
+ * @returns
+ */
+export function getInformByHome (id) {
+  return request({
+    url: '/system/site/inform/hget',
+    method: 'get',
+    params: {
+      id: id
+    }
+  })
+}
+
+/**
  * 新建/修改 数据 一体接口
  * @param {*} params
  * @returns
