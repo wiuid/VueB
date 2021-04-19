@@ -106,7 +106,7 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-card class="card-home" shadow="hover" style="height: 300px">
+      <el-card class="card-home" shadow="hover" style="height: auto">
         <p>本业顶部人员情况四个板块，不晓得要放什么数据，索性就空出来了</p>
         <p>右上角公告采用了Element的抽屉和对话框的样式，对接了公告API</p>
         <p>中间及下面的三张图标采用了Echarts的折线图及饼图，未对接后台数据，这个要根据自身的业务去做合理的规划对接</p>
@@ -168,9 +168,8 @@
 import pagination from '@/components/Pagination'
 import { getData, getInform } from '@/api/system/site/inform'
 
- // 加载echarts，注意引入文件的路径
-let echarts = require('echarts/lib/echarts')
- 
+// 加载echarts，注意引入文件的路径
+const echarts = require('echarts/lib/echarts')
 // 引入图类型
 require('echarts/lib/chart/line')
 require('echarts/lib/chart/pie')
@@ -182,8 +181,7 @@ require('echarts/lib/component/legend')
 require('echarts/lib/component/grid')
 require('echarts/lib/component/toolbox')
 require('echarts/lib/component/radar')
-//图例翻译滚动
-
+// 图例翻译滚动
 export default {
   name: 'Home',
   components: { pagination },

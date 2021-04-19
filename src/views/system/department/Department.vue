@@ -151,7 +151,7 @@ export default {
           if (result.data === null) {
             this.tableData = []
           } else {
-            this.tableData = JSON.parse(result.data.departmentList)
+            this.tableData = result.data.departmentList
           }
           this.loading = false
         }
@@ -163,7 +163,7 @@ export default {
       })
       res.then((result) => {
         if (result.status === 200) {
-          this.userTree = JSON.parse(result.data.userList)
+          this.userTree = result.data.userList
         }
       })
     },
