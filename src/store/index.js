@@ -18,7 +18,7 @@ export default new Vuex.Store({
   mutations: {
     setDialogWidth (state) {
       const clientWidth = document.body.clientWidth
-      if (clientWidth < 680) {
+      if (clientWidth < 68) {
         state.dialogWidth = '100%'
       } else {
         state.dialogWidth = '50%'
@@ -27,7 +27,7 @@ export default new Vuex.Store({
   },
   // 主要是页面和vuex 的方法之间的api处理
   actions: {
-    setDialogWidth ({commit, state}) {
+    setDialogWidth ({ commit, state }) {
       commit('setDialogWidth')
     }
   },

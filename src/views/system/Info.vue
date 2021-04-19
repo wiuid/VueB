@@ -241,7 +241,6 @@ export default {
       }
     }
   },
-    
   created () {
     this.$store.dispatch('setDialogWidth')
     this.dialogWidth = this.$store.getters.getDialogWidth

@@ -122,7 +122,6 @@ export default {
   mounted () {
     this.getTableData()
     this.getUserData()
-    
     window.onresize = () => {
       this.$store.dispatch('setDialogWidth')
       this.dialogWidth = this.$store.getters.getDialogWidth
