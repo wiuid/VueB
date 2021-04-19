@@ -76,7 +76,7 @@
       :current="pageJump"></pagination>
     </el-row>
 
-    <el-dialog :title="dialogAddUserTitle+'用户'" :visible.sync="dialogAddUser" :before-close="closeDialog">
+    <el-dialog :title="dialogAddUserTitle+'用户'" :visible.sync="dialogAddUser" :width="dialogWidth" :before-close="closeDialog">
       <el-form :model="user" :rules="rules" ref="user">
         <el-row>
           <el-col :span="12">
@@ -149,7 +149,7 @@
         <el-button type="primary" @click="saveData('user')">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="修改用户密码" :visible.sync="dialogUpdatePassword" width="30%" :before-close="closeUpdatePassword">
+    <el-dialog title="修改用户密码" :visible.sync="dialogUpdatePassword" :width="dialogWidth" :before-close="closeUpdatePassword">
       <el-form :model="userPassword" :rules="userPasswordRules" ref="userPassword">
         <el-form-item label="您的密码" :label-width="formLabelWidth" prop="rootPassword">
           <el-input type="password" v-model="userPassword.rootPassword"></el-input>
@@ -267,11 +267,20 @@ export default {
       dialogAddUser: false,
       dialogAddUserTitle: '新增',
       formLabelWidth: '80px',
-      dialogUpdatePassword: false
+      dialogUpdatePassword: false,
+      dialogWidth: '50%'
     }
+  },
+  created () {
+    this.$store.dispatch('setDialogWidth')
+    this.dialogWidth = this.$store.getters.getDialogWidth
   },
   mounted () {
     Promise.all([this.getTableData(), this.getDataRole(), this.getDataDepartment(), this.getDataPost()])
+    window.onresize = () => {
+      this.$store.dispatch('setDialogWidth')
+      this.dialogWidth = this.$store.getters.getDialogWidth
+    }
   },
   filters: {
     formatData (time) {

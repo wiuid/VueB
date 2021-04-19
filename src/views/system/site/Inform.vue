@@ -54,7 +54,7 @@
       :current="pageJump"></pagination>
     </el-row>
 
-    <el-dialog :title="dialogAddInformTitle+'公告'" :visible.sync="dialogAddInform" :before-close="closeDialog">
+    <el-dialog :title="dialogAddInformTitle+'公告'" :visible.sync="dialogAddInform" :width="dialogWidth" :before-close="closeDialog">
       <el-form :model="inform" :rules="rules" ref="inform">
         <el-row>
           <el-form-item label="公告标题" :label-width="formLabelWidth" prop="title">
@@ -127,6 +127,7 @@ export default {
       dialogAddInform: false,
       dialogAddInformTitle: '',
       formLabelWidth: '80px',
+      dialogWidth: '50%',
 
       stateSelect: [
         {
@@ -140,8 +141,17 @@ export default {
       ]
     }
   },
+  created () {
+    this.$store.dispatch('setDialogWidth')
+    this.dialogWidth = this.$store.getters.getDialogWidth
+  },
   mounted () {
     this.getTableData()
+    
+    window.onresize = () => {
+      this.$store.dispatch('setDialogWidth')
+      this.dialogWidth = this.$store.getters.getDialogWidth
+    }
   },
   filters: {
     formatData (time) {

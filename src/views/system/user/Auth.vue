@@ -48,7 +48,7 @@
       :current="pageJump"></pagination>
     </el-row>
 
-    <el-dialog :title="dialogAddRoleTitle+'角色'" :visible.sync="dialogAddRole" :before-close="closeDialog">
+    <el-dialog :title="dialogAddRoleTitle+'角色'" :visible.sync="dialogAddRole" :width="dialogWidth" :before-close="closeDialog">
       <el-form :model="role" :rules="rules" ref="role">
         <el-row>
           <el-col :span="12">
@@ -143,6 +143,7 @@ export default {
       dialogAddRole: false,
       dialogAddRoleTitle: '新增',
       formLabelWidth: '80px',
+      dialogWidth: '50%',
 
       // 对话框表单
       role: {
@@ -183,11 +184,19 @@ export default {
       ]
     }
   },
+  created () {
+    this.$store.dispatch('setDialogWidth')
+    this.dialogWidth = this.$store.getters.getDialogWidth
+  },
   mounted () {
     this.getTableData()
     this.getDataAuth()
     if (this.authTree === []) {
       this.authTreeIf = true
+    }
+    window.onresize = () => {
+      this.$store.dispatch('setDialogWidth')
+      this.dialogWidth = this.$store.getters.getDialogWidth
     }
   },
   filters: {

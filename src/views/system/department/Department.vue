@@ -35,7 +35,7 @@
         </el-table-column>
       </el-table>
     </el-row>
-    <el-dialog :title="dialogAddDepartmentTitle+'部门'" :visible.sync="dialogAddDepartment" :before-close="closeDialog">
+    <el-dialog :title="dialogAddDepartmentTitle+'部门'" :width="dialogWidth" :visible.sync="dialogAddDepartment" :before-close="closeDialog">
       <el-form :model="department" :rules="rules" ref="department">
         <el-row>
           <el-form-item label="上级部门" :label-width="formLabelWidth" prop="superior">
@@ -111,12 +111,22 @@ export default {
 
       dialogAddDepartmentTitle: '新增',
       dialogAddDepartment: false,
-      formLabelWidth: '80px'
+      formLabelWidth: '80px',
+      dialogWidth: '50%'
     }
+  },
+  created () {
+    this.$store.dispatch('setDialogWidth')
+    this.dialogWidth = this.$store.getters.getDialogWidth
   },
   mounted () {
     this.getTableData()
     this.getUserData()
+    
+    window.onresize = () => {
+      this.$store.dispatch('setDialogWidth')
+      this.dialogWidth = this.$store.getters.getDialogWidth
+    }
   },
   filters: {
     // 时间格式化处理

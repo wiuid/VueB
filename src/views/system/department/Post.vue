@@ -50,7 +50,7 @@
       :current="pageJump"></pagination>
     </el-row>
 
-    <el-dialog :title="dialogAddPostTitle+'岗位'" :visible.sync="dialogAddPost" :before-close="closeDialog">
+    <el-dialog :title="dialogAddPostTitle+'岗位'" :visible.sync="dialogAddPost" :width="dialogWidth" :before-close="closeDialog">
       <el-form :model="post" :rules="rules" ref="post">
         <el-row>
           <el-col :span="24">
@@ -130,6 +130,7 @@ export default {
       formLabelWidth: '80px',
       dialogAddPost: false,
       dialogAddPostTitle: '新增',
+      dialogWidth: '50%',
 
       stateSelect: [
         {
@@ -143,8 +144,16 @@ export default {
       ]
     }
   },
+  created () {
+    this.$store.dispatch('setDialogWidth')
+    this.dialogWidth = this.$store.getters.getDialogWidth
+  },
   mounted () {
     this.getTableData()
+    window.onresize = () => {
+      this.$store.dispatch('setDialogWidth')
+      this.dialogWidth = this.$store.getters.getDialogWidth
+    }
   },
   filters: {
     // 时间格式化处理

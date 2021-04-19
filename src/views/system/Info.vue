@@ -95,7 +95,7 @@
       </el-col>
     </el-row>
 
-    <el-dialog title="修改头像" :visible.sync="dialogChangePortrait" width="dialogWidth" style="transition: all .5s">
+    <el-dialog title="修改头像" :visible.sync="dialogChangePortrait" :width="dialogWidth" style="transition: all .5s">
       <el-row>
         <el-col :xs="24" :md="12" :style="{height: '350px'}">
           <el-row style="margin-bottom:10px">
@@ -103,7 +103,6 @@
               :img="option.img"
               ref="cropper"
               :autoCrop="true"
-              :outputSize="option.size"
               :autoCropWidth="200"
               :autoCropHeight="200"
               :fixedBox="true"
@@ -220,7 +219,7 @@ export default {
         ]
       },
       dialogChangePortrait: false,
-      dialogWidth: '800px'
+      dialogWidth: '50%'
     }
   },
   filters: {
@@ -242,30 +241,21 @@ export default {
       }
     }
   },
+    
   created () {
-    // 初始修改头像对话框宽度数据
-    this.setDialogWidth()
+    this.$store.dispatch('setDialogWidth')
+    this.dialogWidth = this.$store.getters.getDialogWidth
   },
   mounted () {
     // 获取页面基础数据
     this.getTableData()
     // 对话框宽度自适应
     window.onresize = () => {
-      return (() => {
-        this.setDialogWidth()
-      })()
+      this.$store.dispatch('setDialogWidth')
+      this.dialogWidth = this.$store.getters.getDialogWidth
     }
   },
   methods: {
-    setDialogWidth () {
-      // 头像修改对话框宽度自适应
-      var val = document.body.clientWidth
-      if (val < '800') {
-        this.dialogWidth = '400px'
-      } else {
-        this.dialogWidth = '800px'
-      }
-    },
     // 上传预处理
     beforeUpload (file) {
       if (file.type.indexOf('image/') === -1) {
