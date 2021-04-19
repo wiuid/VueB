@@ -89,9 +89,6 @@
       </el-card></el-col>
     </el-row>
     <el-row>
-      <el-button @click="ceshi">测试</el-button>
-    </el-row>
-    <el-row>
       <el-card style="margin: 10px; height: auto" shadow="hover" >
         <div id="myChart1" style="height: 300px; width: 100%;"></div>
       </el-card>
@@ -545,12 +542,6 @@ export default {
       window.addEventListener('resize', function () {
         myChart.resize()
       })
-    },
-    ceshi () {
-      const dw = this.$store.getters.getDialogWidth
-      console.log('1111111111111111111')
-      console.log(dw)
-      console.log(this.dialogWidth)
     }
   }
 }
