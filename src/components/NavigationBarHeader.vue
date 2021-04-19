@@ -14,6 +14,7 @@
           </el-breadcrumb-item>
         </el-breadcrumb>
     </el-menu-item>
+    
     <el-submenu style="float: right" index="2">
       <template slot="title">
         <img  v-if="fullIf" :src="avatar" style="height:40px; wight:40px; border-radius: 10px"/>
