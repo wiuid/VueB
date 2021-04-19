@@ -6,7 +6,7 @@
       <i class="el-icon-s-unfold hidden-sm-and-up"></i>
     </el-menu-item>
 
-    <el-menu-item>
+    <el-menu-item class="hidden-xs-only">
         <el-breadcrumb separator="/" style="margin-top:20px">
           <el-breadcrumb-item :to="{ path: '/system' }">首页</el-breadcrumb-item>
           <el-breadcrumb-item v-if="nav !== null">
