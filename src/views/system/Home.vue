@@ -89,6 +89,9 @@
       </el-card></el-col>
     </el-row>
     <el-row>
+      <el-button @click="ceshi">测试</el-button>
+    </el-row>
+    <el-row>
       <el-card style="margin: 10px; height: auto" shadow="hover" >
         <div id="myChart1" style="height: 300px; width: 100%;"></div>
       </el-card>
@@ -116,7 +119,7 @@
       </el-card>
     </el-row>
 
-    <el-dialog center :title="dialogInformText.title" :visible.sync="dialog">
+    <el-dialog center :title="dialogInformText.title" :width="dialogWidth" :visible.sync="dialog">
       <el-row style="text-align: center;margin-bottom: 20px">
         <i class="el-icon-date">{{dialogInformText.createDate | formatDate}}</i>
         <span style="padding: 0 10px">发布人：{{dialogInformText.userNickname}}</span>
@@ -196,6 +199,7 @@ export default {
       allTableData: [],
       // 对话框状态--显示公告具体信息的
       dialog: false,
+      dialogWidth: '50%',
       // 对话框中信息载体
       dialogInformText: {
         title: '',
@@ -224,6 +228,10 @@ export default {
       searchDate: []
     }
   },
+  created () {
+    this.$store.dispatch('setDialogWidth')
+    this.dialogWidth = this.$store.getters.getDialogWidth
+  },
   mounted () {
     // 三个图表
     this.drawLine1()
@@ -231,6 +239,11 @@ export default {
     this.drawLine3()
     // 6条最新公告的获取
     this.getNewData()
+
+    window.onresize = () => {
+      this.$store.dispatch('setDialogWidth')
+      this.dialogWidth = this.$store.getters.getDialogWidth
+    }
   },
   filters: {
     // 时间格式过滤
@@ -532,6 +545,12 @@ export default {
       window.addEventListener('resize', function () {
         myChart.resize()
       })
+    },
+    ceshi () {
+      const dw = this.$store.getters.getDialogWidth
+      console.log('1111111111111111111')
+      console.log(dw)
+      console.log(this.dialogWidth)
     }
   }
 }

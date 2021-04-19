@@ -6,14 +6,30 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   // 相当于全局变量
   state: {
-    token: 'sadasdas'
+    dialogWidth: '50%'
   },
-  // 控制全局变量的值   写方法的形式 在这里写  一个一个的方法
-  mutations: {
-  },
-  actions: {
-  },
+  // 获取容器中的数据
   getters: {
+    getDialogWidth (state) {
+      return state.dialogWidth
+    }
+  },
+  // 设置容器中的数据
+  mutations: {
+    setDialogWidth (state) {
+      const clientWidth = document.body.clientWidth
+      if (clientWidth < 680) {
+        state.dialogWidth = '100%'
+      } else {
+        state.dialogWidth = '50%'
+      }
+    }
+  },
+  // 主要是页面和vuex 的方法之间的api处理
+  actions: {
+    setDialogWidth ({commit, state}) {
+      commit('setDialogWidth')
+    }
   },
   modules: {
   }
