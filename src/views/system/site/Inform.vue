@@ -15,7 +15,7 @@
       <el-button type="primary" plain icon="el-icon-search" @click="getTableData">搜索</el-button>
     </el-row>
     <el-row>
-      <el-button type="primary" plain icon="el-icon-plus"  @click="openAddDialog">新 增</el-button>
+      <el-button type="primary" plain icon="el-icon-plus"  @click="openInitPage">新 增</el-button>
       <el-button type="danger" plain icon="el-icon-delete"  @click="deleteDatas">删 除</el-button>
     </el-row>
     <el-row>
@@ -28,7 +28,11 @@
         <el-table-column type="selection" width="55" align="center"></el-table-column>
         <el-table-column type="index" label="序号" width="55" align="center"></el-table-column>
         <el-table-column prop="id" v-if="false"></el-table-column>
-        <el-table-column prop="title" label="公告标题" align="center"></el-table-column>
+        <el-table-column prop="title" label="公告标题" align="center">
+          <template slot-scope="scope">
+            <el-link :underline="false" type="primary" @click="openViewDialog(scope.row.id)">{{scope.row.title}}</el-link>
+          </template>
+        </el-table-column>
         <el-table-column prop="userNickname" label="发布人" align="center"></el-table-column>
         <el-table-column prop="state" label="状态" align="center">
           <template slot-scope="scope">
@@ -37,12 +41,12 @@
         </el-table-column>
         <el-table-column prop="createDate" label="时间" align="center">
           <template slot-scope="scope">
-            {{scope.row.createDate | formatData()}}
+            {{scope.row.createDate | formatDate()}}
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="openEditDialog(scope.row.id)"><i class="el-icon-edit"></i>修改</el-link>
+            <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="openEditPage(scope.row.id)"><i class="el-icon-edit"></i>修改</el-link>
             <el-link :underline="false" type="primary" style="margin-right: 10px;font-size: 10px" @click="deleteData(scope.row)"><i class="el-icon-delete"></i>删除</el-link>
           </template>
         </el-table-column>
@@ -54,40 +58,34 @@
       :current="pageJump"></pagination>
     </el-row>
 
-    <el-dialog :title="dialogAddInformTitle+'公告'" :visible.sync="dialogAddInform" :width="dialogWidth" :before-close="closeDialog">
-      <el-form :model="inform" :rules="rules" ref="inform">
-        <el-row>
-          <el-form-item label="公告标题" :label-width="formLabelWidth" prop="title">
-            <el-input v-model="inform.title" autocomplete="off"></el-input>
-          </el-form-item>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="状态" :label-width="formLabelWidth" prop="status">
-              <el-switch v-model="inform.state" :active-value="0" :inactive-value="1"></el-switch>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-form-item label="通知正文" :label-width="formLabelWidth" prop="text">
-            <el-input type="textarea" placeholder="请输入通知内容" v-model="inform.text" show-word-limit rows="6"></el-input>
-          </el-form-item>
-        </el-row>
-      </el-form>
+    <el-dialog
+      center
+      :title="inform.title"
+      :visible.sync="dialogViewInform"
+      :width="dialogWidth">
+      <el-row style="text-align: center;margin-bottom: 20px">
+        <i class="el-icon-date">发布：{{inform.createDate | formatDate}}</i>
+        <span style="padding: 0 10px">发布人：{{inform.userNickname}}</span>
+        <i class="el-icon-date">更新：{{inform.updateDate | formatDate}}</i>
+      </el-row>
+      <el-row class="informTextStyle">
+        <span v-html="inform.text">
+        </span>
+      </el-row>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="closeDialog">取 消</el-button>
-        <el-button type="primary" @click="saveData('inform')">确 定</el-button>
+        <el-button @click="dialogViewInform = false">取 消</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
-
 <script>
-import { getData, getInform, saveInform, deleteInform, deleteInforms } from '@/api/system/site/inform'
+import { getData, getInformByHome, saveInform, deleteInform, deleteInforms } from '@/api/system/site/inform'
 import pagination from '@/components/Pagination'
 export default {
   name: 'Inform',
-  components: { pagination },
+  components: {
+    pagination
+  },
   data () {
     return {
       // 列表数据相关
@@ -108,25 +106,11 @@ export default {
       },
 
       // 对话框表单
-      inform: {
-        id: 0,
-        title: '',
-        state: 0,
-        text: ''
-      },
-      rules: {
-        title: [
-          { required: true, message: '请输入公告标题', trigger: 'blur' }
-        ],
-        text: [
-          { required: true, message: '请输入公告正文内容', trigger: 'blur' }
-        ]
-      },
+      inform: {},
 
       // 对话框相关
-      dialogAddInform: false,
-      dialogAddInformTitle: '',
-      formLabelWidth: '80px',
+      dialogViewInform: false,
+      dialogViewInformTitle: '',
       dialogWidth: '50%',
 
       stateSelect: [
@@ -153,7 +137,7 @@ export default {
     }
   },
   filters: {
-    formatData (time) {
+    formatDate (time) {
       var data = new Date(time)
       var y = data.getFullYear()
       var M = data.getMonth() + 1
@@ -192,38 +176,11 @@ export default {
     /**
      * 打开对话框  同时清空表单数据、标题改为新增公告
      */
-    openAddDialog () {
-      this.dialogAddInformTitle = '新增'
-      this.dialogAddInform = true
-    },
-    /**
-     * 将获取的行数据赋值到对话框进行更新
-     * @param id
-     */
-    openEditDialog (id) {
-      this.dialogAddInformTitle = '修改'
-      const res = new Promise((resolve, reject) => {
-        getInform(id).then((result) => { resolve(result) })
+    openViewDialog (id) {
+      getInformByHome(id).then(result => {
+        this.inform = result.data.inform
+        this.dialogViewInform = true
       })
-
-      res.then((result) => {
-        if (result.status === 200) {
-          this.inform = result.data.inform
-        }
-      })
-      this.dialogAddInform = true
-    },
-    /**
-     * 关闭对话框并重置表单
-     */
-    closeDialog () {
-      this.dialogAddInform = false
-      this.$refs.inform.resetFields()
-      this.inform.id = 0
-      this.inform.title = ''
-      this.inform.userNickname = ''
-      this.inform.state = 0
-      this.inform.text = ''
     },
     // 重置搜索条件
     reSearchParams () {
@@ -234,34 +191,6 @@ export default {
       this.params.createDateEnd = ''
       this.searchDate = []
       this.getTableData()
-    },
-    /**
-     * 保存对话框中的数据到后台数据库（更新和新增同一接口）
-     */
-    saveData (inform) {
-      this.$refs[inform].validate((valid) => {
-        if (valid) {
-          this.$confirm('是否确认' + this.dialogAddInformTitle + '名称为"' + this.inform.title + '"的公告通知?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            const res = new Promise((resolve, reject) => {
-              this.inform.text = this.inform.text.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;')
-              saveInform(this.inform).then((result) => { resolve(result) })
-            })
-            res.then((result) => {
-              if (result.status === 200) {
-                this.$message.success(result.msg)
-                this.getTableData()
-              }
-            })
-            this.closeDialog()
-          })
-        } else {
-          return false
-        }
-      })
     },
     // 更新公告状态
     dataStateSwitch (row) {
@@ -342,11 +271,21 @@ export default {
      */
     handleSelectionChange (val) {
       this.multipleSelection = val
+    },
+    openInitPage () {
+      this.$router.push('/system/site/inform/edit')
+    },
+    openEditPage (id) {
+      this.$router.push('/system/site/inform/edit/' + id)
     }
   }
 }
 </script>
-
 <style scoped>
-
+  .informTextStyle {
+    padding: 10px 20px;
+    -webkit-box-shadow: 0 0 6px 1px rgba(0,0,0,0.2) inset;
+    /* border: 1px solid #333333; */
+    border-radius: 5px;
+  }
 </style>
