@@ -121,7 +121,7 @@
         <i class="el-icon-date">{{dialogInformText.createDate | formatDate}}</i>
         <span style="padding: 0 10px">发布人：{{dialogInformText.userNickname}}</span>
       </el-row>
-      <el-row style="padding: 10px 20px">
+      <el-row class="informTextStyle">
         <span v-html="dialogInformText.text">
         </span>
       </el-row>
@@ -550,5 +550,11 @@ export default {
   .card-home {
     margin: 10px;
     height: 100px;
+  }
+  .informTextStyle {
+    padding: 10px 20px;
+    -webkit-box-shadow: 0 0 6px 1px rgba(0,0,0,0.2) inset;
+    /* border: 1px solid #333333; */
+    border-radius: 5px;
   }
 </style>
