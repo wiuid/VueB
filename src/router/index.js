@@ -51,13 +51,13 @@ if (dynamicRouter) {
       path: '/system/site/inform/edit',
       name: 'Edit',
       component: 'system/site/Edit',
-      title: '公告编辑'
+      title: '公告发布'
     },
     {
       path: '/system/site/inform/edit/*',
       name: 'Edit',
       component: 'system/site/Edit',
-      title: '公告发布'
+      title: '公告编辑'
     },
     {
       path: '/system/info',
