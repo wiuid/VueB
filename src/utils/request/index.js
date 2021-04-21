@@ -78,7 +78,7 @@ instance.interceptors.response.use(
             // token 过期
             sessionStorage.removeItem('token')
             localStorage.removeItem('token')
-            Message.info(res.msg)
+            Message.warning(res.msg)
             router.replace('/login')
             break
           case 444:
