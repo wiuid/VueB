@@ -48,6 +48,18 @@ if (dynamicRouter) {
   // 定义一个列表用于存储动态路由
   var defaultLoginRoutes = [
     {
+      path: '/system/site/inform/edit',
+      name: 'Edit',
+      component: 'system/site/Edit',
+      title: '公告编辑'
+    },
+    {
+      path: '/system/site/inform/edit/*',
+      name: 'Edit',
+      component: 'system/site/Edit',
+      title: '公告发布'
+    },
+    {
       path: '/system/info',
       name: 'Info',
       component: 'system/Info',
@@ -70,8 +82,9 @@ if (dynamicRouter) {
     }
   })
   // 添加个人信息和404页
-  routes[2].children.push(defaultLoginRoutes[0])
-  routes[2].children.push(defaultLoginRoutes[1])
+  for (let index = 0; index < defaultLoginRoutes.length; index++) {
+    routes[2].children.push(defaultLoginRoutes[index])
+  }
   filterAsyncRouter(routes[2].children)
 }
 
