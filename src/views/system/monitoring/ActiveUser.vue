@@ -52,7 +52,6 @@ export default {
   },
   mounted () {
     this.getTableData()
-    console.log('确认执行1')
   },
   methods: {
     getTableData () {
@@ -62,7 +61,6 @@ export default {
           this.tableData = result.data.activeUserList
         }
       })
-      console.log('确认执行2')
       this.loading = false
     },
     deleteData (Uuid) {
@@ -71,7 +69,6 @@ export default {
           this.$message.success(result.msg)
         }
       })
-      // this.$message.warning('目前不支持！')
     }
   }
 }
