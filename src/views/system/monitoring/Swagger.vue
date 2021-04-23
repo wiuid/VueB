@@ -10,8 +10,6 @@
 <script>
 export default {
   name: 'Swagger',
-  data () {
-  },
   methods: {
   }
 }
