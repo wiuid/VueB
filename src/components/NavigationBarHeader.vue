@@ -105,27 +105,11 @@ export default {
     },
     logout () {
       const token = sessionStorage.getItem('token')
-
       if (token !== null && token !== '') {
-        const res = new Promise((resolve, reject) => {
-          logout().then((result) => {
-            resolve(result)
-          }).catch((err) => {
-            reject(err)
-            this.$message.error(err)
-          })
-        })
-        res.then((result) => {
-          if (result.status === 200) {
-            sessionStorage.removeItem('token')
-            localStorage.removeItem('token')
-            localStorage.removeItem('dynamicRouter')
-            this.$router.replace('/login')
-          } else {
-            this.$message.info(result.msg)
-          }
+        logout().then(() => {
+          this.cleanToken()
         }).catch(() => {
-          this.$message.error('后端异常')
+          this.cleanToken()
         })
       } else {
         this.$message.error('您当前未登录')
@@ -134,6 +118,12 @@ export default {
     full () {
       screenfull.toggle()
       this.fullIf = !this.fullIf
+    },
+    cleanToken () {
+      sessionStorage.removeItem('token')
+      localStorage.removeItem('token')
+      localStorage.removeItem('dynamicRouter')
+      this.$router.replace('/login')
     }
   }
 }
