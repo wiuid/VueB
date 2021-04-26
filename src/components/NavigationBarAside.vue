@@ -17,7 +17,40 @@
         <i class="el-icon-s-home"></i>
         <span slot="title">首页</span>
       </el-menu-item>
-      <template v-for="item in aside">
+      <el-submenu index="/system/commodity">
+        <template slot="title">
+          <i class="el-icon-s-goods"></i>
+          <span>商品管理</span>
+        </template>
+        <el-menu-item index="/system/commodity">商品</el-menu-item>
+        <el-menu-item index="/system/commodity/class">分类</el-menu-item>
+      </el-submenu>
+      <el-submenu index="/system/customer">
+        <template slot="title">
+          <i class="el-icon-s-custom"></i>
+          <span>客户管理</span>
+        </template>
+        <el-menu-item index="/system/customer">客户</el-menu-item>
+        <el-menu-item index="/system/customer/class">分类</el-menu-item>
+        <el-menu-item index="/system/customer/order">销售单</el-menu-item>
+      </el-submenu>
+      <el-submenu index="/system/supplier">
+        <template slot="title">
+          <i class="el-icon-s-help"></i>
+          <span>供应商管理</span>
+        </template>
+        <el-menu-item index="/system/supplier">供应商</el-menu-item>
+        <el-menu-item index="/system/supplier/order">进货单</el-menu-item>
+      </el-submenu>
+      <el-submenu index="/system/Finance">
+        <template slot="title">
+          <i class="el-icon-s-finance"></i>
+          <span>财务管理</span>
+        </template>
+        <el-menu-item index="/system/Finance/expenditure">支出</el-menu-item>
+        <el-menu-item index="/system/Finance/income">支出</el-menu-item>
+      </el-submenu>
+      <!-- <template v-for="item in aside">
         <el-submenu v-if="item.children" :index="item.path" :key="item.path">
           <template slot="title">
             <i :class="item.icon"></i>
@@ -34,7 +67,7 @@
           <i :class="item.icon"></i>
           <span span slot="title">{{item.title}}</span>
         </el-menu-item>
-      </template>
+      </template> -->
     </el-menu>
   </el-col>
 </template>
